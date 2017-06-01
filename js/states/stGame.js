@@ -1,157 +1,203 @@
 //Main this.game State
 var stGame = function(game) {
-      var waterStreamMaxDistance;
-      var particleVelocityOffsetMax;
-      var particleVelocityOffsetMin;
-      var particleVelocityOffsetNarrowing;
-      var particleVelocityOffsetNoise;
-      var emitterSpriteOffsetX;
-      var emitterSpriteOffsetY;
-
-      var particleVelocityOffset;
-      var distMouseCursorToEmitter;
-      var waterParticleLifetimeConstant;
-
+	//Rioter_
+   var MM;
+   var MM2;
+   //_Rioter
 };
 stGame.prototype = {
    preload: function(){
       this.game.time.advancedTiming = true;
-
+	  //Rioter_
+      MM = new MobManager(100, 50, 100, 1, 1.5, 1);
+      //_Rioter
    },//end_preload
    create: function() {
-
-      this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
    //--/ variable assignments
-      //--/ water particle emitter variables
-         //Max distance the stream of water reaches
-         waterStreamMaxDistance = 250; //250 seems optimal for a 600 by 800 screen
-         //particleVelocityOffset is the distance of the player to the mouse cursor; Max and min limit that distance
-         particleVelocityOffsetMax = 200;
-         particleVelocityOffsetMin = 80;
-         //narrowing
-         particleVelocityOffsetNarrowing = 0.5;
-         // adds left-right variation in the longest possible stream of particles to resemble a jet of water
-         particleVelocityOffsetNoise = 10;
-         //the location in pixels from the center of the sprite (0, 0) to the location of the emitter
-         //    used to calculate new positions for the emitter as player rotates
-         emitterSpriteOffsetX = 25;
-         emitterSpriteOffsetY = 15;
-         // a "this.game feel" variable that both affects distance and where the cursor should be
-         //    positioned to achieve a certain distance with the particles. Phaser does not seem
-         //    to have particle limiting by distance so keep this value at 4 for now.
-         waterParticleLifetimeConstant = 4;
+	console.log('game bg');
+      //--/ tilemap variable
+		this.game.world.setBounds(0,0,3200,2432); // initialize world bounds
+        this.game.stage.backgroundColor = "#228B22";
+		//this.game.add.tileSprite(0,0,1200,912,'bg');
+		this.map = this.game.add.tilemap('CityTilemap');
+        this.map.addTilesetImage('CityTileset64', 'CityTileset64');
+        this.backgroundLayer = this.map.createLayer('Background');
+        this.groundLayer = this.map.createLayer('ForeGround');
 
-      //test sprite functionality, player added here
-      player = this.add.sprite(this.game.world.centerX, this.game.world.centerY, "Player");
-      player.anchor.set(0.5);
+      // Create a new Player
+      this.player = new Player(this.game,this.game.world.centerX, this.game.world.centerY, 'Player');
+     this.game.camera.follow(this.player,4,0.1,0.1);  // set camera to player
+	  
+	  // Attach hose to player object
+      this.emitter = new WaterHose(this.game, this.player, 25,15);
+      this.world.moveDown(this.emitter);
 
-      this.game.physics.arcade.enable(player);
-      player.enableBody = true;
-      player.collideWorldBounds = true;
+   // Create new buildings
+   // manual creation for this test
+   this.buildingGroup = this.game.add.group(); // generate building group
+   this.building = new Building(this.game,17,10,200,this.game.rnd.integerInRange(1,5),'building1', 'buildingDestroyed1');
+	this.buildingGroup.add(this.building);
+   
+   this.building = new Building(this.game,737,10,200,this.game.rnd.integerInRange(1,5),'building5', 'buildingDestroyed5');
+   this.buildingGroup.add(this.building);
+   
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,(509+(417*i)),10,200,this.game.rnd.integerInRange(1,5),'building1', 'buildingDestroyed1');
+		this.buildingGroup.add(this.building);
+	}
+	
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,(2823+(200*i)),25,200,this.game.rnd.integerInRange(1,5),'building5', 'buildingDestroyed5');
+		this.buildingGroup.add(this.building);
+	}
+	
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,(1405+(255*i)),10,200,this.game.rnd.integerInRange(1,5),'building1', 'buildingDestroyed1');
+		this.buildingGroup.add(this.building);
+	}
+	
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,(2000+(325*i)),10,200,this.game.rnd.integerInRange(1,5),'building1', 'buildingDestroyed1');
+		this.buildingGroup.add(this.building);
+	}
+	
+	this.building = new Building(this.game,2420,720,200,this.game.rnd.integerInRange(1,5),'building6', 'buildingDestroyed6');
+	this.buildingGroup.add(this.building);
+	
+	this.building = new Building(this.game,1450,1300,200,this.game.rnd.integerInRange(1,5),'fireStation', 'fireStationDestroyed');
+	this.buildingGroup.add(this.building);
+	
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,1800 + i*100,(1350),200, this.game.rnd.integerInRange(1,5),'fTruck', 'fTruckDestroyed');
+		this.buildingGroup.add(this.building);
+	}
+	
+	for(var i = 0; i < 3; i++){
+		this.building = new Building(this.game,(835),(645 + i*260),200,this.game.rnd.integerInRange(1,5),'building2', 'buildingDestroyed2');
+		this.buildingGroup.add(this.building);
+	}
+	
+	this.building = new Building(this.game,525,645,200,this.game.rnd.integerInRange(1,5),'building1', 'buildingDestroyed1');
+	this.buildingGroup.add(this.building);
+	
+	this.building = new Building(this.game,525,1100,200,this.game.rnd.integerInRange(1,5),'building1', 'buildingDestroyed1');
+	this.buildingGroup.add(this.building);
+	
+	this.building = new Building(this.game,530,1475,200,this.game.rnd.integerInRange(1,5),'building3', 'buildingDestroyed3');
+	this.buildingGroup.add(this.building);
+	
+	this.building = new Building(this.game,0,665,200,this.game.rnd.integerInRange(1,5),'building4', 'buildingDestroyed4');
+	this.buildingGroup.add(this.building);
+	
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,(510 + i*250),(2110),200,this.game.rnd.integerInRange(1,5),'building4', 'buildingDestroyed4');
+		this.buildingGroup.add(this.building);
+	}
+	
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,(2300 + i*450),(2110),200,this.game.rnd.integerInRange(1,5),'building4', 'buildingDestroyed4');
+		this.buildingGroup.add(this.building);
+	}
+	
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,(2560 + i*450),(2130),200,this.game.rnd.integerInRange(1,5),'building5', 'buildingDestroyed5');
+		this.buildingGroup.add(this.building);
+	}
+	
+	this.building = new Building(this.game,21,2110,200,this.game.rnd.integerInRange(1,5),'building1', 'buildingDestroyed1');
+	this.buildingGroup.add(this.building);
+   
+	for(var i = 0; i < 2; i++){
+		this.building = new Building(this.game,(1280+(225*i)),2110,200,this.game.rnd.integerInRange(1,5),'building1', 'buildingDestroyed1');
+		this.buildingGroup.add(this.building);
+	}
+	
+	this.building = new Building(this.game,1735,2185,200,this.game.rnd.integerInRange(1,5),'building2', 'buildingDestroyed2');
+	this.buildingGroup.add(this.building);
+	
+	for(var i = 0; i < 3; i++){
+		this.building = new Building(this.game,(-65),(1085 + i*260),200,this.game.rnd.integerInRange(1,5),'building2', 'buildingDestroyed2');
+		this.buildingGroup.add(this.building);
+	}
+	
+	//this.hydrant1 = new Hydrant(this.game,300,1000,this.player);
+   
+   this.pointer = this.game.add.sprite(0, 0, 'Particle');
+   this.pointer.anchor.set(0.5,0.5);
+   
+	//create rioters and add to MobManager
+   for(i=0; i<19; i++){
+      rioter = new Rioter(this.game, {key: "rioter", frame: 0}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
+      MM.addMob(rioter);
+      this.game.add.existing(rioter);
+   }
+   MM.positionAllOffscreenRandomly(this.game);
 
-      player.rotation = this.game.physics.arcade.angleToPointer(player);
+   MM.setAllGoal(this.building.centerX, this.building.centerY, 0.4);
+   
+   building2 = this.building;
+   console.log("BUILDING LOC: ", building2.x, building2.y);
 
-      cursors = this.game.input.keyboard.createCursorKeys();
+game = this.game; //temp solution until I can figure out a better way to refernce game
+   var throwAtBuilding2 = function(mob){
+      //mob.freeze();
+      mob.fireAtBuilding(game, building2);
+      mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
+	  console.log("FIRED: ", building2.x, building2.y);
+      //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
+   };
 
-      //--/ creating the water particle emitter
-      emitter = this.game.add.emitter(this.game, 0, 0);
+   var onSprayIncreaseGoalweight = function(mob){
+      //mob.freeze();
+      mob.setGoalPoint(mob.primaryGoalX, mob.primaryGoalY, (mob.goalVectorWeight + 0.02));
+      //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
+   };
 
-      this.world.moveDown(emitter);
-
-      //(String or array of strings for particles to be used, frames the sprite uses, number of particles to generate, arcade collision, world bounds collision)
-      emitter.makeParticles('Particle', 0, 1000, true, false);
-
-      emitter.forEach(function(particle) {
-         particle.enableBody = true;
-         particle.body.allowGravity = false;
-      }, this);
-
-      // test particle collision functionality, building added here
-       building = this.add.sprite(this.game.world.centerX/2, this.game.world.centerY, "Test_Building1");
-       building.anchor.set(0.5);
-       this.game.physics.arcade.enable(building);
-       building.enableBody = true;
-       building.body.immovable = true;
-
-       building2 = this.add.sprite(this.game.world.centerX*1.5, this.game.world.centerY, "Test_Building1");
-       building2.anchor.set(0.5);
-       this.game.physics.arcade.enable(building2);
-       building2.enableBody = true;
-       building2.body.immovable = true;
-
-
-      particleBuildingOnCollision = function(building, particle){
-         particle.kill();
-
-      };
-
+   MM.addAllTriggerOnEntry(building2.x-(building2.width/2)-60, building2.y - (building2.height/2)- 60, building2.width+120, building2.height + 120, throwAtBuilding2);
+   //This is for top left corner handle --> MM.addAllTriggerOnEntry(building2.x-60, building2.y - 60, building2.width+120, building2.height + 120, throwAtBuilding2);
+   // The less movable an object is, the further down the list it should be
+   MM.addAllTriggerOnCollision(this.emitter, onSprayIncreaseGoalweight, false);
+   MM.addAllTriggerOnCollision(this.player);
+   MM.addAllTriggerOnCollision(this.hydrantGroup, null, false);
+   MM.addAllTriggerOnCollision(this.buildingGroup, null, false);
+	
+    // Create UI
+	this.waterUI = new WaterUI(this.game,this.player,70,60);
+	this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
+	
+	// Damage Fire Function
+	hitBuilding = function(particle,building){
+		particle.kill();
+	}
    },//end_create
    update: function(){
-      player.rotation = this.game.physics.arcade.angleToPointer(player);
+	if (this.game.input.keyboard.isDown(Phaser.Keyboard.G)){
+		this.state.start("stGameOver");
+	}
+	   
+   // start UI update functions
+    MM.update(this.game);
+	this.waterUI.update();
+	this.fireUI.update();
+	
+	// collisions
+	this.game.physics.arcade.collide(this.emitter, this.buildingGroup,hitBuilding);
+	this.game.physics.arcade.collide(this.player, this.buildingGroup);
 
-   if (this.game.input.activePointer.isDown){
-
-      emitter.y = player.y + transformOverAngle(player.rotation, emitterSpriteOffsetX, emitterSpriteOffsetY).y;
-      emitter.x = player.x + transformOverAngle(player.rotation, emitterSpriteOffsetX, emitterSpriteOffsetY).x;
-
-      distMouseCursorToEmitter = distanceBetween(this.game.input.mousePointer.x, this.game.input.mousePointer.y, emitter.x, emitter.y);
-
-      // handles the "spread" of water particles (the further you aim the narrower the stream)
-      particleVelocityOffset = distMouseCursorToEmitter ;
-      if (particleVelocityOffset > particleVelocityOffsetMax){
-         particleVelocityOffset = particleVelocityOffsetMax;
-      }else if(particleVelocityOffset < particleVelocityOffsetMin){
-         particleVelocityOffset = particleVelocityOffsetMin;
-      }
-      particleVelocityOffset = particleVelocityOffsetNarrowing*(particleVelocityOffsetMax-particleVelocityOffset) + particleVelocityOffsetNoise;
-
-      emitter.lifespan = waterStreamMaxDistance*waterParticleLifetimeConstant;
-
-      if(distMouseCursorToEmitter > waterStreamMaxDistance){
-         var similarTriangleProportion = waterStreamMaxDistance/distMouseCursorToEmitter;
-         emitterToMouseDistanceX = similarTriangleProportion*(this.game.input.mousePointer.x-emitter.x);
-         emitterToMouseDistanceY = similarTriangleProportion*(this.game.input.mousePointer.y-emitter.y);
-      }else{
-         emitterToMouseDistanceX = this.game.input.mousePointer.x-emitter.x;
-         emitterToMouseDistanceY = this.game.input.mousePointer.y-emitter.y;
-      }
-
-      emitter.maxParticleSpeed = new Phaser.Point(emitterToMouseDistanceX+particleVelocityOffset, emitterToMouseDistanceY+particleVelocityOffset);
-      emitter.minParticleSpeed = new Phaser.Point(emitterToMouseDistanceX-particleVelocityOffset,emitterToMouseDistanceY-particleVelocityOffset);
-
-      emitter.emitParticle();
-
-   }
-
-   this.game.physics.arcade.collide(emitter, building, particleBuildingOnCollision);
-   this.game.physics.arcade.collide(player, building);
-
-   this.game.physics.arcade.collide(emitter, building2, particleBuildingOnCollision);
-   this.game.physics.arcade.collide(player, building2);
-
-
-
-//TEST player movement functionality
-//every frame reset player velocity in the x direction
-player.body.velocity.x = 0;
-player.body.velocity.y = 0;
-//if the left arrow key is pressed change player velocity to 150 left
-   if(cursors.left.isDown){
-      player.body.velocity.x = -150;
-   }else if(cursors.right.isDown){
-      player.body.velocity.x = 150;
-   }else if(cursors.up.isDown){
-      player.body.velocity.y = -150;
-   }else if(cursors.down.isDown){
-      player.body.velocity.y = 150;
-   }
-
-
-
+	// Fires
+	this.buildingGroup.forEach(function(building){
+		this.game.physics.arcade.overlap(this.emitter,building.fireGroup,building.damageFire); // emitter with fire
+	},this);
+	
+	//cursor
+	this.pointer.x = this.game.camera.x + this.game.input.x -0;
+	this.pointer.y = this.game.camera.y + this.game.input.y -0;
+	
+	//console.log(this.game.camera.x + this.game.input.x, this.game.camera.y + this.game.input.y);
    },//end_update
-   render: function() {
+   //render: function() {
    // display fps
-      this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
-   }
+    //  this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
+	//this.game.debug.body(this.building);
+   //}
 };//end_s1Game
