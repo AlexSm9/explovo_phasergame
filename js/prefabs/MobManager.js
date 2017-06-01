@@ -244,3 +244,38 @@ MobManager.prototype.getRandomSubset = function(minQuantity, maxQuntity){
    }
    return returnList;
 };
+
+MobManager.prototype.positionAllOffscreenRandomly = function(game){
+   mobList = this.mobList;
+   for(var x=mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
+
+
+      mob = mobList[x];
+      mob.positionOffscreenRandomly(game);
+      /*
+      leftX = game.camera.x - mob.spriteDiagonal;
+      rightX = game.camera.x + game.camera.width + mob.spriteDiagonal;
+      leftY = game.camera.y - mob.spriteDiagonal;
+      rightY = game.camera.y + game.camera.height + mob.spriteDiagonal;
+
+
+      // potentially does overlap, fix if time
+      switch(randInt(0, 3)){
+         case 0:
+            this.x = leftX;
+            this.y = randInt(leftY, rightY);
+            break;
+         case 1:
+            this.x = rightX;
+            this.y = randInt(leftY, rightY);
+            break;
+         case 2:
+            this.x = randInt(leftX, rightX);
+            this.y = leftY;
+            break;
+         case 3:
+            this.x = randInt(leftX, rightX);
+            this.y = rightY;
+      }*/
+   }
+};

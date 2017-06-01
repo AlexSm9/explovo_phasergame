@@ -16,7 +16,7 @@ Hydrant.prototype.constructor = Hydrant;
 Hydrant.prototype.update = function(){
 	this.game.physics.arcade.collide(this,this.player);
 	
-	if (this.game.math.distance(this.x, this.y, this.player.x, this.player.y) < 50){
+	if (this.game.math.distance(this.x, this.y, this.player.x, this.player.y) < 75){
 		this.player.waterUp();
 	}
 };

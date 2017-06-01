@@ -12,7 +12,7 @@ function Rioter(game, spriteObject, positionX, positionY){
    this.spriteAngleOffset = Math.PI/2; //(sprite normally faces... up: -Math.PI/2, down: Math.pi/2, left: Math.PI, right: 0)
    this.rotationDefault = 0;
 
-
+   this.canFire = true;
 
    //--/ can change but beware of possible buggy behavior
    // This value and the function that uses it prevents a situation between 2 sprites where
@@ -30,6 +30,7 @@ function Rioter(game, spriteObject, positionX, positionY){
    this.flockingVector = {x: 0, y: 0};
    this.primaryGoalX = null;
    this.primaryGoalY = null;
+   this.goalVectorWeight = null;
    this.headToGoal = false;
    this.lastFrameRotation = this.rotationDefault;
    // move according to the rules of MobManager
@@ -149,7 +150,7 @@ Rioter.prototype.update = function(){
       if(event.efficient === false){
          this.game.physics.arcade.collide(this, event.collideWith, event.cb);
       }else{
-         if(distanceBetween(this.x, this.y, event.collideWith.x, event.collideWith.y)<Math.max(mob.spriteDiagonal, Math.sqrt(Math.pow(event.collideWith.width, 2)+Math.pow(event.collideWith.height, 2)))){
+         if(distanceBetween(this.x, this.y, event.collideWith.x, event.collideWith.y)<Math.max(this.spriteDiagonal, Math.sqrt(Math.pow(event.collideWith.width, 2)+Math.pow(event.collideWith.height, 2)))){
             this.game.physics.arcade.collide(this, event.collideWith, event.cb);
          }
       }
@@ -162,5 +163,37 @@ Rioter.prototype.freeze = function(boolean){
    this.naturalMove = false;
    if(boolean === false){
       this.naturalMove = true;
+   }
+};
+
+Rioter.prototype.fireAtBuilding = function(game, building){
+   if(this.canFire === true){
+      this.canFire = false;
+      tObject = new ThrownObject(game, {key: "moltav", frame: 0}, this.centerX, this.centerY);
+      tObject.throwAtBuilding(building, 20);
+   }
+};
+
+Rioter.prototype.positionOffscreenRandomly = function(game){
+   leftX = game.camera.x - mob.spriteDiagonal;
+   rightX = game.camera.x + game.camera.width + mob.spriteDiagonal;
+   leftY = game.camera.y - mob.spriteDiagonal;
+   rightY = game.camera.y + game.camera.height + mob.spriteDiagonal;
+   switch(randInt(0, 3)){
+      case 0:
+         this.x = leftX;
+         this.y = randInt(leftY, rightY);
+         break;
+      case 1:
+         this.x = rightX;
+         this.y = randInt(leftY, rightY);
+         break;
+      case 2:
+         this.x = randInt(leftX, rightX);
+         this.y = leftY;
+         break;
+      case 3:
+         this.x = randInt(leftX, rightX);
+         this.y = rightY;
    }
 };
