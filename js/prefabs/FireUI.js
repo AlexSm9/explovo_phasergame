@@ -30,7 +30,7 @@ FireUI.prototype.constructor = FireUI; // creation call
 
 FireUI.prototype.update = function(){
 	this.buildingTotals.forEach(function(fireDamage){
-		this.current -= fireDamage.fireGroup.countLiving()*fireDamage.damageMult;
+		this.current -= fireDamage.fireLevel*fireDamage.damageMult;
 	},this);
 	this.uiInner.scale.y = this.current/this.total;
 };

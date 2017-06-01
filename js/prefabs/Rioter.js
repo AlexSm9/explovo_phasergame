@@ -170,7 +170,7 @@ Rioter.prototype.fireAtBuilding = function(game, building){
    if(this.canFire === true){
       this.canFire = false;
       tObject = new ThrownObject(game, {key: "moltav", frame: 0}, this.centerX, this.centerY);
-      tObject.throwAtBuilding(building, 20);
+      tObject.throwAtBuilding(building, 80);
    }
 };
 

@@ -9,6 +9,7 @@ var Player = function(game, x, y, key, src) {
 	this.game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
 	this.anchor.set(0.5,0.5); // set anchor to center
 	this.body.setCircle(25); // circular hitbox
+	this.body.setSize(this.width-10, this.height-10, 5, 5);
 	
 	this.waterLevel = 100;
 	this.waterLevelTotal = 100;

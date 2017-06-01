@@ -28,26 +28,21 @@ stPreload.prototype = {
 		this.load.atlas('NextButtons', 'ContinueButtons.png', 'ContinueButtons.json');
 		
 		//Buildings
-		this.load.image('building1','Building1.png');
-		this.load.image('building2','Building2.png');
-		this.load.image('building3','Building3.png');
-		this.load.image('building4','Building4.png');
-		this.load.image('building5','Building5.png');
-		this.load.image('building6','Building6.png');
-		this.load.image('fireStation','FIREstation.png');
-		this.load.image('buildingDestroyed1','BuildingDestroyed1.png');
-		this.load.image('buildingDestroyed2','BuildingDestroyed2.png');
-		this.load.image('buildingDestroyed3','BuildingDestroyed3.png');
-		this.load.image('buildingDestroyed4','BuildingDestroyed4.png');
-		this.load.image('buildingDestroyed5','BuildingDestroyed5.png');
-		this.load.image('buildingDestroyed6','BuildingDestroyed6.png');
-		this.load.image('fireStationDestroyed','FIREstationDestroyed.png');
-		this.load.image('fTruck','FTruck.png');
-		this.load.image('fTruckDestroyed','FTruckDestroyed.png');
+		this.load.path = "assets/img/Buildings/";
+		this.load.spritesheet('building1','Building1Sheet.png',328,470);
+		this.load.spritesheet('building2','Building2Sheet.png',415,343);
+		this.load.spritesheet('building3','Building3Sheet.png',698,480);
+		this.load.spritesheet('building4','Building4Sheet.png',337,372);
+		this.load.spritesheet('building5','Building5Sheet.png',289,400);
+		this.load.spritesheet('building6','Building6Sheet.png',615,1130);
+		this.load.spritesheet('fireStation','FIREstationSheet.png',448,600);
+		this.load.spritesheet('fTruck','FTruckSheet.png',175,286);
 		
 		//other
-		this.load.image('fire','Fire3.png');
+		this.load.path = "assets/img/";
+		//this.load.image('fire','Fire3.png');
 		this.load.image('hydrant','FireHydrant.png');
+		this.load.image('crosshair','crosshair.png');
 		
 		//audio
         this.load.path = "assets/audio/"
@@ -58,7 +53,7 @@ stPreload.prototype = {
 		this.load.audio("whirling", 'newstransition.mp3');
         
 		//Tilemap
-		this.load.path = "assets/img/tiles/"
+		this.load.path = "assets/img/Tiles/";
         this.game.load.tilemap('CityTilemap', 'CityTilemap.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('CityTileset64', 'CityTileset64.png');
    },//end_preload
