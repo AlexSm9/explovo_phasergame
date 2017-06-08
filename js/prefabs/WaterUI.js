@@ -3,14 +3,14 @@
 var WaterUI = function(game, player, x, y){
 	this.player = player;
 	// Adjust parameters for inner part of the UI
-	this.uiInner = game.add.image(x,y,'WaterLevel');
+	this.uiInner = game.add.image(x,y,'assets','waterBarIn');
 	this.uiInner.anchor.set(0,0.5);
 	this.uiInner.fixedToCamera = true;
 	this.uiInner.cameraOffset.setTo(x,y);
 	this.uiInner.scale.x = this.player.waterLevel/this.player.waterLevelTotal;
 	
 	// Adjust parameters for the outer part of the UI
-	this.uiOuter = game.add.image(x-50,y-40,'WaterBar');
+	this.uiOuter = game.add.image(x-50,y-40,'assets','waterBarOut');
 	this.uiOuter.fixedToCamera = true;
 	this.uiOuter.cameraOffset.setTo(x-50,y-40);
 };

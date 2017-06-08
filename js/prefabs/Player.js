@@ -8,12 +8,13 @@ var Player = function(game, x, y, key, src) {
 	Phaser.Sprite.call(this, game, x, y, key, src); // call sprite
 	this.game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
 	this.anchor.set(0.5,0.5); // set anchor to center
-	this.body.setCircle(25); // circular hitbox
-
+	this.body.setSize(25,25,25,25); // set to a small square
+	//this.body.setCircle(25); // circular hitbox, kinda sucks actually
 	this.waterLevel = 100;
 	this.waterLevelTotal = 100;
 
 	// set parameters
+	this.game = game;
 	this.body.collideWorldBounds = true;
 	this.body.drag.set(100); // drag property
 	this.body.maxVelocity.set(200); // max velocity
@@ -61,6 +62,5 @@ Player.prototype.update = function() {
 Player.prototype.waterUp = function(){
 	if (this.waterLevel < 100){
 		this.waterLevel += 0.5;
-	}
-
+    }
 };

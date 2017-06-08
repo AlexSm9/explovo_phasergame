@@ -18,11 +18,18 @@ stDirections.prototype = {
         this.add.text(125, this.game.height-250, 'Put out as many fires as you can and use the fire hydrants to refill your water!', {fontSize: '15px', fill: 'white'});
 
 
-        var button = this.game.add.button(this.game.width/2, this.game.height - 120, 'NextButtons', this.startGame, this.game,'ContinueButtonOver', 'ContinueButton');
-        button.anchor.set(0.5);
-        button.scale.setTo(0.4,0.4);
-        button.onInputOver.add(this.over, this);
-        button.onInputOut.add(this.out, this);  
+        var buttonTutorial = this.game.add.button(this.game.width/2, this.game.height - 120, 'NextButtons', this.startTutorial, this.game,'ContinueButtonOver', 'ContinueButton');
+        buttonTutorial.anchor.set(0.5);
+        buttonTutorial.scale.setTo(0.4,0.4);
+        buttonTutorial.onInputOver.add(this.over, this);
+        buttonTutorial.onInputOut.add(this.out, this);  
+		
+		this.add.text(this.game.width - 100, this.game.height - 100, 'Skip Tutorial', {fontSize: '15px', fill: 'white'});
+		var buttonSkip = this.game.add.button(this.game.width - 50, this.game.height - 50, 'NextButtons', this.skipTutorial, this.game,'ContinueButtonOver', 'ContinueButton');
+		buttonSkip.anchor.set(0.5);
+        buttonSkip.scale.setTo(0.2,0.2);
+        buttonSkip.onInputOver.add(this.over, this);
+        buttonSkip.onInputOut.add(this.out, this);  
         
     },//end_create
     over: function() {
@@ -33,7 +40,14 @@ stDirections.prototype = {
         l("out");
         
     },//end_out
-    startGame: function() {
+    startTutorial: function() {
+
+        this.state.start("stTutorialLevel");
+      
+    },//end_startTutorial
+	skipTutorial: function() {
+
         this.state.start("stGame");
-    }//end_startGame
+      
+    }//end_skipTutorial
 };

@@ -1,5 +1,6 @@
 function MobManager(defaultCohesionDistance, defaultSeparationDistance, defaultHeadingDistance, defaultCohesionWeight, defaultSeparationWeight, defaultHeadingWeight){
    this.mobList = [];
+   this.RM = null;
    this.defaultCohesionDistance = defaultCohesionDistance;
    this.defaultSeparationDistance = defaultSeparationDistance;
    this.defaultHeadingDistance = defaultHeadingDistance;
@@ -9,6 +10,12 @@ function MobManager(defaultCohesionDistance, defaultSeparationDistance, defaultH
 
    // enable collisions between members of this MobManager. This should rarely, if ever, be changed during runtime
    this.doCollideMobs = true;
+
+   this.creationTime = (new Date()).getTime();
+
+   this.events = [];
+
+   this.killOffscreen = false;
 
 }
 MobManager.prototype.constructor = MobManager;
@@ -67,8 +74,15 @@ MobManager.prototype.setAllGoal = function(goalX, goalY, goalWeight){
       mob.setGoalPoint(goalX, goalY, goalWeight);
    });
 };
+
+MobManager.prototype.setAllBuilding = function(building){
+   this.mobList.forEach(function(mob){
+      mob.setOwnBuilding(building);
+   });
+};
+
 // kills all mobs out of view of the camera, assumes anchor is at center
-MobManager.prototype.killAllOutOfView = function(game){
+MobManager.prototype.killAllOutOfView = function(game){ // kills only mobs with killOffscreen set to true
    cameraX = game.camera.x;
    cameraY = game.camera.y;
    cameraW = game.camera.width;
@@ -77,12 +91,15 @@ MobManager.prototype.killAllOutOfView = function(game){
    for(var x=mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
       mob = mobList[x];
       //assumption: sprite's anchor is 0.5, 0.5
-      if(((mob.x + mob.spriteDiagonal/2)<cameraX) || ((mob.x - mob.spriteDiagonal/2)>(cameraX+cameraW)) || ((mob.y + mob.spriteDiagonal/2)<cameraY) || ((mob.y - mob.spriteDiagonal/2)>(cameraY+cameraH))){
-            mob.destroy();
-            this.mobList.splice(x, 1);
+      if(mob.killOffscreen === true){
+         if(((mob.x + mob.spriteDiagonal/2)<cameraX) || ((mob.x - mob.spriteDiagonal/2)>(cameraX+cameraW)) || ((mob.y + mob.spriteDiagonal/2)<cameraY) || ((mob.y - mob.spriteDiagonal/2)>(cameraY+cameraH))){
+               mob.destroy();
+               this.mobList.splice(x, 1);
+         }
       }
    }
 };
+
 // to each mob add a callback that occurs if it enters the area defined by the other parameters
 MobManager.prototype.addAllTriggerOnEntry = function(leftCornerX, leftCornerY, width, height, callback){
    this.mobList.forEach(function(mob){
@@ -104,10 +121,27 @@ MobManager.prototype.addAllTriggerOnCollision = function(objectToCollideWith, ca
 
 // update method for MobManager, since this is not a phaser object, this method MUST be called within the update loop of its state
 MobManager.prototype.update = function(game){
+   //include MobManager as parameter to callback
+   time = (new Date()).getTime();
+   createTime = this.creationTime;
+   for(var x=this.events.length-1; x>=0; x--){
+      event = this.events[x];
+      if(time > createTime + event.millisecs){
+         event.cb(this);
+         this.events.splice(x, 1);
+      }
+   }
+
+   if(this.killOffscreen === true){
+      this.killAllOutOfView(game);
+   }
+
    var mobList = this.mobList;
    doCollideMobs = this.doCollideMobs;
 
    mobList.forEach(function(mob){
+      //game.debug.body(mob);
+
       updateFlocking(mob, getNeighbors(mob, mobList));
       //update loop n^2 runtime individual mob check
       if(doCollideMobs){
@@ -225,6 +259,17 @@ MobManager.prototype.freezeAll = function(){
       mob.freeze();
    });
 };
+
+MobManager.prototype.killOnEmpty = function(){
+   if(this.mobList.length<=0){
+      delete this;
+   }
+};
+
+MobManager.prototype.addEvent = function(callbackForMobManager, elapsedSecondsAfterCallingThisFunction){
+   this.events.push({millisecs: elapsedSecondsAfterCallingThisFunction*1000, cb: callbackForMobManager});
+};
+
 // returns a random array of mobs
 MobManager.prototype.getRandomSubset = function(minQuantity, maxQuntity){
    maxQuantity = typeof maxQuantity !== 'undefined' ? maxQuantity : minQuantity;
