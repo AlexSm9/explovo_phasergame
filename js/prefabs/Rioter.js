@@ -4,8 +4,12 @@ function Rioter(game, spriteObject, positionX, positionY){
    this.anchor.set(0.5);
    game.physics.enable(this);
    this.body.setSize(this.width-4, this.height-4, 2, 2);
+   this.building = null;
 
+   this.killOffscreen = false;
 
+   this.creationTime = (new Date()).getTime();
+   this._events = [];
 
    // values which should be here but can be changed as required
    this.maxVelocity = 60;
@@ -90,6 +94,15 @@ Rioter.prototype.setFlockingDistances = function(cDist, sDist, hDist){
 };
 Rioter.prototype.update = function(){
 
+   time = (new Date()).getTime();
+   for(var w=this._events.length-1; w>=0; w--){
+      event = this._events[w];
+      if(time > this.creationTime + event.millisecs){
+         event.cb(this);
+         this._events.splice(w, 1);
+      }
+   }
+
    velX = this.body.velocity.x;
    velY = this.body.velocity.y;
 
@@ -136,7 +149,7 @@ Rioter.prototype.update = function(){
       this.body.velocity.y = 0;
    }
 
-   // perform callbacks for enttry and collision events
+   // perform callbacks for enttry and collision _events
    for(var x in this.triggerEvents){
       event = this.triggerEvents[x];
       if(this.x>event.leftX && this.x<event.rightX){
@@ -177,12 +190,31 @@ Rioter.prototype.fireAtBuilding = function(game, building){
    }
 };
 
+Rioter.prototype.fireAtOwnBuilding = function(game){
+   building = this.building;
+   if(!building.isDead){
+      if(this.canFire === true){
+        this.canFire = false;
+         tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
+         tObject.throwAtBuilding(building, 20);
+      }
+   }
+};
+
+Rioter.prototype.setOwnBuilding = function(building){
+   this.building = building;
+};
+
+Rioter.prototype.addEvent = function(callbackForMobManager, elapsedSecondsAfterCallingThisFunction){
+   this._events.push({millisecs: elapsedSecondsAfterCallingThisFunction*1000, cb: callbackForMobManager});
+};
+
 Rioter.prototype.positionOffscreenRandomly = function(game){
-   leftX = game.camera.x - mob.spriteDiagonal;
-   rightX = game.camera.x + game.camera.width + mob.spriteDiagonal;
-   leftY = game.camera.y - mob.spriteDiagonal;
-   rightY = game.camera.y + game.camera.height + mob.spriteDiagonal;
-   switch(randInt(0, 3)){
+   leftX = game.camera.x - this.spriteDiagonal;
+   rightX = game.camera.x + game.camera.width + this.spriteDiagonal;
+   leftY = game.camera.y - this.spriteDiagonal;
+   rightY = game.camera.y + game.camera.height + this.spriteDiagonal;
+   switch(randInt(3, 0)){
       case 0:
          this.x = leftX;
          this.y = randInt(leftY, rightY);
@@ -199,4 +231,10 @@ Rioter.prototype.positionOffscreenRandomly = function(game){
          this.x = randInt(leftX, rightX);
          this.y = rightY;
    }
+};
+
+Rioter.prototype.positionOffworldRandomly = function(game){
+   var point = randomPointOffscreen;
+   this.x = point.x;
+   this.y = point.y;
 };
