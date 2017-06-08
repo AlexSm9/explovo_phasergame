@@ -16,6 +16,7 @@ stPreload.prototype = {
         this.load.image('News2', "News2.png"); // newspaper 2
         this.load.image('News3', "News3.png"); // newspaper 3
         this.load.image('GameOverPage',"GameOverScreen.png"); // game over screen
+        this.load.image('titleText', "riotfighter title text.png");
 
         // --  load asset sheets
         this.load.path = "assets/img/sheets/"; 
