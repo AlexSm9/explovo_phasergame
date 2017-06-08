@@ -32,14 +32,6 @@ stTitle.prototype = {
         this.title_music.play('', 0, 1, true);
         
     },//end_create
-    over: function() {
-        l("over");
-
-    },//end_over
-    out: function() {
-        l("out");
-        
-    },//end_out
     stopMusic: function() {
         this.title_music.stop();
     },
