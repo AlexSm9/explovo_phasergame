@@ -11,6 +11,8 @@ stTitle.prototype = {
     },//end_preload
     create: function(){
         l("title_create");
+        
+        this.game.stage.backgroundColor = "#000000";
        
        // add in animated title background
        this.TitleAnimation = this.game.add.sprite(0,0,'TitleAnimation');
