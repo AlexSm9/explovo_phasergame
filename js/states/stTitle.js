@@ -27,7 +27,7 @@ stTitle.prototype = {
         
         // add and play music
         this.title_music = this.game.add.audio('title_screen');
-        this.title_music.play('', 0, .8, true);
+        this.title_music.play('', 0, .7, true);
         
     },//end_create
     stopMusic: function() {
