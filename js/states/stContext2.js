@@ -27,11 +27,11 @@ stContext2.prototype = {
         this.game.add.tween(news.scale).to( { x: 1, y: 1 }, 1200, Phaser.Easing.Linear.None, true);
 
   
-        var button = this.game.add.button(this.game.width/2, this.game.height - 120, 'NextButtons', this.startGame, this.game,'ContinueButtonOver', 'ContinueButton');
-        button.anchor.set(0.5);
-        button.scale.setTo(0.4,0.4);
-        button.onInputOver.add(this.over, this);
-        button.onInputOut.add(this.out, this);  
+        this.button = this.game.add.button(this.game.width/2, this.game.height - 120, 'NextButtons', this.startGame, this.game,'ContinueButtonOver', 'ContinueButton');
+        this.button.anchor.set(0.5);
+        this.button.scale.setTo(0.4,0.4);
+        this.button.onInputOver.add(this.over, this);
+        this.button.onInputOut.add(this.out, this);  
         
     },//end_create
     update: function(){

@@ -12,7 +12,10 @@ var ThrownObject = function(game, spriteObject, positionX, positionY, sounds) {
 	this.inProgress = false;
 	this.building = null;
 	this.maxVelocity = 4;
-
+    
+    // add audio
+    this.molotov = game.add.audio('molotov');
+    this.molotov.allowMultiple = true; //so you can hear all the molotovs shatter yay
 };
 
 ThrownObject.prototype = Object.create(Phaser.Sprite.prototype);
@@ -24,12 +27,18 @@ ThrownObject.prototype.update = function() {
 	this.rotation += 0.1;
 
 	if(this.collideWithBuildingEnable === true){
+
 		if(this.game.physics.arcade.collide(this, this.building)){
+            // play molotov explosion sound
+            if (!this.molotov.isPlaying) {
+                this.molotov.play('', 0, .75, false);
+            }
 			this.building.startFire(this.game.physics.arcade.angleBetweenCenters(this,this.building));
 			this.destroy();
 		}
 	}
 };
+
 ThrownObject.prototype.throwAtBuilding = function(building, velocity){
 	this.building = building;
 	this.collideWithBuildingEnable = true;

@@ -1,29 +1,24 @@
 // -- Generic Building
 // Get fire count with this.fireGroup.countLiving()
-var Building = function(game, x, y, health, fires, key, keyDestroyed, src){
-
-	//var onFire = game.add.sprite(game.world.centerX, 300,'Flame');
-   	//this.onFIre.animations.add('FlameOn', Phaser.Animation.generateFrameNames('FlameOn', 1, 6), 5, true);
-	//onFire.animations.add('FlameOn');
-
-   // onFire.animations.play('FlameOn', 24, true);
-
-    //  Bob the octopus up and down with a tween
-   // game.add.tween(octopus).to({ y: 300 }, 2000, Phaser.Easing.Quadratic.InOut, true, 0, 1000, true);
-
-    //var octopus = game.add.sprite(300, 200, 'octopus');
-
-	this.saved = game;
-
+// Buildings should be named building01-01, building01-02, etc subject to change
+// Example - "MemeFactory-01.png" for alive "MemeFactory-02.png" for dead
+// May extend for animations if necessary
+var Building = function(game, x, y, health, fires, src){
+	// initalization
+	this.game = game;
+	this.src = src + '-01';
+	this.srcDestroyed = src + '-02';
 	// Creation Code
-	Phaser.Sprite.call(this, game, x, y, key, src); // call sprite
+	Phaser.Sprite.call(this, game, x, y, 'buildings', this.src); // call sprite
 	game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
-	this.keyDestroyed = keyDestroyed;
 	this.body.immovable = true; // dsable movement
 	this.body.moves = false;
 	this.anchor.set(0.5,0.5); // set anchor to center
 	this.game.add.existing(this);
-
+    
+    // add sounds
+    this.collapse = game.add.audio('collapse');
+    
 	//this.count = game.add.text(740,35, 'X ' + this.fireCount,{fontSize: '25px',fill:'yellow'});
 	//this.count.fixedToCamera=true;
 	this.isDead = false;
@@ -48,9 +43,9 @@ Building.prototype.update = function(){
 	// Indicator management
 	if (this.fireGroup.countLiving() > 0){
 		// movement of the fire indicator
-		this.indicator.rotation = this.saved.physics.arcade.angleBetween(this,this.indicator);
-		this.indicator.x = this.saved.camera.target.x;
-		this.indicator.y = this.saved.camera.target.y;
+		this.indicator.rotation = this.game.physics.arcade.angleBetween(this,this.indicator);
+		this.indicator.x = this.game.camera.target.x;
+		this.indicator.y = this.game.camera.target.y;
 	}
 	else{
 		if(this.indicator!==undefined){
@@ -64,9 +59,15 @@ Building.prototype.update = function(){
 	}
 	else{
 		this.isDead = true;
+        this.fireGroup.forEach(this.stopFireSound, this, true);
 		this.fireGroup.removeAll(true);
-		this.loadTexture(this.keyDestroyed);
+		this.loadTexture('buildings', this.srcDestroyed);
 	}
+    
+    // play collapse sound
+    if(this.health > 0 && this.health < 1 && !this.collapse.isPlaying) {
+        this.collapse.play('', 0, 1, false);
+    }
 	// Debug code
 	/*this.fireGroup.forEach(function(fire){
 		this.saved.debug.body(fire);
@@ -76,13 +77,8 @@ Building.prototype.update = function(){
 // startFire
 // Starts a fire on this building
 
-//var boom = this.game.add.sprite(this.x + this.game.rnd.integerInRange(0,this.width-100),this.y + this.game.rnd.integerInRange(0,this.height-100),'Explosion');
-	//boom.scale.setTo(0.5,0.5);
-	//boom.animations.add('BOOM');
-	//boom.animations.play('Boom',5,true);
-	//fire.anchor.setTo(0.5,0.5);
 // Accepts a side in radians and generates a random fire
-Building.prototype.startFire = function(side){
+Building.prototype.startFire = function(side){    
 	// Get the side of the building that was lit
 	var angle = rToA(side);
 	if (angle >= -45 && angle <= 45){ // left
@@ -112,12 +108,16 @@ Building.prototype.startFire = function(side){
   	this.fireGroup.add(fire);
 	if(this.fireGroup.countLiving() == 1){
 		// fire indicator
-		this.indicator = this.saved.add.sprite(this.saved.camera.target.x,this.saved.camera.target.y,'assets','fireIndicator');
+		this.indicator = this.game.add.sprite(this.game.camera.target.x,this.game.camera.target.y,'assets','fireIndicator');
 		this.indicator.anchor.setTo(0.5,0.5);
 	}
-	// sound goes here
+
 };
 
 Building.prototype.damageFire = function(particle,fire){
 	fire.damage();
+};
+
+Building.prototype.stopFireSound = function(fire) {
+    fire.fire_sound.stop();
 }

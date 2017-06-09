@@ -12,7 +12,7 @@ stTutorialLevel.prototype = {
 	create: function(){
 		l("Tutorial_create");
 		
-		this.game.world.setBounds(0,0,1200,800);
+		this.game.world.setBounds(0,0,2400,1600);
 		this.game.stage.backgroundColor = "#228B22";
 		
 		this.buildingGroup = this.game.add.group(); // generate building group
@@ -220,10 +220,11 @@ stTutorialLevel.prototype = {
 		this.instructor.visible = true;
 		
 		//Create a building
-		this.building = new Building(this.game,326,300,200,0,'building1', 'buildingDestroyed1');
+		this.building = new Building(this.game,326,300,200,0,'Building01');
 		this.buildingGroup.add(this.building);
 		
 		this.bg = this.game.add.image(0, 0, 'TutorialBG');
+		this.bg.scale.setTo(2,2);
 		
 		this.fireUI = new FireUI(this.game,this.buildingGroup, 765, 355);
 		this.fireUI.visible = false;

@@ -92,7 +92,7 @@ WaterHose.prototype.update = function() {
 			this.emitParticle();
 			this.attachment.waterLevel -= 0.2; // water flow rate, needs changing soon
 			
-			if(this.attachment.waterLevel<50){
+		/*	if(this.attachment.waterLevel<50){
 				this.ArrowOn=true;
 				l("U need watter");
 				this.waterarrow = new WaterArrow(this.game,615,100,this.player);
@@ -105,7 +105,7 @@ WaterHose.prototype.update = function() {
 
 			//	 }else{
 			//	 	this.waterarrow.kill();
-			//	 }
+			//	 }*/
 			
    }
     }

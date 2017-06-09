@@ -16,6 +16,7 @@ stPreload.prototype = {
         this.load.image('News2', "News2.png"); // newspaper 2
         this.load.image('News3', "News3.png"); // newspaper 3
         this.load.image('GameOverPage',"GameOverScreen.png"); // game over screen
+        this.load.image('titleText', "riotfighter title text.png");
 
         // --  load asset sheets
         this.load.path = "assets/img/sheets/"; 
@@ -24,16 +25,20 @@ stPreload.prototype = {
         this.load.atlas('fires','Fires.png','json/FiresAtlas.json'); // animated fire asset
         this.load.atlas('TitleAnimation',"TitleAnimation.png","json/TitleAnimation.json"); // title screen animation
         this.load.atlas('NextButtons', 'ContinueButtons.png', 'json/ContinueButtons.json'); // continue button
+        
+        this.load.atlas('TitleScreenButtons', 'TitleScreenButtons.png', 'json/TitleScreenButtons.json');
         this.load.atlas('assets','normalAssets.png','json/normalAssets.json'); // all remaining assets
+        this.load.atlas('buildings',"buildings.png",'json/buildings.json');
 
         // -- misc assets, last minute assets
         this.load.path = "assets/img/raw images/";
         // particles are incompatible with texture atlas 
-		this.load.image('CityOSPortrait', "PLACEHOLDER_CityOSPortrait.png");
-		this.load.image('RioterPortrait', "PLACEHOLDER_RioterPortrait.png");
-		this.load.image('textBox', 'TextBox.png');
         this.load.image('water','WaFParticle.png');
         this.load.image('foam', 'WFParticle.png');
+        // placeholder tutorial level assets
+        this.load.image('CityOSPortrait', "PLACEHOLDER_CityOSPortrait.png");
+		this.load.image('RioterPortrait', "PLACEHOLDER_RioterPortrait.png");
+		this.load.image('textBox', 'TextBox.png');
 		
 		//Buildings
 		this.load.image('building1','Building1.png');
@@ -70,9 +75,11 @@ stPreload.prototype = {
         this.load.audio('refill', 'refill.mp3');
         this.load.audio('refill_done', 'refill_done.mp3');
         this.load.audio('refill_notdone', 'refill_notdone.mp3');
-        this.load.audio('fireSizzle','sizzle.wav');
+        this.load.audio('molotov', 'molotov.mp3');
+        this.load.audio('fireSizzle','sizzle.mp3');
+        this.load.audio('fire', 'fire.mp3');
+        this.load.audio('collapse', 'building collapse.mp3');
         this.game.load.audio("whirling", 'newstransition.mp3');
-
     
     },//end_preload
     create: function(){
