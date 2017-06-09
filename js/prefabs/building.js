@@ -33,7 +33,6 @@ var Building = function(game, x, y, health, fires, src){
 	for( let i = 0; i < fires; i++){
 		let j = game.rnd.integerInRange(-2,3);
 		this.startFire(j);
-        this.fire_sound.play('', 0, .35, true);
 	}
 	// debug
 	// this.starterFire = game.input.keyboard.addKey(Phaser.Keyboard.T);
@@ -65,11 +64,12 @@ Building.prototype.update = function(){
 		this.fireGroup.removeAll(true);
 		this.loadTexture('buildings', this.srcDestroyed);
         this.fire_sound.stop();
-        
-        if (!this.collapse.isPlaying) {
-            this.collapse.play('', 0, .75, false);
-        }
 	}
+    
+    // play collapse sound
+    if(this.health > 0 && this.health < .3 && !this.collapse.isPlaying) {
+        this.collapse.play('', 0, 1, false);
+    }
 	// Debug code
 	/*this.fireGroup.forEach(function(fire){
 		this.saved.debug.body(fire);
@@ -113,13 +113,11 @@ Building.prototype.startFire = function(side){
 		this.indicator = this.game.add.sprite(this.game.camera.target.x,this.game.camera.target.y,'assets','fireIndicator');
 		this.indicator.anchor.setTo(0.5,0.5);
 	}
-    
-    if(fire.health <= 0) {
-        //this.fire_sound.stop();
-    }
+    //play fire sound
+    this.fire_sound.play('', 0, .5, true);
 
 };
 
 Building.prototype.damageFire = function(particle,fire){
 	fire.damage();
-}
+};
