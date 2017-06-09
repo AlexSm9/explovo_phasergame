@@ -23,8 +23,6 @@ stTitle.prototype = {
         this.button = this.game.add.button(this.game.width/2, this.game.height - 186, 'StartButtons', this.startGame, this.game, 'riotfighter title button2 w shadow', 'riotfighter title button w shadow');
         this.button.anchor.set(0.5);
         
-        this.button.onInputOver.add(this.over, this);
-        this.button.onInputOut.add(this.out, this);  
         this.button.onInputUp.add(this.stopMusic, this);
         
         // add and play music
