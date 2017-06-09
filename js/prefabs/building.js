@@ -62,11 +62,10 @@ Building.prototype.update = function(){
         this.fireGroup.forEach(this.stopFireSound, this, true);
 		this.fireGroup.removeAll(true);
 		this.loadTexture('buildings', this.srcDestroyed);
-        //this.fire_sound.stop();
 	}
     
     // play collapse sound
-    if(this.health > 0 && this.health < .3 && !this.collapse.isPlaying) {
+    if(this.health > 0 && this.health < 1 && !this.collapse.isPlaying) {
         this.collapse.play('', 0, 1, false);
     }
 	// Debug code
