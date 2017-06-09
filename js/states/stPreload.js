@@ -25,6 +25,8 @@ stPreload.prototype = {
         this.load.atlas('fires','Fires.png','json/FiresAtlas.json'); // animated fire asset
         this.load.atlas('TitleAnimation',"TitleAnimation.png","json/TitleAnimation.json"); // title screen animation
         this.load.atlas('NextButtons', 'ContinueButtons.png', 'json/ContinueButtons.json'); // continue button
+        
+        this.load.atlas('TitleScreenButtons', 'TitleScreenButtons.png', 'json/TitleScreenButtons.json');
         this.load.atlas('assets','normalAssets.png','json/normalAssets.json'); // all remaining assets
         this.load.atlas('buildings',"buildings.png",'json/buildings.json');
 
@@ -76,6 +78,7 @@ stPreload.prototype = {
         this.load.audio('molotov', 'molotov.mp3');
         this.load.audio('fireSizzle','sizzle.mp3');
         this.load.audio('fire', 'fire.mp3');
+        this.load.audio('collapse', 'building collapse.mp3');
         this.game.load.audio("whirling", 'newstransition.mp3');
     
     },//end_preload

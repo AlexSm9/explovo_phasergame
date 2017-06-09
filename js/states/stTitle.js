@@ -11,6 +11,8 @@ stTitle.prototype = {
     },//end_preload
     create: function(){
         l("title_create");
+        
+        this.game.stage.backgroundColor = "#000000";
        
        // add in animated title background
        this.TitleAnimation = this.game.add.sprite(0,0,'TitleAnimation');
@@ -27,7 +29,7 @@ stTitle.prototype = {
         
         // add and play music
         this.title_music = this.game.add.audio('title_screen');
-        this.title_music.play('', 0, 1, true);
+        this.title_music.play('', 0, .7, true);
         
     },//end_create
     stopMusic: function() {

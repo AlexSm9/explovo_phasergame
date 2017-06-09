@@ -31,7 +31,7 @@ ThrownObject.prototype.update = function() {
 		if(this.game.physics.arcade.collide(this, this.building)){
             // play molotov explosion sound
             if (!this.molotov.isPlaying) {
-                this.molotov.play('', 0, 1, false);
+                this.molotov.play('', 0, .75, false);
             }
 			this.building.startFire(this.game.physics.arcade.angleBetweenCenters(this,this.building));
 			this.destroy();
