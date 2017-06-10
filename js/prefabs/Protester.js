@@ -160,11 +160,12 @@ Protester.prototype.update = function(){
    }
 
    // perform callbacks for enttry and collision _events
-   for(var x in this.triggerEvents){
+   for(var x = this.triggerEvents.length-1; x>=0; x--){
       event = this.triggerEvents[x];
       if(this.x>event.leftX && this.x<event.rightX){
          if(this.y>event.upY && this.y<event.downY){
             event.cb(this); //calls callback and passes mob in as parameter
+            this.triggerEvents.splice(x, 1); // splices event as soon as complete
          }
       }
    }

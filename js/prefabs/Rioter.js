@@ -1,5 +1,4 @@
 function Rioter(game, spriteObject, positionX, positionY){
-   l("new rioter created");
    Phaser.Sprite.call(this, game, positionX, positionY, spriteObject.key, spriteObject.frame);
    this.spriteDiagonal = distanceBetween(this.x, this.y, this.x+this.width, this.y+this.height); //do this before setting anchor
    this.anchor.set(0.5);
@@ -153,11 +152,12 @@ Rioter.prototype.update = function(){
    }
 
    // perform callbacks for enttry and collision _events
-   for(var x in this.triggerEvents){
+   for(var x = this.triggerEvents.length-1; x>=0; x--){
       event = this.triggerEvents[x];
       if(this.x>event.leftX && this.x<event.rightX){
          if(this.y>event.upY && this.y<event.downY){
             event.cb(this); //calls callback and passes mob in as parameter
+            this.triggerEvents.splice(x, 1); // splices event as soon as complete
          }
       }
    }

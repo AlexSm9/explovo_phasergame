@@ -107,8 +107,8 @@ stGame.prototype = {
    MM.addAllTriggerOnCollision(this.buildingGroup, null, false);
 */
 
-//this.game.time.events.repeat(5000, 50, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 10 times then stop
-this.game.time.events.repeat(2000, 1, createProtesters, this); // every 3 seconds run function newBuildingAttack; repeat 10 times then stop
+this.game.time.events.repeat(5000, 50, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 10 times then stop
+this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
 
 
 var buildingGroup = this.buildingGroup;
@@ -179,7 +179,8 @@ function createProtesters(){
    var triggerToNewPoint = function(mob){
       var newPoint = randomPointOffscreen(game, 50);
       mob.setGoalPoint(newPoint.x, newPoint.y, 0.5); // randomly head to offscreen point with weight 0.8
-      mob.triggerOnEntry(newPoint.x-60, newPoint.y-60, newPoint+120, newPoint+120, triggerToNewPoint); //possible reccursion issues?
+      mob.triggerOnEntry(newPoint.x-60, newPoint.y-60, newPoint.x+120, newPoint.y+120, triggerToNewPoint); //possible reccursion issues?
+      //^ Current Problem Here
    };
 
    var onSprayBecomeRioter = function(mob){
@@ -232,7 +233,7 @@ var throwAtBuilding = function(mob){
      this.end = damageFire = function(particle,building){
       particle.kill();
       building.damageFire();
-   }
+   };
 
    },//end_create
 
@@ -248,7 +249,9 @@ var throwAtBuilding = function(mob){
 
       this.RM.update(this.game);
       this.RM.killAllOutOfView(this.game);
-      //l("Mobs in RM: " + this.RM.mobList.length);
+      this.PM.update(this.game);
+
+      l("Mobs in RM: " + this.RM.mobList.length + ", Mobs in PM: " + this.PM.mobList.length);
 
 
    //MM.update(this.game);
@@ -283,14 +286,16 @@ var throwAtBuilding = function(mob){
 
 
 
+/*
+  render: function() {
 
- /*  render: function() {
 	   this.buildingGroup.forEach(function(building){
 		   building.fireGroup.forEach(function(fire){
 			   this.game.debug.body(fire);
 		   },this);
 	   },this);
+
    // display fps
-    //  this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
-   }*/
+     this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
+  }*/
 };//end_s1Game
