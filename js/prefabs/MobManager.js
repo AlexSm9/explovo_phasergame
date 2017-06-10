@@ -50,11 +50,22 @@ MobManager.prototype.removeMob = function(mobToRemove){
    for(var x=mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
       mob = mobList[x];
       if(mob == mobToRemove){
-         mob.destroy();
          this.mobList.splice(x, 1);
       }
    }
 };
+
+// removes and destroys a mob passed into arguments, if it exists
+MobManager.prototype.removeAndDestroyMob = function(mobToRemove){
+   for(var x=mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
+      mob = this.mobList[x];
+      if(mob == mobToRemove){
+         removed = this.mobList.splice(x, 1);
+         mob.killNextFrame = true;
+      }
+   }
+};
+
 // destroys all mobs within this MobManager
 MobManager.prototype.killAll = function(mobToRemove){
    mobList = this.mobList;
