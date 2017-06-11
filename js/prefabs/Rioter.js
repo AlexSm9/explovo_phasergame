@@ -8,12 +8,6 @@ function Rioter(game, spriteObject, positionX, positionY){
 
    game.add.existing(this);
 
-   // Quickfix for world ordering
-   game.world.sendToBack(this);
-   for(var q=0; q<2; q++){
-      game.world.moveUp(this);
-   }
-
    this.killOffscreen = false;
 
    this.creationTime = (new Date()).getTime();
