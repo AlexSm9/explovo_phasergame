@@ -294,7 +294,7 @@ stTutorialLevel.prototype = {
 
 		game = this.game;
 		var throwAtBuilding = function(mob){
-			mob.fireAtBuilding(game, building);
+			mob.fireAtBuilding(game, building, true);
 			mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
 		};
 
