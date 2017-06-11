@@ -12,9 +12,6 @@ var stGame = function(game) {
 stGame.prototype = {
    preload: function(){
       this.game.time.advancedTiming = true;
-      //Rioter_
-      //MM = new MobManager(100, 50, 100, 1, 1.5, 1);
-      //_Rioter
       this.RM = new MobManager(100, 50, 100, 1, 1.5, 1);
       this.PM = new MobManager(150, 75, 100, 1, 1.5, 1.5);
 
@@ -102,7 +99,6 @@ stGame.prototype = {
         var onSprayIncreaseGoalweight = function(mob){
             //mob.freeze();
             mob.setGoalPoint(mob.primaryGoalX, mob.primaryGoalY, (mob.goalVectorWeight + 0.02));
-            //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
         };
 
         var buildingGroup = this.buildingGroup;
@@ -131,13 +127,9 @@ stGame.prototype = {
             for(var i=0; i<randInt(6, 3); i++){ //creates 3-5 rioters to pursue building
                 var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
 				this.rioterLayer.add(rioter);
-                //l(rioter);
-                //console.dir(this.RM);
                 this.RM.addMob(rioter);
 
-                //do{ // infinite loop
                     rioter.positionOffscreenRandomly(game);
-                //}while(game.physics.arcade.overlap(rioter, this.buildingGroup)===true);
 
                 rioter.setOwnBuilding(building);
                 rioter.setGoalPoint(building.centerX, building.centerY, 0.4);
@@ -170,7 +162,6 @@ stGame.prototype = {
             var newPoint = randomPointOffscreen(game, 50);
             mob.setGoalPoint(newPoint.x, newPoint.y, 0.5); // randomly head to offscreen point with weight 0.8
             mob.triggerOnEntry(newPoint.x-60, newPoint.y-60, newPoint.x+120, newPoint.y+120, triggerToNewPoint); //possible reccursion issues?
-            //^ Current Problem Here
         };
 
         var onSprayBecomeRioter = function(mob){
@@ -185,11 +176,6 @@ stGame.prototype = {
             this.PM.addMob(protester);
             protester.positionOffscreenRandomly(game);
 
-            /*var point = randomPointOffscreen(game, 50);
-            protester.setGoalPoint(point.x, point.y, 0.2); // randomly head to offscreen point with weight 0.8
-            protester.triggerOnEntry(point.x-60, point.y-60, point+120, point+120, triggerToNewPoint); //possible reccursion issues?
-        */
-
             triggerToNewPoint(protester);
 
             protester.triggerOnCollision(this.emitter, onSprayBecomeRioter, false);
@@ -197,7 +183,6 @@ stGame.prototype = {
 
             // Potential for slowdown with many mobs, use the second commented line instead if slowdown too significant
             protester.triggerOnCollision(this.rioterLayer, null, false);
-            //  protester.triggerOnCollision(this.rioterLayer);
 
             protester.triggerOnCollision(this.hydrantGroup, null, false);
             protester.triggerOnCollision(this.buildingGroup, null, false);
@@ -209,7 +194,6 @@ stGame.prototype = {
         //mob.freeze();
         mob.fireAtOwnBuilding(game);
         mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
-        //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
         };
 
         // Create UI
@@ -217,14 +201,11 @@ stGame.prototype = {
         this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
 		this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
         this.pointer.anchor.set(0.5,0.5);
-        //this.musicButton = new MusicButton(this.game, this.bg_music, 1, 760, 560); //music mute/unmute button
-
 
 		this.uiLayer.add(this.waterUI.uiInner);
 		this.uiLayer.add(this.fireUI.uiInner);
 		this.uiLayer.add(this.waterUI.uiOuter);
 		this.uiLayer.add(this.fireUI.uiOuter);
-        //this.uiLayer.add(this.musicButton);
 		this.uiLayer.add(this.pointer);
 
 },//end_create
@@ -236,14 +217,11 @@ stGame.prototype = {
       this.RM.killAllOutOfView(this.game);
       this.PM.update(this.game);
 
-      //l("Mobs in RM: " + this.RM.mobList.length + ", Mobs in PM: " + this.PM.mobList.length);
-
    if (this.G.isDown){
       this.gameWin.dispatch();
    }
    // Loss Condition
    //  IF city life is below 40%, signal game over
-   //console.log(this.buildingGroup.countLiving());
    if(this.buildingGroup.countLiving() == 0){
       this.gameOver.dispatch();
    }
@@ -311,13 +289,6 @@ stGame.prototype = {
 
 
   /*render: function() {
-	this.game.debug.body(this.buildingGroup.building);
-	  // this.buildingGroup.forEach(function(building){
-		//   building.fireGroup.forEach(function(fire){
-		//	   this.game.debug.body(fire);
-		 //  },this);
-	   // },this);
-
    // display fps
      this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
   }*/
