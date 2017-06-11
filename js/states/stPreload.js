@@ -4,7 +4,8 @@ var stPreload = function(game) {
 };
 stPreload.prototype = {
     preload: function(){
-        //---/ load all assets
+        // Setup loading signals
+        this.loading = this.add.text(this.game.width/2, this.game.height/2, this.load.progress, {fontSize: '15px', fill: 'white', align:'center'});
 
         //  -- load screens
         this.load.path = "assets/img/screens/"; //
@@ -90,6 +91,9 @@ stPreload.prototype = {
         l("PreloadAssets_create");
         this.game.sound.setDecodedCallback(['title_screen', 'game_music'], this.start, this);
     },//end_create
+    loadUpdate: function(){
+        this.loading.setText('Loading: ' + this.load.progress)
+    },
     start: function(){
          this.state.start("stTitle");
     }, //end_start

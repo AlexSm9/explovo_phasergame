@@ -20,7 +20,7 @@ function Rioter(game, spriteObject, positionX, positionY){
    this._events = [];
 
    // values which should be here but can be changed as required
-   this.maxVelocity = 60;
+   this.maxVelocity = 120;
    this.goalVectorWeightDefault = 0.4;
    this.spriteAngleOffset = Math.PI/2; //(sprite normally faces... up: -Math.PI/2, down: Math.pi/2, left: Math.PI, right: 0)
    this.rotationDefault = 0;

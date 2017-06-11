@@ -3,14 +3,13 @@
 var stGameBuildingGroup = function(game){
    this.game = game;
     Phaser.Group.call(this,game);
-    this.addBuilding(1000,1000,1000,setFires(),'Building01');
-    this.addBuilding(1646,2285,100,setFires(),'Building03');
-    this.addBuilding(758,2284,100,setFires(),'Building04');
-    this.addBuilding(2620,1585,100,setFires(),'Building05');
-    this.addBuilding(628,831,100,setFires(),'Building06');
-    this.addBuilding(804,1655,1000,setFires(),'Building07');
-    this.addBuilding(1654,199,100,setFires(),'Building08');
-    this.addBuilding(1726,1567,1000,setFires(),'Building09');
+    this.addBuilding(1722,1575,250,0,'FIREstation');
+    this.addBuilding(2786,2313,300,0,'Building03');
+    this.addBuilding(2267,194,200,0,'Building04');
+    this.addBuilding(830,1659,200,0,'Building05');
+    this.addBuilding(1660,2314,200,0,'Building09');
+    this.addBuilding(988,975,200,0,'Building07');
+    this.addBuilding(2610,930,200,0,'Building06');
 
     function setFires(){
       return 0;

@@ -17,6 +17,7 @@ stDirections.prototype = {
         this.add.text(250, this.game.height-300, 'Use your mouse to direct and shoot water!', {fontSize: '15px', fill: 'white'});
         this.add.text(125, this.game.height-250, 'Put out as many fires as you can and use the fire hydrants to refill your water!', {fontSize: '15px', fill: 'white'});
 
+
         var buttonTutorial = this.game.add.button(this.game.width/2, this.game.height - 120, 'NextButtons', this.startTutorial, this.game,'ContinueButtonOver', 'ContinueButton');
         buttonTutorial.anchor.set(0.5);
         buttonTutorial.scale.setTo(0.4,0.4);
