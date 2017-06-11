@@ -7,6 +7,7 @@ var stContext1 = function(game) {
 stContext1.prototype = {
     preload: function(){
         l("Context1_preload");
+        this.game.stage.backgroundColor = "#000000";
         // add in background
         
     },//end_preload
@@ -44,6 +45,6 @@ stContext1.prototype = {
         //l("out");
     },//end_out
     startGame: function() {
-		this.state.start("stDirections");
+		this.state.start("stGame");
     }//end_startGame
 };

@@ -4,7 +4,8 @@ var stPreload = function(game) {
 };
 stPreload.prototype = {
     preload: function(){
-        //---/ load all assets
+        // Setup loading signals
+        this.loading = this.add.text(this.game.width/2, this.game.height/2, this.load.progress, {fontSize: '15px', fill: 'white', align:'center'});
 
         //  -- load screens
         this.load.path = "assets/img/screens/"; //
@@ -16,7 +17,7 @@ stPreload.prototype = {
         this.load.image('News2', "News2.png"); // newspaper 2
         this.load.image('News3', "News3.png"); // newspaper 3
         this.load.image('GameOverPage',"GameOverScreen.png"); // game over screen
-        this.load.image('WinScreen',"WinScreen.png"); // game over screen
+        this.load.image('Win',"WinScreen.png"); // game over screen
         this.load.image('titleText', "riotfighter title text.png");
 
         // --  load asset sheets
@@ -90,6 +91,9 @@ stPreload.prototype = {
         l("PreloadAssets_create");
         this.game.sound.setDecodedCallback(['title_screen', 'game_music'], this.start, this);
     },//end_create
+    loadUpdate: function(){
+        this.loading.setText('Loading: ' + this.load.progress)
+    },
     start: function(){
          this.state.start("stTitle");
     }, //end_start
