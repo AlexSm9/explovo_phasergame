@@ -1,6 +1,7 @@
 //Instructions Page
 
 var stGameOver = function(game) {
+    this.game = game;
 };
 stGameOver.prototype = {
     preload: function(){
@@ -10,7 +11,7 @@ stGameOver.prototype = {
 
     },//end_preload
     create: function(){
-        game.sound.stopAll();
+        this.game.sound.stopAll();
        l("Directions_create");
         // add in start button
         this.add.text(315, this.game.height-500, 'You failed to save the city!', {fontSize: '15px', fill: 'white'});

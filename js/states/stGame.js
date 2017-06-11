@@ -50,7 +50,7 @@ stGame.prototype = {
 
    // Start music
    this.bg_music = this.game.add.audio('game_music');
-   this.bg_music.play('', 0, 1, true);
+   this.bg_music.play('', 0, 0.5, true);
 
    //create rioters and add to MobManager
 /*
@@ -188,14 +188,7 @@ var throwAtBuilding = function(mob){
    },//end_create
 
    update: function(){
-
       game = this.game;
-
-
-
-
-
-
 
       this.RM.update(this.game);
       this.RM.killAllOutOfView(this.game);

@@ -486,6 +486,6 @@ stTutorialLevel.prototype = {
 	
 	startGame: function() {
 		this.game.paused = false;
-		this.state.start("stGame");
+		this.state.start("stContext1");
 	}//end startGame
 };
