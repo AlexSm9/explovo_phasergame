@@ -14,9 +14,16 @@ stTutorialLevel.prototype = {
 
 		this.game.world.setBounds(0,0,2400,1600);
 		this.game.stage.backgroundColor = "#228B22";
-
-		this.buildingGroup = this.game.add.group(); // generate building group
-		this.hydrantGroup = this.game.add.group(); // generate hydrant group
+		
+		//groups for ordering
+		this.hydrantGroup = this.game.add.group();
+		this.rioterGroup = this.game.add.group();
+		this.emitterGroup = this.game.add.group();
+		this.playerGroup = this.game.add.group();
+		this.buildingGroup = this.game.add.group();
+		this.textGroup = this.game.add.group();
+		this.uiGroup = this.game.add.group();
+		
 
 		// add and play music (MUSIC IS WEIRD BECAUSE PAUSES)
 		//this.bg_music = this.game.add.audio('game_music');
@@ -25,7 +32,7 @@ stTutorialLevel.prototype = {
 		//Create UI
 		this.pointer = this.game.add.sprite(0, 0, 'assets', 'crosshair');
 		this.pointer.anchor.set(0.5,0.5);
-		this.pointer.visible = false;
+		this.uiGroup.add(this.pointer);
 
 		this.end = damageFire = function(particle,building){
 			particle.kill();
@@ -35,27 +42,39 @@ stTutorialLevel.prototype = {
 		this.instructor = this.game.add.image(-50, 320, 'CityOSPortrait');
 		this.instructor.scale.setTo(0.7, 0.7);
 		this.instructor.fixedToCamera = true;
+		this.textGroup.add(this.instructor);
 
 		this.antagonist = this.game.add.image(550, 300, 'RioterPortrait');
 		this.antagonist.scale.setTo(0.6, 0.6);
 		this.antagonist.visible = false;
 		this.antagonist.fixedToCamera = true;
+		this.textGroup.add(this.antagonist);
 
 		this.textBox = this.game.add.image(0, 500, 'textBox');
 		this.textBox.fixedToCamera = true;
+		this.textGroup.add(this.textBox);
 		this.text1 = this.add.text(25, 515, 'NOW_BOOTING: "Emeregency Riot Training Protocol"', {fontSize: '15px', fill: 'lime'});
 		this.text1.fixedToCamera = true;
+		this.textGroup.add(this.text1);
 		this.text2 = this.add.text(25, 535, 'Hello <Firefighter_name_here>,', {fontSize: '15px', fill: 'white'});
 		this.text2.fixedToCamera = true;
+		this.textGroup.add(this.text2);
 		this.text3 = this.add.text(25, 555, 'Welcome to RiotOS', {fontSize: '15px', fill: 'white'});
 		this.text3.fixedToCamera = true;
+		this.textGroup.add(this.text3);
 		this.continueText = this.add.text(710, 510, 'Continue...', {fontSize: '15px', fill: 'white'});
 		this.continueText.fixedToCamera = true;
+		this.textGroup.add(this.continueText);
 
 		this.button = this.game.add.button(750, 565, 'NextButtons', this.start, this,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
+		this.textGroup.add(this.button);
+		
+		this.instructing = false;
+		this.winning = false;
+		this.losing = false;
 	},//end_create
 
 	update: function(){
@@ -78,8 +97,10 @@ stTutorialLevel.prototype = {
 				this.game.physics.arcade.overlap(this.emitter,building.fireGroup,building.damageFire); // emitter with fire
 			},this);
 
-			if(this.building.fireGroup.countLiving() > 0 && this.antagonist.visible == false)
+			if(this.building.fireGroup.countLiving() > 0 && !this.instructing){
 				this.tutorial10();
+				l("HERE");
+			}
 			if(this.building.health > 150 && this.building.health < 151)
 				this.tutorial10();
 			if(this.building.health > 100 && this.building.health < 101)
@@ -87,10 +108,10 @@ stTutorialLevel.prototype = {
 			if(this.building.health > 50 && this.building.health < 51)
 				this.tutorial10();
 
-			if(this.building.fireGroup.countLiving() == 0 && this.building.health < 200)
+			if(this.building.fireGroup.countLiving() == 0 && this.building.health < 200 && !this.winning)
 				this.tutorialWin();
 
-			if(this.building.isDead == true)
+			if(this.building.isDead == true && !this.losing)
 				this.tutorialFail();
 		}
 
@@ -105,7 +126,8 @@ stTutorialLevel.prototype = {
 		// Create a new Player
 		this.player = new Player(this.game,600, 300, 'assets', 'firefighter');
 		this.game.camera.follow(this.player,4,0.1,0.1);  // set camera to player
-		this.pointer.visible = true;
+		this.playerGroup.add(this.player);
+		this.player.freeze(true);
 
 		this.text1.text = "Loading Firefighter.exe ... Complete";
 		this.text2.text = "You can use WASD to move around and the mouse cursor to aim";
@@ -116,27 +138,12 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-
-		//ORDERING BULLSHIT
-		this.instructor.bringToTop();
-		this.antagonist.bringToTop();
-		this.textBox.bringToTop();
-		this.text1.bringToTop();
-		this.text2.bringToTop();
-		this.text3.bringToTop();
-		this.continueText.bringToTop();
-		this.button.bringToTop();
-		this.pointer.bringToTop();
-
-		this.game.paused = true;
-		this.pointer.visible = false;
+		this.textGroup.add(this.button);
 	},//end start
 
 	tutorial01: function() {
-		this.game.paused = false;
-		this.pointer.visible = true;
 		this.instructor.visible = false;
-
+		this.player.freeze(false);
 		this.button.destroy();
 
 		this.text1.text = "";
@@ -148,31 +155,31 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
+		this.textGroup.add(this.button);
 	},//end tutorial01
 
 	tutorial02: function() {
 		this.button.destroy();
 		this.instructor.visible = true;
-
+		this.player.freeze(true);
+		
 		// Attach hose to player object
 		this.emitter = new WaterHose(this.game, this.player, 30,15);
 		this.waterUI = new WaterUI(this.game,this.player, 70, 60);
+		this.emitterGroup.add(this.emitter);
+		this.uiGroup.add(this.waterUI.uiInner);
+		this.uiGroup.add(this.waterUI.uiOuter);
 
 		this.text1.text = "Installing FireHose Module (CAUTION: Is extremely deadly)";
 		this.text2.text = "Use your left mouse button to spray water from your hose";
 		this.text3.text = "Your current water reserve is shown at the top left";
 
 		//new button
-		this.button = this.game.add.button(this.game.camera.x + 750, this.game.camera.y + 565, 'NextButtons', this.tutorial03, this,'ContinueButtonOver', 'ContinueButton');
+		this.button = this.game.add.button(750, 565, 'NextButtons', this.tutorial03, this,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-
-		//ORDERING BULLSHIT
-		this.world.sendToBack(this.emitter);
-
-		this.game.paused = true;
-		this.pointer.visible = false;
+		this.textGroup.add(this.button);
 	},//end tutorial02
 
 	tutorial03: function() {
@@ -187,21 +194,16 @@ stTutorialLevel.prototype = {
 		this.text3.text = "You can use fire hydrants to replenish your water supply";
 
 		//new button
-		this.button = this.game.add.button(this.game.camera.x + 750, this.game.camera.y + 565, 'NextButtons', this.tutorial04, this,'ContinueButtonOver', 'ContinueButton');
+		this.button = this.game.add.button(750, 565, 'NextButtons', this.tutorial04, this,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-
-		//ORDERING BULLSHIT
-		this.world.sendToBack(this.emitter);
-		this.world.sendToBack(this.hydrantGroup);
+		this.textGroup.add(this.button);
 	},//end tutorial03
 
 	tutorial04: function() {
-		this.game.paused = false;
-		this.pointer.visible = true;
 		this.instructor.visible = false;
-
+		this.player.freeze(false);
 		this.button.destroy();
 
 		this.text1.text = "";
@@ -213,14 +215,16 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
+		this.textGroup.add(this.button);
 	},//end tutorial04
 
 	tutorial05: function() {
 		this.button.destroy();
 		this.instructor.visible = true;
+		this.player.freeze(true);
 
 		//Create a building
-		this.building = new Building(this.game,326,300,200,0,'Building01');
+		this.building = new Building(this.game,300,300,200,0,'Building07');
 		this.buildingGroup.add(this.building);
 
 		if(this.game.physics.arcade.overlap(this.player, this.building)){
@@ -230,45 +234,28 @@ stTutorialLevel.prototype = {
 
 
 		this.bg = this.game.add.image(0, 0, 'TutorialBG');
-		this.bg.scale.setTo(2,2);
+		this.world.sendToBack(this.bg);
 
 		this.fireUI = new FireUI(this.game,this.buildingGroup, 765, 355);
 		this.fireUI.visible = false;
+		this.uiGroup.add(this.fireUI.uiInner);
+		this.uiGroup.add(this.fireUI.uiOuter);
 
 		this.text1.text = "Loading SimEnv_v1007.exe ... Complete";
 		this.text2.text = "It is your duty to guard the city buildings from any potential harm";
 		this.text3.text = "The total health of all the buildings in the city is shown to the right, it will decrease as the city burns";
 
 		//new button
-		this.button = this.game.add.button(this.game.camera.x + 750, this.game.camera.y + 565, 'NextButtons', this.tutorial06, this,'ContinueButtonOver', 'ContinueButton');
+		this.button = this.game.add.button(750, 565, 'NextButtons', this.tutorial06, this,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-
-		//ORDERING BULLSHIT
-		this.world.sendToBack(this.bg);
-		this.world.moveUp(this.buildingGroup);
-		this.world.bringToTop(this.instructor);
-		this.world.bringToTop(this.antagonist);
-		this.world.bringToTop(this.textBox);
-		this.world.bringToTop(this.text1);
-		this.world.bringToTop(this.text2);
-		this.world.bringToTop(this.text3);
-		this.world.bringToTop(this.continueText);
-		this.world.bringToTop(this.button);
-		this.world.bringToTop(this.waterUI);
-		this.world.bringToTop(this.fireUI);
-		this.world.bringToTop(this.pointer);
-
-		this.game.paused = true;
-		this.pointer.visible = false;
+		this.textGroup.add(this.button);
 	},//end tutorial05
 
 	tutorial06: function() {
-		this.game.paused = false;
-		this.pointer.visible = true;
 		this.instructor.visible = false;
-
+		this.player.freeze(false);
 		this.button.destroy();
 
 		this.text1.text = "";
@@ -280,14 +267,18 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
+		this.textGroup.add(this.button);
 	},//end tutorial06
 
 	tutorial07: function() {
 		this.button.destroy();
 		this.instructor.visible = true;
+		this.player.freeze(true);
+		
 		rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, 600, 400);
 		MM.addMob(rioter);
 		this.game.add.existing(rioter);
+		this.rioterGroup.add(rioter);
 
 		building = this.buildingGroup.getRandom();
 		MM.setAllGoal(building.centerX, building.centerY, 0.4);
@@ -315,36 +306,18 @@ stTutorialLevel.prototype = {
 		this.text3.text = "A malicious individual is approaching city property, engage FULL ALERT";
 
 		//new button
-		this.button = this.game.add.button(this.game.camera.x + 750, this.game.camera.y + 565, 'NextButtons', this.tutorial08, this,'ContinueButtonOver', 'ContinueButton');
+		this.button = this.game.add.button(750, 565, 'NextButtons', this.tutorial08, this,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-
-		//ORDERING BULLSHIT
-		this.world.sendToBack(rioter);
-		this.world.sendToBack(this.emitter);
-		this.world.sendToBack(this.hydrantGroup);
-		this.world.sendToBack(this.bg);
-		this.world.bringToTop(this.instructor);
-		this.world.bringToTop(this.antagonist);
-		this.world.bringToTop(this.textBox);
-		this.world.bringToTop(this.text1);
-		this.world.bringToTop(this.text2);
-		this.world.bringToTop(this.text3);
-		this.world.bringToTop(this.continueText);
-		this.world.bringToTop(this.button);
-		this.world.bringToTop(this.waterUI);
-		this.world.bringToTop(this.fireUI);
-		this.world.bringToTop(this.pointer);
-
-		this.game.paused = true;
-		this.pointer.visible = false;
+		this.textGroup.add(this.button);
 	},//end tutorial07
 
 	tutorial08: function() {
 		this.button.destroy();
 		this.instructor.visible = false;
 		this.antagonist.visible = true;
+		this.player.freeze(true);
 		rioter.freeze(false);
 
 		this.text2.setStyle({fontSize: '25px', fill: 'orange'});
@@ -352,21 +325,20 @@ stTutorialLevel.prototype = {
 
 		this.text1.text = "";
 		this.text2.text = "Ima fuck up this building so hard";
-		this.text3.text = "kek";
+		this.text3.text = "Heh";
 
 		//new button
-		this.button = this.game.add.button(this.game.camera.x + 750, this.game.camera.y + 565, 'NextButtons', this.tutorial09, this,'ContinueButtonOver', 'ContinueButton');
+		this.button = this.game.add.button(750, 565, 'NextButtons', this.tutorial09, this,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
+		this.textGroup.add(this.button);
 	},//end tutorial08
 
 	tutorial09: function() {
-		this.game.paused = false;
-		this.pointer.visible = true;
 		this.instructor.visible = false;
 		this.antagonist.visible = false;
-
+		this.player.freeze(false);
 		this.button.destroy();
 
 		this.text2.setStyle({fontSize: '15px', fill: 'white'});
@@ -380,11 +352,11 @@ stTutorialLevel.prototype = {
 	},//end tutorial09
 
 	tutorial10: function() {
-		this.game.paused = false;
-		this.pointer.visible = true;
 		this.instructor.visible = false;
 		this.antagonist.visible = true;
-
+		this.player.freeze(false);
+		this.instructing = true;
+		
 		this.continueText.visible = true;
 		this.textBox.visible = true;
 
@@ -419,12 +391,14 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
+		this.textGroup.add(this.button);
 	},//end tutorial10
 
 	tutorial11: function() {
 		this.instructor.visible = true;
 		this.antagonist.visible = false;
-
+		this.player.freeze(false);
+		
 		this.button.destroy();
 
 		this.text2.setStyle({fontSize: '15px', fill: 'white'});
@@ -435,19 +409,18 @@ stTutorialLevel.prototype = {
 		this.text3.text = "You must put it out as soon as possible, aim your hose and shoot!";
 
 		//new button
-		this.button = this.game.add.button(this.game.camera.x + 750, this.game.camera.y + 565, 'NextButtons', this.tutorial09, this,'ContinueButtonOver', 'ContinueButton');
+		this.button = this.game.add.button(750, 565, 'NextButtons', this.tutorial09, this,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-
-		this.game.paused = true;
-		this.pointer.visible = false;
+		this.textGroup.add(this.button);
 	},//end tutorial11
 
 	tutorialWin: function() {
 		this.instructor.visible = true;
 		this.antagonist.visible = false;
-
+		this.player.freeze(false);
+		this.winning = true;
 		this.button.destroy();
 
 		this.text2.setStyle({fontSize: '15px', fill: 'white'});
@@ -462,15 +435,14 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-
-		this.game.paused = true;
-		this.pointer.visible = false;
+		this.textGroup.add(this.button);
 	},//end tutorialWin
 
 	tutorialFail: function() {
 		this.instructor.visible = true;
 		this.antagonist.visible = false;
-
+		this.player.freeze(false);
+		this.losing = true;
 		this.button.destroy();
 
 		this.text2.setStyle({fontSize: '15px', fill: 'white'});
@@ -485,13 +457,10 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-
-		this.game.paused = true;
-		this.pointer.visible = false;
+		this.textGroup.add(this.button);
 	},//end tutorialFail
 
 	startGame: function() {
-		this.game.paused = false;
 		this.state.start("stContext1");
 	}//end startGame
 };
