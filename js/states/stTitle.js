@@ -40,7 +40,7 @@ stTitle.prototype = {
        this.button.onInputUp.add(this.stopMusic, this);
         
        // add in music mute/unmute button
-       this.musicButton = new MusicButton(this.game, this.title_music);
+       this.musicButton = new MusicButton(this.game, this.title_music, this.game.width - 40, this.game.height - 45);
         
         
     },//end_create

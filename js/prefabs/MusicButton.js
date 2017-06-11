@@ -1,13 +1,13 @@
 // Music Button
 // Button for muting/unmuting music
-var MusicButton = function(game, music) {
+var MusicButton = function(game, music, x, y) {
    this.game = game;
    this.music = music;
    // add in music mute/unmute button
-   this.musicButton = (isMute ? this.game.add.button(this.game.width - 40, this.game.height - 45, 'MusicButtons', this.muteMusic, this, 'music-button-off2', 'music-button-off') : this.game.add.button(this.game.width - 40, this.game.height - 45, 'MusicButtons', this.muteMusic, this, 'music-button-on2', 'music-button-on'));
+   this.musicButton = (isMute ? this.game.add.button(x, y, 'MusicButtons', this.muteMusic, this, 'music-button-off2', 'music-button-off') : this.game.add.button(this.game.width - 40, this.game.height - 45, 'MusicButtons', this.muteMusic, this, 'music-button-on2', 'music-button-on'));
    this.musicButton.anchor.set(0.5);
    this.musicButton.scale.setTo(0.4);
-   this.musicButton.fixToCamera = true;
+   this.musicButton.fixedToCamera = true;
 };
 
 MusicButton.prototype = Object.create(Phaser.Button.prototype);
