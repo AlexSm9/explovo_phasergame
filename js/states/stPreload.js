@@ -92,7 +92,8 @@ stPreload.prototype = {
         this.load.audio('fireSizzle','sizzle.mp3');
         this.load.audio('fire', 'fire.mp3');
         this.load.audio('collapse', 'building collapse.mp3');
-        this.game.load.audio("whirling", 'newstransition.mp3');
+        this.load.audio('whirling', 'newstransition.mp3');
+        this.load.audio('game_over', 'game over.mp3');
 
     },//end_preload
     create: function(){

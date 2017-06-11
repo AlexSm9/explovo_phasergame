@@ -18,6 +18,12 @@ stGameOver.prototype = {
         // add sound
         this.fire_sound = this.game.add.audio('fire');
         this.fire_sound.play('', 0, .5, true);
+        this.bg_music = this.game.add.audio('game_over');
+        this.bg_music.play('', 0, 1, false);
+        
+        if (isMute === true) {
+           this.bg_music.volume = 0;
+        }
         
         // add in start button
         this.add.text(315, this.game.height-500, 'You failed to save the city!', {fontSize: '15px', fill: 'white'});
@@ -50,6 +56,7 @@ stGameOver.prototype = {
     },//end_out
     stopSound: function() {
         this.fire_sound.stop();
+        this.bg_music.stop();
         
     },//end_stopMusic
     startGame: function() {
