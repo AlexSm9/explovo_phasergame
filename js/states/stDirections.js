@@ -15,14 +15,9 @@ stDirections.prototype = {
         // add audio
         this.bg_sounds = this.game.add.audio('riot_sounds');
         this.bg_sounds.play('', 0, 0.7, true);
-        
-        this.add.text(225, this.game.height-400, 'The city is in chaos, and it is up to you to protect it!', {fontSize: '15px', fill: 'white'});
-        this.add.text(300, this.game.height-350, 'Use the WASD keys to move!', {fontSize: '15px', fill: 'white'});
-        this.add.text(250, this.game.height-300, 'Use your mouse to direct and shoot water!', {fontSize: '15px', fill: 'white'});
-        this.add.text(125, this.game.height-250, 'Put out as many fires as you can and use the fire hydrants to refill your water!', {fontSize: '15px', fill: 'white'});
 
         //add in buttons
-        this.buttonTutorial = this.game.add.button(this.game.width/2, this.game.height - 120, 'NextButtons', this.startTutorial, this.game,'ContinueButtonOver', 'ContinueButton');
+        this.buttonTutorial = this.game.add.button(this.game.width/2, this.game.height - 110, 'NextButtons', this.startTutorial, this.game,'ContinueButtonOver', 'ContinueButton');
         this.buttonTutorial.anchor.set(0.5);
         this.buttonTutorial.scale.setTo(0.4,0.4);
         this.buttonTutorial.onInputUp.add(this.stopSound, this);

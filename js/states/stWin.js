@@ -28,19 +28,12 @@ stWin.prototype = {
         this.titleButton.scale.setTo(0.8);
         this.titleButton.onInputUp.add(this.stopSound, this);
         
-        this.button = this.game.add.button(this.game.width - 110, this.game.height - 50, 'NextButtons', this.restartGame, this.game,'ContinueButtonOver', 'ContinueButton');
-        this.button.anchor.set(0.5);
-        this.button.scale.setTo(0.35);
-        this.button.onInputUp.add(this.stopSound, this);
 
     },//end_create
     stopSound: function() {
         this.bg_music.stop();
         this.bg_sounds.stop();
     },//end_stopSound
-    restartGame: function() {
-        this.state.start(this.state.previousState);
-    },//end_restartGame
     titleScreen: function() {
         this.state.start("stTitle");
     }//end_titleScreen
