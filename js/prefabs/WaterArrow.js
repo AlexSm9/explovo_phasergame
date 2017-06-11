@@ -21,10 +21,10 @@ var WaterArrow = function(game,x,y,player){
 	this.ArrowGroup = this.game.add.group();
 	//this.game.add.existing(Arrow);
 	//this.ArrowGroup.add(Arrow);
-	
+
 
 	this.makeArrow();
-	
+
 };
 
 WaterArrow.prototype = Object.create(Phaser.Sprite.prototype);
@@ -34,9 +34,9 @@ WaterArrow.prototype.update = function(){
 
 
 
-	
+
 	//this.game.physics.arcade.collide(this,this.player);
-	
+
 	//if (this.game.math.distance(this.x, this.y, this.player.x, this.player.y) < 50){
 	//	this.player.waterUp();
 	//}

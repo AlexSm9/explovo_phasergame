@@ -15,7 +15,10 @@ var Building = function(game, x, y, health, fires, src){
 	this.body.moves = false;
 	this.anchor.set(0.5,0.5); // set anchor to center
 	this.game.add.existing(this);
-
+    
+    // add sounds
+    this.collapse = game.add.audio('collapse');
+    
 	//this.count = game.add.text(740,35, 'X ' + this.fireCount,{fontSize: '25px',fill:'yellow'});
 	//this.count.fixedToCamera=true;
 	this.isDead = false;
@@ -56,9 +59,15 @@ Building.prototype.update = function(){
 	}
 	else{
 		this.isDead = true;
+        this.fireGroup.forEach(this.stopFireSound, this, true);
 		this.fireGroup.removeAll(true);
 		this.loadTexture('buildings', this.srcDestroyed);
 	}
+    
+    // play collapse sound
+    if(this.health > 0 && this.health < 1 && !this.collapse.isPlaying) {
+        this.collapse.play('', 0, 1, false);
+    }
 	// Debug code
 	/*this.fireGroup.forEach(function(fire){
 		this.saved.debug.body(fire);
@@ -107,4 +116,8 @@ Building.prototype.startFire = function(side){
 
 Building.prototype.damageFire = function(particle,fire){
 	fire.damage();
+};
+
+Building.prototype.stopFireSound = function(fire) {
+    fire.fire_sound.stop();
 }

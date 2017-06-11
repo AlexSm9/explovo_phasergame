@@ -12,7 +12,7 @@ var ThrownObject = function(game, spriteObject, positionX, positionY, sounds) {
 	this.inProgress = false;
 	this.building = null;
 	this.maxVelocity = 4;
-    
+
     // add audio
     this.molotov = game.add.audio('molotov');
     this.molotov.allowMultiple = true; //so you can hear all the molotovs shatter yay
@@ -31,7 +31,7 @@ ThrownObject.prototype.update = function() {
 		if(this.game.physics.arcade.collide(this, this.building)){
             // play molotov explosion sound
             if (!this.molotov.isPlaying) {
-                this.molotov.play('', 0, 1, false);
+                this.molotov.play('', 0, 0.75, false);
             }
 			this.building.startFire(this.game.physics.arcade.angleBetweenCenters(this,this.building));
 			this.destroy();
@@ -42,12 +42,12 @@ ThrownObject.prototype.update = function() {
 ThrownObject.prototype.throwAtBuilding = function(building, velocity){
 	this.building = building;
 	this.collideWithBuildingEnable = true;
-	dX = building.centerX-this.x;
-	dY = building.centerY-this.y;
+	var dX = building.centerX-this.x;
+	var dY = building.centerY-this.y;
 	if(this.inProgress === false){
 		this.inProgress = true;
 	}
-	n = normalize(dX, dY);
+	var n = normalize(dX, dY);
 	this.body.velocity.x = this.maxVelocity*n.x*velocity;
 	this.body.velocity.y = this.maxVelocity*n.y*velocity;
 };

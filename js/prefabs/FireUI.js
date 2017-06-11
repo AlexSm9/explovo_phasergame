@@ -4,7 +4,7 @@ var FireUI = function(game, buildings, x, y){
 	// initialize variables
 	this.total = 0;
 	this.fires = 0;
-	
+
 	// create UI and fix to camera
 	this.counter= game.add.image(700,50,'assets','FireCounter');
 	this.counter.anchor.set(0.5,0.5);
@@ -18,18 +18,18 @@ var FireUI = function(game, buildings, x, y){
 	this.uiInner.anchor.set(0.5,1);
 	this.uiInner.fixedToCamera = true;
 	this.uiInner.cameraOffset.setTo(x,y);
-	
+
 	this.uiOuter = game.add.image(x-41,y-285,'assets','healthBarOut');
 	this.uiOuter.fixedToCamera = true;
 	this.uiOuter.cameraOffset.setTo(x-41,y-285);
-	
+
 	// create scaling factor
 	this.buildingTotals = buildings; // save building group
 	this.buildingTotals.forEach(function(building){  // get total health for the fire bar
 		this.total += building.health;
 	},this); // start both values at full
 	l(this.total);
-	this.current = this.total; 
+	this.current = this.total;
 	this.uiInner.scale.y = this.current / this.total;
 };
 
