@@ -47,7 +47,8 @@ stGameOver.prototype = {
         
     },//end_stopMusic
     startGame: function() {
-        this.state.start("stGame");
+        console.log(this.state.previousState)
+        this.state.start(this.state.previousState);
     },//end_startGame
     titleScreen: function() {
         this.state.start("stTitle");

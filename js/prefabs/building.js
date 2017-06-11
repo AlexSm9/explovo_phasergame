@@ -67,6 +67,7 @@ Building.prototype.update = function(){
     // play collapse sound
     if(this.health > 0 && this.health < 1 && !this.collapse.isPlaying) {
         this.collapse.play('', 0, 1, false);
+		this.game.camera.shake(0.005,1000,true,Phaser.Camera.SHAKE_BOTH,false);
     }
 	// Debug code
 	/*this.fireGroup.forEach(function(fire){

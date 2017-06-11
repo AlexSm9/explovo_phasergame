@@ -13,6 +13,7 @@ window.onload = function() {
     game.state.add("stContext2", stContext2);
     game.state.add("stContext3", stContext3);
     game.state.add("stGameOver", stGameOver);
+    game.state.add("stWin",stWin);
     game.state.add("stTitle", stTitle);
     game.state.add("stGame", stGame);
     //start the first state
