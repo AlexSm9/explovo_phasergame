@@ -14,11 +14,11 @@ stWin.prototype = {
        l("Directions_create");
 
 
-        this.titleButton = this.game.add.button(130, this.game.height - 75, 'TitleScreenButtons', this.startGame, this.game,'titleScreenButtonOver', 'titleScreenButton');
+        this.titleButton = this.game.add.button(130, this.game.height - 75, 'TitleScreenButtons', this.titleScreen, this.game,'titleScreenButtonOver', 'titleScreenButton');
         this.titleButton.anchor.set(0.5);
         this.titleButton.scale.setTo(0.8);
         
-        this.button = this.game.add.button(this.game.width - 110, this.game.height - 50, 'NextButtons', this.startGame, this.game,'ContinueButtonOver', 'ContinueButton');
+        this.button = this.game.add.button(this.game.width - 110, this.game.height - 50, 'NextButtons', this.restartGame, this.game,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.35);
         this.button.onInputUp.add(this.stopSound, this);
@@ -27,7 +27,10 @@ stWin.prototype = {
     stopSound: function() {
         
     },//end_stopSound
-    startGame: function() {
+    restartGame: function() {
+        this.state.start(this.state.previousState);
+    },//end_restartGame
+    titleScreen: function() {
         this.state.start("stTitle");
-    }//end_startGame
+    }//end_titleScreen
 };
