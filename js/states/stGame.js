@@ -65,8 +65,13 @@ stGame.prototype = {
 		});
 
         // Start music
-        this.bg_music = this.game.add.audio('game_music');
-        this.bg_music.play('', 0, 0.5, true);
+         this.bg_sounds = this.game.add.audio('riot_sounds'); this.bg_sounds.play('', 0, 1, true);
+         this.bg_music = this.game.add.audio('game_music');
+         this.bg_music.play('', 0, 1, true);
+
+         if (isMute === true) {
+            this.bg_music.volume = 0;
+         }
 
 
    // Debug Keys
@@ -88,7 +93,7 @@ stGame.prototype = {
             this.winnable = true;
         },this);
 
-        // Peaceful protester spawn timer  
+        // Peaceful protester spawn timer
         this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
 
 
@@ -206,12 +211,16 @@ stGame.prototype = {
         this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
 		this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
         this.pointer.anchor.set(0.5,0.5);
+        this.musicButton = new MusicButton(this.game, this.bg_music, 1, 760, 560); //music mute/unmute button
+
 		
 		this.uiLayer.add(this.waterUI.uiInner);
 		this.uiLayer.add(this.fireUI.uiInner);
 		this.uiLayer.add(this.waterUI.uiOuter);
 		this.uiLayer.add(this.fireUI.uiOuter);
+        this.uiLayer.add(this.musicButton);
 		this.uiLayer.add(this.pointer);
+
 },//end_create
 
    update: function(){
@@ -228,7 +237,7 @@ stGame.prototype = {
    }
    // Loss Condition
    //  IF city life is below 40%, signal game over
-   console.log(this.buildingGroup.countLiving());
+   //console.log(this.buildingGroup.countLiving());
    if(this.buildingGroup.countLiving() == 0){
       this.gameOver.dispatch();
    }
@@ -252,7 +261,7 @@ stGame.prototype = {
             console.log(currentFires);
         }
    }
-   
+
    // start UI update functions
 	this.waterUI.update();
 	this.fireUI.update();
