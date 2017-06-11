@@ -30,10 +30,11 @@ stGame.prototype = {
         this.map.addTilesetImage('CityTileset64', 'CityTileset64');
         this.backgroundLayer = this.map.createLayer('Background');
         this.groundLayer = this.map.createLayer('ForeGround');
-		
+
 		//groups for ordering
 		this.hydrantLayer = this.game.add.group();
 		this.rioterLayer = this.game.add.group();
+      this.protesterLayer = this.game.add.group();
 		this.emitterLayer = this.game.add.group();
 		this.playerLayer = this.game.add.group();
 		this.buildingLayer = this.game.add.group();
@@ -57,7 +58,7 @@ stGame.prototype = {
 		this.hydrantLayer.add(this.hydrantGroup);
         this.buildingGroup = new stGameBuildingGroup(this.game); // Buildings
 		this.buildingLayer.add(this.buildingGroup);
-		
+
 		var pLayer = this.playerLayer;
 		this.buildingGroup.forEach(function(building){
 			pLayer.add(building.fireGroup);
@@ -180,7 +181,7 @@ stGame.prototype = {
 
         for(var i=0; i<randInt(4, 1); i++){
             var protester = new Protester(this.game, {key: 'protester', frame: 0}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
-			this.rioterLayer.add(protester);
+			this.protesterLayer.add(protester);
             this.PM.addMob(protester);
             protester.positionOffscreenRandomly(game);
 
@@ -193,6 +194,7 @@ stGame.prototype = {
 
             protester.triggerOnCollision(this.emitter, onSprayBecomeRioter, false);
             protester.triggerOnCollision(this.player);
+            protester.triggerOnCollision(this.rioterLayer);
             protester.triggerOnCollision(this.hydrantGroup, null, false);
             protester.triggerOnCollision(this.buildingGroup, null, false);
         }
@@ -206,14 +208,14 @@ stGame.prototype = {
         //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
         };
 
-        // Create UI 
+        // Create UI
         this.waterUI = new WaterUI(this.game,this.player,70,60);
         this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
 		this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
         this.pointer.anchor.set(0.5,0.5);
         //this.musicButton = new MusicButton(this.game, this.bg_music, 1, 760, 560); //music mute/unmute button
 
-		
+
 		this.uiLayer.add(this.waterUI.uiInner);
 		this.uiLayer.add(this.fireUI.uiInner);
 		this.uiLayer.add(this.waterUI.uiOuter);

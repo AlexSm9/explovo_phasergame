@@ -14,7 +14,7 @@ stTutorialLevel.prototype = {
 
 		this.game.world.setBounds(0,0,1200,800);
 		this.game.stage.backgroundColor = "#228B22";
-		
+
 		//groups for ordering
 		this.hydrantLayer = this.game.add.group();
 		this.rioterLayer = this.game.add.group();
@@ -23,9 +23,9 @@ stTutorialLevel.prototype = {
 		this.buildingLayer = this.game.add.group();
 		this.textLayer = this.game.add.group();
 		this.uiLayer = this.game.add.group();
-		
 
-		// add and play music 
+
+		// add and play music
 		this.bg_music = this.game.add.audio('game_music');
 		this.bg_music.play('', 0, 1, true);
 
@@ -71,7 +71,7 @@ stTutorialLevel.prototype = {
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
 		this.textLayer.add(this.button);
-		
+
 		this.instructing = false;
 		this.winning = false;
 		this.losing = false;
@@ -161,7 +161,7 @@ stTutorialLevel.prototype = {
 		this.button.destroy();
 		this.instructor.visible = true;
 		this.player.freeze(true);
-		
+
 		// Attach hose to player object
 		this.emitter = new WaterHose(this.game, this.player, 30,15);
 		this.waterUI = new WaterUI(this.game,this.player, 70, 60);
@@ -225,11 +225,11 @@ stTutorialLevel.prototype = {
 		//Create a building
 		this.building = new Building(this.game,300,300,200,0,'Building07', 289, 397, 269, 346);
 		this.buildingLayer.add(this.building);
-		
+
 		//add building's fire and foam to player Layer for ordering reasons
 		this.playerLayer.add(this.building.fireGroup);
 		this.playerLayer.add(this.building.foamGroup);
-		
+
 		if(this.game.physics.arcade.overlap(this.player, this.building)){
 			this.player.x = 550;
 			this.player.y = 280;
@@ -246,7 +246,7 @@ stTutorialLevel.prototype = {
 
 		this.text1.text = "Loading SimEnv_v1007.exe ... Complete";
 		this.text2.text = "It is your duty to guard the city buildings from any potential harm";
-		this.text3.text = "The total health of all the buildings in the city is shown to the right, it will decrease as the city burns";
+		this.text3.text = "The health of all the buildings in the city is shown to the right, it will decrease as the city burns";
 
 		//new button
 		this.button = this.game.add.button(750, 565, 'NextButtons', this.tutorial06, this,'ContinueButtonOver', 'ContinueButton');
@@ -292,19 +292,19 @@ stTutorialLevel.prototype = {
 		var onSprayIncreaseGoalweight = function(mob){
 			mob.setGoalPoint(mob.primaryGoalX, mob.primaryGoalY, (mob.goalVectorWeight + 0.02));
 		};
-		
+
 		rioter.setOwnBuilding(building);
 		rioter.setGoalPoint(building.centerX, building.centerY, 0.4);
 
 		// The less movable an object is, the further down the list it should be
 		rioter.triggerOnEntry(building.x-(building.width/2)-60, building.y - (building.height/2)- 60, building.width+120, building.height + 120, throwAtBuilding);
-		
+
 		rioter.triggerOnCollision(this.emitter, onSprayIncreaseGoalweight, false);
 		rioter.triggerOnCollision(this.player);
 		rioter.triggerOnCollision(this.hydrantLayer, null, false);
 		rioter.triggerOnCollision(this.buildingLayer, null, false);
-		
-		
+
+
 		rioter.freeze(true);
 
 		this.text1.text = "Loading Rioter.exe ... Complete";
@@ -362,7 +362,7 @@ stTutorialLevel.prototype = {
 		this.antagonist.visible = true;
 		this.player.freeze(false);
 		this.instructing = true;
-		
+
 		this.continueText.visible = true;
 		this.textBox.visible = true;
 
@@ -404,7 +404,7 @@ stTutorialLevel.prototype = {
 		this.instructor.visible = true;
 		this.antagonist.visible = false;
 		this.player.freeze(false);
-		
+
 		this.button.destroy();
 
 		this.text2.setStyle({fontSize: '15px', fill: 'white'});
@@ -432,6 +432,7 @@ stTutorialLevel.prototype = {
 		this.text2.setStyle({fontSize: '15px', fill: 'white'});
 		this.text3.setStyle({fontSize: '15px', fill: 'white'});
 
+		this.textBox.visible = true;
 		this.text1.text = "INITIALIZING SUCCESS PROTOCOL ... Complete";
 		this.text2.text = "Well done! Your firefighting skills are <insert_compliment_here/>";
 		this.text3.text = "You are adequately prepared to defend your city";
@@ -454,6 +455,7 @@ stTutorialLevel.prototype = {
 		this.text2.setStyle({fontSize: '15px', fill: 'white'});
 		this.text3.setStyle({fontSize: '15px', fill: 'white'});
 
+		this.textBox.visible = true;
 		this.text1.text = "INITIALIZING FAILURE PROTOCOL ... Complete";
 		this.text2.text = "Huh? You couldn't even save the tutorial building?!";
 		this.text3.text = "OverlordOS help us all...";
@@ -469,7 +471,7 @@ stTutorialLevel.prototype = {
 	startGame: function() {
 		this.state.start("stContext1");
 	},//end startGame
-	
+
 	/*render: function() {
 		if(this.building != null)
 			this.game.debug.body(this.building);
