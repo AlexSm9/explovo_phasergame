@@ -115,7 +115,7 @@ stGame.prototype = {
     this.gameWin.addOnce(this.fadeWin,this);
 
       // Wave Timer + Winnable flag
-      this.waves = this.game.time.events.repeat(5000, 2, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 10 times then stop
+      this.waves = this.game.time.events.repeat(5000, 10, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 10 times then stop
       // Once this timer ends, enable win flag
       this.waves.timer.onComplete.addOnce(function(){
         this.winnable = true;
@@ -148,7 +148,7 @@ var setGoalOffscreen = function(mob){
 
 function newBuildingAttack(){
    var building = chooseUnburntBuilding();
-      for(var i=0; i<randInt(5, 2); i++){ //creates 2-4 rioters to pursue building
+      for(var i=0; i<randInt(8, 5); i++){ //creates 5-7 rioters to pursue building
          var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
          //l(rioter);
          //console.dir(this.RM);
