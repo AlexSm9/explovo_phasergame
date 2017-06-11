@@ -16,6 +16,8 @@ stTitle.prototype = {
        this.game.stage.backgroundColor = "#000000";
         
        // add and play music
+       this.click1 = this.game.add.audio('click1');
+       this.click2 = this.game.add.audio('click2');
        this.title_sounds = this.game.add.audio('title_sounds');
        this.title_sounds.play('', 0, .7, true);
        this.title_music = this.game.add.audio('title_screen');
@@ -35,12 +37,14 @@ stTitle.prototype = {
        this.add.image(0, -20, 'titleText');
 
        // add in start button
-       this.button = this.game.add.button(this.game.width/2, this.game.height - 186, 'StartButtons', this.startGame, this, 'riotfighter title button2 w shadow', 'riotfighter title button w shadow');
+       this.button = this.game.add.button(this.game.width/2, this.game.height - 170, 'StartButtons', this.startGame, this, 'riotfighter-title-button2', 'riotfighter-title-button1', 'riotfighter-title-button3', 'riotfighter-title-button2');
        this.button.anchor.set(0.5);
+       this.button.scale.setTo(0.55);
        this.button.onInputUp.add(this.stopMusic, this);
+       this.button.setSounds(this.click1, '', this.click2, '');
         
        // add in music mute/unmute button
-       this.musicButton = new MusicButton(this.game, this.title_music, this.game.width - 40, this.game.height - 45);
+       this.musicButton = new MusicButton(this.game, this.title_music, 760, 560);
         
         
     },//end_create

@@ -3,11 +3,15 @@
 var MusicButton = function(game, music, x, y) {
    this.game = game;
    this.music = music;
-   // add in music mute/unmute button
-   this.musicButton = (isMute ? this.game.add.button(x, y, 'MusicButtons', this.muteMusic, this, 'music-button-off2', 'music-button-off') : this.game.add.button(this.game.width - 40, this.game.height - 45, 'MusicButtons', this.muteMusic, this, 'music-button-on2', 'music-button-on'));
+   this.click1 = this.game.add.audio('click1');
+   this.click2 = this.game.add.audio('click2');
+    
+   // add in mute/unmute music button
+   this.musicButton = (isMute ? this.game.add.button(x, y, 'MusicButtons', this.muteMusic, this, 'music-button-off2', 'music-button-off') : this.game.add.button(x, y, 'MusicButtons', this.muteMusic, this, 'music-button-on2', 'music-button-on'));
    this.musicButton.anchor.set(0.5);
    this.musicButton.scale.setTo(0.4);
    this.musicButton.fixedToCamera = true;
+   this.musicButton.setSounds(this.click1, '', this.click2, '');
 };
 
 MusicButton.prototype = Object.create(Phaser.Button.prototype);

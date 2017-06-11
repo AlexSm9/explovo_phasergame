@@ -15,6 +15,10 @@ stGameOver.prototype = {
         
         this.game.stage.backgroundColor = "#000000";
         
+        // add sound
+        this.fire_sound = this.game.add.audio('fire');
+        this.fire_sound.play('', 0, .3, true);
+        
         // add in start button
         this.add.text(315, this.game.height-500, 'You failed to save the city!', {fontSize: '15px', fill: 'white'});
         this.add.text(280, this.game.height-450, 'Hopefully next time you can succeed.', {fontSize: '15px', fill: 'white'});
@@ -25,9 +29,7 @@ stGameOver.prototype = {
         this.button = this.game.add.button(this.game.width/2, this.game.height - 230, 'NextButtons', this.startGame, this.game,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.4,0.4);
-        this.button.onInputOver.add(this.over, this);
-        this.button.onInputOut.add(this.out, this);
-        this.button.onInputUp.add(this.stopMusic, this);
+        this.button.onInputUp.add(this.stopSound, this);
         
         this.add.text(380, this.game.height - 150, 'Or...', {fontSize: '20px', fill: 'white'});
         
@@ -35,7 +37,7 @@ stGameOver.prototype = {
         this.titleButton = this.game.add.button(this.game.width/2, this.game.height - 80, 'TitleScreenButtons', this.titleScreen, this.game, 'titleScreenButtonOver', 'titleScreenButton');
         this.titleButton.anchor.set(0.5);
         this.titleButton.scale.setTo(0.7);
-        this.titleButton.onInputUp.add(this.stopMusic, this);
+        this.titleButton.onInputUp.add(this.stopSound, this);
 
     },//end_create
     over: function() {
@@ -46,7 +48,8 @@ stGameOver.prototype = {
         l("out");
 
     },//end_out
-    stopMusic: function() {
+    stopSound: function() {
+        this.fire_sound.stop();
         
     },//end_stopMusic
     startGame: function() {

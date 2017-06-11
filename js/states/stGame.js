@@ -228,7 +228,7 @@ var throwAtBuilding = function(mob){
    this.pointer.anchor.set(0.5,0.5);
    this.waterUI = new WaterUI(this.game,this.player,70,60); //water UI
    this.fireUI = new FireUI(this.game,this.buildingGroup,765,355); //fire UI
-   this.musicButton = new MusicButton(this.game, this.bg_music, 760, 535); //music mute/unmute button
+   this.musicButton = new MusicButton(this.game, this.bg_music, 760, 560); //music mute/unmute button
 
      this.end = damageFire = function(particle,building){
       particle.kill();
