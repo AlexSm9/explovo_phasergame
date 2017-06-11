@@ -94,6 +94,8 @@ stPreload.prototype = {
         this.load.audio('collapse', 'building collapse.mp3');
         this.load.audio('whirling', 'newstransition.mp3');
         this.load.audio('game_over', 'game over.mp3');
+        this.load.audio('win', 'win.mp3');
+        this.load.audio('win_sounds', 'win sounds.mp3');
 
     },//end_preload
     create: function(){

@@ -13,10 +13,20 @@ stWin.prototype = {
         this.sound.stopAll();
        l("Directions_create");
 
-
+        // add audio
+        this.bg_music = this.game.add.audio('win');
+        this.bg_music.play('', 0, .7, false);
+        this.bg_sounds = this.game.add.audio('win_sounds');
+        this.bg_sounds.play('', 0, .7, true);
+        
+        if (isMute === true) {
+            this.bg_music.volume = 0;
+        }
+        
         this.titleButton = this.game.add.button(130, this.game.height - 75, 'TitleScreenButtons', this.titleScreen, this.game,'titleScreenButtonOver', 'titleScreenButton');
         this.titleButton.anchor.set(0.5);
         this.titleButton.scale.setTo(0.8);
+        this.titleButton.onInputUp.add(this.stopSound, this);
         
         this.button = this.game.add.button(this.game.width - 110, this.game.height - 50, 'NextButtons', this.restartGame, this.game,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
@@ -25,7 +35,8 @@ stWin.prototype = {
 
     },//end_create
     stopSound: function() {
-        
+        this.bg_music.stop();
+        this.bg_sounds.stop();
     },//end_stopSound
     restartGame: function() {
         this.state.start(this.state.previousState);
