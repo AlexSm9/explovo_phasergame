@@ -4,7 +4,8 @@
 var ArrowOn=false;
 
 var WaterHose = function(game,attachments,x,y){
-	console.log('create hose');
+	this.game = game;
+	// console.log('create hose');
 // Create emitter
 	Phaser.Particles.Arcade.Emitter.call(this, game, x, y); // create emitter
 	this.game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
@@ -148,7 +149,9 @@ WaterHose.prototype.stopSound = function() {
 // Creates 'foam' over the collision target
 WaterHose.prototype.buildingCollision = function(particle,building){
     // Generate a new emitter
-    var foamEmitter = building.game.add.emitter(particle.x,particle.y,3);
+    foamEmitter = building.game.add.emitter(particle.x,particle.y,3);
+	building.foamGroup.add(foamEmitter);
+
     foamEmitter.makeParticles('foam'); // create foam particle
     foamEmitter.forEach(function(particle){ // disable gravity for each
         particle.body.allowGravity = false;

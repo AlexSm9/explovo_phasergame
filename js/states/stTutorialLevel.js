@@ -12,27 +12,27 @@ stTutorialLevel.prototype = {
 	create: function(){
 		l("Tutorial_create");
 
-		this.game.world.setBounds(0,0,2400,1600);
+		this.game.world.setBounds(0,0,1200,800);
 		this.game.stage.backgroundColor = "#228B22";
 		
 		//groups for ordering
-		this.hydrantGroup = this.game.add.group();
-		this.rioterGroup = this.game.add.group();
-		this.emitterGroup = this.game.add.group();
-		this.playerGroup = this.game.add.group();
-		this.buildingGroup = this.game.add.group();
-		this.textGroup = this.game.add.group();
-		this.uiGroup = this.game.add.group();
+		this.hydrantLayer = this.game.add.group();
+		this.rioterLayer = this.game.add.group();
+		this.emitterLayer = this.game.add.group();
+		this.playerLayer = this.game.add.group();
+		this.buildingLayer = this.game.add.group();
+		this.textLayer = this.game.add.group();
+		this.uiLayer = this.game.add.group();
 		
 
-		// add and play music (MUSIC IS WEIRD BECAUSE PAUSES)
-		//this.bg_music = this.game.add.audio('game_music');
-		//this.bg_music.play('', 0, 1, true);
+		// add and play music 
+		this.bg_music = this.game.add.audio('game_music');
+		this.bg_music.play('', 0, 1, true);
 
 		//Create UI
 		this.pointer = this.game.add.sprite(0, 0, 'assets', 'crosshair');
 		this.pointer.anchor.set(0.5,0.5);
-		this.uiGroup.add(this.pointer);
+		this.uiLayer.add(this.pointer);
 
 		this.end = damageFire = function(particle,building){
 			particle.kill();
@@ -42,35 +42,35 @@ stTutorialLevel.prototype = {
 		this.instructor = this.game.add.image(-50, 320, 'CityOSPortrait');
 		this.instructor.scale.setTo(0.7, 0.7);
 		this.instructor.fixedToCamera = true;
-		this.textGroup.add(this.instructor);
+		this.textLayer.add(this.instructor);
 
 		this.antagonist = this.game.add.image(550, 300, 'RioterPortrait');
 		this.antagonist.scale.setTo(0.6, 0.6);
 		this.antagonist.visible = false;
 		this.antagonist.fixedToCamera = true;
-		this.textGroup.add(this.antagonist);
+		this.textLayer.add(this.antagonist);
 
 		this.textBox = this.game.add.image(0, 500, 'textBox');
 		this.textBox.fixedToCamera = true;
-		this.textGroup.add(this.textBox);
+		this.textLayer.add(this.textBox);
 		this.text1 = this.add.text(25, 515, 'NOW_BOOTING: "Emeregency Riot Training Protocol"', {fontSize: '15px', fill: 'lime'});
 		this.text1.fixedToCamera = true;
-		this.textGroup.add(this.text1);
+		this.textLayer.add(this.text1);
 		this.text2 = this.add.text(25, 535, 'Hello <Firefighter_name_here>,', {fontSize: '15px', fill: 'white'});
 		this.text2.fixedToCamera = true;
-		this.textGroup.add(this.text2);
+		this.textLayer.add(this.text2);
 		this.text3 = this.add.text(25, 555, 'Welcome to RiotOS', {fontSize: '15px', fill: 'white'});
 		this.text3.fixedToCamera = true;
-		this.textGroup.add(this.text3);
+		this.textLayer.add(this.text3);
 		this.continueText = this.add.text(710, 510, 'Continue...', {fontSize: '15px', fill: 'white'});
 		this.continueText.fixedToCamera = true;
-		this.textGroup.add(this.continueText);
+		this.textLayer.add(this.continueText);
 
 		this.button = this.game.add.button(750, 565, 'NextButtons', this.start, this,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 		
 		this.instructing = false;
 		this.winning = false;
@@ -86,20 +86,19 @@ stTutorialLevel.prototype = {
 			this.fireUI.update();
 
 		// - Collisions -
-		if(this.buildingGroup.length != 0){
+		if(this.buildingLayer.length != 0){
 			// Buildings
 			//game = this.game;
-			this.game.physics.arcade.collide(this.emitter, this.buildingGroup,this.emitter.buildingCollision); // emitter with buildings
-			this.game.physics.arcade.collide(this.player, this.buildingGroup); // player with buildings
+			this.game.physics.arcade.collide(this.emitter, this.buildingLayer,this.emitter.buildingCollision); // emitter with buildings
+			this.game.physics.arcade.collide(this.player, this.buildingLayer); // player with buildings
 
 			// Fires
-			this.buildingGroup.forEach(function(building){
+			this.buildingLayer.forEach(function(building){
 				this.game.physics.arcade.overlap(this.emitter,building.fireGroup,building.damageFire); // emitter with fire
 			},this);
 
 			if(this.building.fireGroup.countLiving() > 0 && !this.instructing){
 				this.tutorial10();
-				l("HERE");
 			}
 			if(this.building.health > 150 && this.building.health < 151)
 				this.tutorial10();
@@ -126,7 +125,7 @@ stTutorialLevel.prototype = {
 		// Create a new Player
 		this.player = new Player(this.game,600, 300, 'assets', 'firefighter');
 		this.game.camera.follow(this.player,4,0.1,0.1);  // set camera to player
-		this.playerGroup.add(this.player);
+		this.playerLayer.add(this.player);
 		this.player.freeze(true);
 
 		this.text1.text = "Loading Firefighter.exe ... Complete";
@@ -138,7 +137,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end start
 
 	tutorial01: function() {
@@ -155,7 +154,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial01
 
 	tutorial02: function() {
@@ -166,9 +165,9 @@ stTutorialLevel.prototype = {
 		// Attach hose to player object
 		this.emitter = new WaterHose(this.game, this.player, 30,15);
 		this.waterUI = new WaterUI(this.game,this.player, 70, 60);
-		this.emitterGroup.add(this.emitter);
-		this.uiGroup.add(this.waterUI.uiInner);
-		this.uiGroup.add(this.waterUI.uiOuter);
+		this.emitterLayer.add(this.emitter);
+		this.uiLayer.add(this.waterUI.uiInner);
+		this.uiLayer.add(this.waterUI.uiOuter);
 
 		this.text1.text = "Installing FireHose Module (CAUTION: Is extremely deadly)";
 		this.text2.text = "Use your left mouse button to spray water from your hose";
@@ -179,7 +178,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial02
 
 	tutorial03: function() {
@@ -187,7 +186,7 @@ stTutorialLevel.prototype = {
 
 		//Create a hydrant
 		this.hydrant = new Hydrant(this.game,455,200,this.player);
-		this.hydrantGroup.add(this.hydrant);
+		this.hydrantLayer.add(this.hydrant);
 
 		this.text1.text = "Configuring HYDRANT ... Complete";
 		this.text2.text = "HYDRANT Module brought to you by InfiniWater Corp.", {fontSize: '15px', fill: 'red'};
@@ -198,7 +197,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial03
 
 	tutorial04: function() {
@@ -215,7 +214,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial04
 
 	tutorial05: function() {
@@ -224,9 +223,13 @@ stTutorialLevel.prototype = {
 		this.player.freeze(true);
 
 		//Create a building
-		this.building = new Building(this.game,300,300,200,0,'Building07');
-		this.buildingGroup.add(this.building);
-
+		this.building = new Building(this.game,300,300,200,0,'Building07', 289, 397, 269, 346);
+		this.buildingLayer.add(this.building);
+		
+		//add building's fire and foam to player Layer for ordering reasons
+		this.playerLayer.add(this.building.fireGroup);
+		this.playerLayer.add(this.building.foamGroup);
+		
 		if(this.game.physics.arcade.overlap(this.player, this.building)){
 			this.player.x = 550;
 			this.player.y = 280;
@@ -236,10 +239,10 @@ stTutorialLevel.prototype = {
 		this.bg = this.game.add.image(0, 0, 'TutorialBG');
 		this.world.sendToBack(this.bg);
 
-		this.fireUI = new FireUI(this.game,this.buildingGroup, 765, 355);
+		this.fireUI = new FireUI(this.game,this.buildingLayer, 765, 355);
 		this.fireUI.visible = false;
-		this.uiGroup.add(this.fireUI.uiInner);
-		this.uiGroup.add(this.fireUI.uiOuter);
+		this.uiLayer.add(this.fireUI.uiInner);
+		this.uiLayer.add(this.fireUI.uiOuter);
 
 		this.text1.text = "Loading SimEnv_v1007.exe ... Complete";
 		this.text2.text = "It is your duty to guard the city buildings from any potential harm";
@@ -250,7 +253,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial05
 
 	tutorial06: function() {
@@ -267,7 +270,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial06
 
 	tutorial07: function() {
@@ -275,14 +278,12 @@ stTutorialLevel.prototype = {
 		this.instructor.visible = true;
 		this.player.freeze(true);
 		
-		rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, 600, 400);
+		rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, 700, 400);
 		MM.addMob(rioter);
 		this.game.add.existing(rioter);
-		this.rioterGroup.add(rioter);
+		this.rioterLayer.add(rioter);
 
-		building = this.buildingGroup.getRandom();
-		MM.setAllGoal(building.centerX, building.centerY, 0.4);
-
+		building = this.buildingLayer.getRandom();
 		game = this.game;
 		var throwAtBuilding = function(mob){
 			mob.fireAtBuilding(game, building);
@@ -292,13 +293,19 @@ stTutorialLevel.prototype = {
 		var onSprayIncreaseGoalweight = function(mob){
 			mob.setGoalPoint(mob.primaryGoalX, mob.primaryGoalY, (mob.goalVectorWeight + 0.02));
 		};
+		
+		rioter.setOwnBuilding(building);
+		rioter.setGoalPoint(building.centerX, building.centerY, 0.4);
 
-		MM.addAllTriggerOnEntry(building.x-(building.width/2)-100, building.y - (building.height/2)- 100, building.width+200, building.height + 200, throwAtBuilding);
-		MM.addAllTriggerOnCollision(this.emitter, onSprayIncreaseGoalweight, false);
-		MM.addAllTriggerOnCollision(this.player);
-		MM.addAllTriggerOnCollision(this.hydrantGroup, null, false);
-		MM.addAllTriggerOnCollision(this.buildingGroup, null, false);
-
+		// The less movable an object is, the further down the list it should be
+		rioter.triggerOnEntry(building.x-(building.width/2)-60, building.y - (building.height/2)- 60, building.width+120, building.height + 120, throwAtBuilding);
+		
+		rioter.triggerOnCollision(this.emitter, onSprayIncreaseGoalweight, false);
+		rioter.triggerOnCollision(this.player);
+		rioter.triggerOnCollision(this.hydrantLayer, null, false);
+		rioter.triggerOnCollision(this.buildingLayer, null, false);
+		
+		
 		rioter.freeze(true);
 
 		this.text1.text = "Loading Rioter.exe ... Complete";
@@ -310,7 +317,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial07
 
 	tutorial08: function() {
@@ -332,7 +339,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial08
 
 	tutorial09: function() {
@@ -391,7 +398,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial10
 
 	tutorial11: function() {
@@ -413,7 +420,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorial11
 
 	tutorialWin: function() {
@@ -435,7 +442,7 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorialWin
 
 	tutorialFail: function() {
@@ -457,10 +464,15 @@ stTutorialLevel.prototype = {
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.2,0.2);
 		this.button.fixedToCamera = true;
-		this.textGroup.add(this.button);
+		this.textLayer.add(this.button);
 	},//end tutorialFail
 
 	startGame: function() {
 		this.state.start("stContext1");
-	}//end startGame
+	},//end startGame
+	
+	/*render: function() {
+		if(this.building != null)
+			this.game.debug.body(this.building);
+	}*/
 };

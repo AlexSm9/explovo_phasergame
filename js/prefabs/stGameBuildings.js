@@ -3,24 +3,25 @@
 var stGameBuildingGroup = function(game){
    this.game = game;
     Phaser.Group.call(this,game);
-    this.addBuilding(1722,1575,250,0,'FIREstation');
-    this.addBuilding(2786,2313,300,0,'Building03');
-    this.addBuilding(2267,194,200,0,'Building04');
-    this.addBuilding(830,1659,200,0,'Building05');
-    this.addBuilding(1660,2314,200,0,'Building09');
-    this.addBuilding(988,975,200,0,'Building07');
-    this.addBuilding(2610,930,200,0,'Building06');
+    this.addBuilding(1722,1575,250000,0,'Building07', 289, 397, 269, 346);
 
-    function setFires(){
-      return 0;
-   }
+    // this.addBuilding(2786,2313,300000,0,'Building03', 300, 300, 300, 300);
+    // this.addBuilding(2267,194,200000,0,'Building04', 300, 300, 300, 300);
+    // this.addBuilding(830,1659,200000,0,'Building05', 300, 300, 300, 300);
+    // this.addBuilding(1660,2314,200000,0,'Building09', 300, 300, 300, 300);
+    // this.addBuilding(988,975,200000,0,'Building07', 300, 300, 300, 300);
+    // this.addBuilding(2610,930,200000,0,'Building06', 300, 300, 300, 300);
+
+    // function setFires(){
+      // return 0;
+   // }
 };
 
 stGameBuildingGroup.prototype = Object.create(Phaser.Group.prototype);
 stGameBuildingGroup.prototype.constructor = stGameBuildingGroup; // creation call
 
-stGameBuildingGroup.prototype.addBuilding = function(x,y,hp,fires,type){
-   this.building = new Building(this.game,x,y,hp,fires,type);
+stGameBuildingGroup.prototype.addBuilding = function( x, y, health, fires, src, height, width, bodyHeight, bodyWidth){
+   this.building = new Building(this.game, x, y, health, fires, src, height, width, bodyHeight, bodyWidth);
    this.add(this.building);
 };
 
