@@ -49,6 +49,8 @@ stGame.prototype = {
 	this.buildingGroup = new stGameBuildingGroup(this.game); // Buildings
 
    // Start music
+   this.bg_sounds = this.game.add.audio('riot_sounds');
+   this.bg_sounds.play('', 0, 1, true);
    this.bg_music = this.game.add.audio('game_music');
    this.bg_music.play('', 0, 1, true);
 
