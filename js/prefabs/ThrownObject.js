@@ -1,5 +1,5 @@
 // -- ThrownObject
-var ThrownObject = function(game, spriteObject, positionX, positionY, sounds) {
+var ThrownObject = function(game, spriteObject, positionX, positionY, isTutorial) {
 	// initialize variable
    Phaser.Sprite.call(this, game, positionX, positionY, spriteObject.key, spriteObject.frame);
 	this.anchor.set(0.5,0.5); // set anchor to center
@@ -16,6 +16,9 @@ var ThrownObject = function(game, spriteObject, positionX, positionY, sounds) {
     // add audio
     this.molotov = game.add.audio('molotov');
     this.molotov.allowMultiple = true; //so you can hear all the molotovs shatter yay
+
+   this.isTutorial = typeof isTutorial !== 'undefined' ? isTutorial : false;
+
 };
 
 ThrownObject.prototype = Object.create(Phaser.Sprite.prototype);
@@ -27,15 +30,25 @@ ThrownObject.prototype.update = function() {
 	this.rotation += 0.1;
 
 	if(this.collideWithBuildingEnable === true){
-
-		if(this.game.physics.arcade.overlap(this, this.building)){
-            // play molotov explosion sound
-            if (!this.molotov.isPlaying) {
-                this.molotov.play('', 0, 0.75, false);
-            }
-			this.building.startFire(this.game.physics.arcade.angleBetweenCenters(this,this.building));
-			this.destroy();
-		}
+      if(this.isTutorial){
+   		if(this.game.physics.arcade.collide(this, this.building)){
+               // play molotov explosion sound
+               if (!this.molotov.isPlaying) {
+                   this.molotov.play('', 0, 0.75, false);
+               }
+   			this.building.startFire(this.game.physics.arcade.angleBetweenCenters(this,this.building));
+   			this.destroy();
+   		}
+      }else{
+         if(this.game.physics.arcade.overlap(this, this.building)){
+               // play molotov explosion sound
+               if (!this.molotov.isPlaying) {
+                   this.molotov.play('', 0, 0.75, false);
+               }
+            this.building.startFire(this.game.physics.arcade.angleBetweenCenters(this,this.building));
+            this.destroy();
+         }
+      }
 	}
 };
 
