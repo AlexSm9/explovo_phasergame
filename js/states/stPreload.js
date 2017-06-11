@@ -29,7 +29,7 @@ stPreload.prototype = {
         this.load.atlas('fires','Fires.png','json/FiresAtlas.json'); // animated fire asset
         this.load.atlas('TitleAnimation',"TitleAnimation.png","json/TitleAnimation.json"); // title screen animation
         this.load.atlas('NextButtons', 'ContinueButtons.png', 'json/ContinueButtons.json'); // continue button
-        
+
         this.load.atlas('TitleScreenButtons', 'TitleScreenButtons.png', 'json/TitleScreenButtons.json'); // return to title screen buttons
         this.load.atlas('MusicButtons', 'musicButtons.png', 'json/musicButtons.json'); // mute/unmute music buttons
         this.load.atlas('assets','normalAssets.png','json/normalAssets.json'); // all remaining assets
@@ -38,7 +38,7 @@ stPreload.prototype = {
         // -- misc assets, last minute assets
         this.load.path = "assets/img/raw images/";
 
-        this.load.image('protester', 'PeaceProtester.png');
+        this.load.image('protester', 'Protester.png');
 
         // particles are incompatible with texture atlas
         this.load.image('water','WaFParticle.png');

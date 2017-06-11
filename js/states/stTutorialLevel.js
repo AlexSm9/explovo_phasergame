@@ -179,7 +179,7 @@ stTutorialLevel.prototype = {
 		this.button.destroy();
 
 		//Create a hydrant
-		this.hydrant = new Hydrant(this.game,455,200,this.player);
+		this.hydrant = new Hydrant(this.game,520,200,this.player);
 		this.hydrantGroup.add(this.hydrant);
 
 		this.text1.text = "Configuring HYDRANT ... Complete";
@@ -220,7 +220,7 @@ stTutorialLevel.prototype = {
 		this.instructor.visible = true;
 
 		//Create a building
-		this.building = new Building(this.game,326,300,200,0,'Building01');
+		this.building = new Building(this.game,300,300,200,0,'Building06');
 		this.buildingGroup.add(this.building);
 
 		if(this.game.physics.arcade.overlap(this.player, this.building)){
@@ -285,7 +285,7 @@ stTutorialLevel.prototype = {
 	tutorial07: function() {
 		this.button.destroy();
 		this.instructor.visible = true;
-		rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, 600, 400);
+		rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, 700, 400);
 		MM.addMob(rioter);
 		this.game.add.existing(rioter);
 
@@ -351,8 +351,8 @@ stTutorialLevel.prototype = {
 		this.text3.setStyle({fontSize: '25px', fill: 'orange'});
 
 		this.text1.text = "";
-		this.text2.text = "Ima fuck up this building so hard";
-		this.text3.text = "kek";
+		this.text2.text = "Down with the system, glory to the people!";
+		this.text3.text = "Hehehe";
 
 		//new button
 		this.button = this.game.add.button(this.game.camera.x + 750, this.game.camera.y + 565, 'NextButtons', this.tutorial09, this,'ContinueButtonOver', 'ContinueButton');
@@ -400,7 +400,7 @@ stTutorialLevel.prototype = {
 		}
 		else if(this.building.health < 101){
 			this.text1.text = "";
-			this.text2.text = "BURN BITCH BURN!";
+			this.text2.text = "BURN TO ASH!";
 			this.text3.text = "";
 		}
 		else if(this.building.health < 151){
@@ -454,7 +454,7 @@ stTutorialLevel.prototype = {
 		this.text3.setStyle({fontSize: '15px', fill: 'white'});
 
 		this.text1.text = "INITIALIZING SUCCESS PROTOCOL ... Complete";
-		this.text2.text = "Well done! Your firefighting skills are <insert_compliment_here>";
+		this.text2.text = "Well done! Your firefighting skills are <insert_compliment_here/>";
 		this.text3.text = "You are adequately prepared to defend your city";
 
 		//new button
@@ -477,7 +477,7 @@ stTutorialLevel.prototype = {
 		this.text3.setStyle({fontSize: '15px', fill: 'white'});
 
 		this.text1.text = "INITIALIZING FAILURE PROTOCOL ... Complete";
-		this.text2.text = "HOLY SHIT! You couldn't even save the tutorial building?";
+		this.text2.text = "Huh? You couldn't even save the tutorial building?!";
 		this.text3.text = "OverlordOS help us all...";
 
 		//new button
