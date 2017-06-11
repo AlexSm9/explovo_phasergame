@@ -136,7 +136,7 @@ var setGoalOffscreen = function(mob){
 function newBuildingAttack(){
 
    var building = chooseUnburntBuilding();
-      for(i=0; i<randInt(5, 2); i++){ //creates 2-4 rioters to pursue building
+      for(var i=0; i<randInt(5, 2); i++){ //creates 2-4 rioters to pursue building
          var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
          //l(rioter);
          //console.dir(this.RM);
@@ -189,7 +189,7 @@ function createProtesters(){
       mob.becomeRioter(game, {key: 'assets', frame: 'rioter'}, chooseUnburntBuilding(), RioterManager, ProtesterManager, collisionArray, eventArray);
    };
 
-   for(i=0; i<randInt(4, 1); i++){
+   for(var i=0; i<randInt(4, 1); i++){
       var protester = new Protester(this.game, {key: 'protester', frame: 0}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
       this.PM.addMob(protester);
       protester.positionOffscreenRandomly(game);
@@ -207,11 +207,7 @@ function createProtesters(){
       protester.triggerOnCollision(this.buildingGroup, null, false);
    }
 
-
 }
-
-
-
 
 var throwAtBuilding = function(mob){
    //mob.freeze();
@@ -219,9 +215,6 @@ var throwAtBuilding = function(mob){
    mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
    //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
 };
-
-
-
 
 
    // Create UI
@@ -241,20 +234,11 @@ var throwAtBuilding = function(mob){
 
       game = this.game;
 
-
-
-
-
-
-
       this.RM.update(this.game);
       this.RM.killAllOutOfView(this.game);
       this.PM.update(this.game);
 
-      l("Mobs in RM: " + this.RM.mobList.length + ", Mobs in PM: " + this.PM.mobList.length);
-
-
-   //MM.update(this.game);
+      //l("Mobs in RM: " + this.RM.mobList.length + ", Mobs in PM: " + this.PM.mobList.length);
 
    if (this.G.isDown){
       this.state.start("stGameOver");
@@ -286,16 +270,16 @@ var throwAtBuilding = function(mob){
 
 
 
-/*
+
   render: function() {
 
-	   this.buildingGroup.forEach(function(building){
-		   building.fireGroup.forEach(function(fire){
-			   this.game.debug.body(fire);
-		   },this);
-	   },this);
+	  // this.buildingGroup.forEach(function(building){
+		//   building.fireGroup.forEach(function(fire){
+		//	   this.game.debug.body(fire);
+		 //  },this);
+	   // },this);
 
    // display fps
      this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
-  }*/
+  }
 };//end_s1Game

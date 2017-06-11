@@ -8,6 +8,12 @@ function Rioter(game, spriteObject, positionX, positionY){
 
    game.add.existing(this);
 
+   // Quickfix for world ordering
+   game.world.sendToBack(this);
+   for(var q=0; q<2; q++){
+      game.world.moveUp(this);
+   }
+
    this.killOffscreen = false;
 
    this.creationTime = (new Date()).getTime();
@@ -96,7 +102,7 @@ Rioter.prototype.setFlockingDistances = function(cDist, sDist, hDist){
 };
 Rioter.prototype.update = function(){
 
-   time = (new Date()).getTime();
+   var time = (new Date()).getTime();
    for(var w=this._events.length-1; w>=0; w--){
       event = this._events[w];
       if(time > this.creationTime + event.millisecs){
@@ -105,15 +111,17 @@ Rioter.prototype.update = function(){
       }
    }
 
-   velX = this.body.velocity.x;
-   velY = this.body.velocity.y;
+   var velX = this.body.velocity.x;
+   var velY = this.body.velocity.y;
 
    if(this.naturalMove === true){
+      var velocityVectorX;
+      var velocityVectorY;
       if(this.headToGoal === true){
-         goalVectorX = this.primaryGoalX-this.x;
-         goalVectorY = this.primaryGoalY-this.y;
-         goal = normalize(goalVectorX, goalVectorY);
-         normal = normalize((this.flockingVector.x+(this.goalVectorWeight*goal.x)),(this.flockingVector.y+(this.goalVectorWeight*goal.y)));
+         var goalVectorX = this.primaryGoalX-this.x;
+         var goalVectorY = this.primaryGoalY-this.y;
+         var goal = normalize(goalVectorX, goalVectorY);
+         var normal = normalize((this.flockingVector.x+(this.goalVectorWeight*goal.x)),(this.flockingVector.y+(this.goalVectorWeight*goal.y)));
          velocityVectorX = normal.x;
          velocityVectorY = normal.y;
       }else{
@@ -122,9 +130,9 @@ Rioter.prototype.update = function(){
       }
       velX += velocityVectorX;
       velY += velocityVectorY;
-      velocityHyp = Math.sqrt((velX*velX)+(velY*velY));
+      var velocityHyp = Math.sqrt((velX*velX)+(velY*velY));
       if(velocityHyp > this.maxVelocity){
-         similarTriangleProportion = this.maxVelocity/velocityHyp;
+         var similarTriangleProportion = this.maxVelocity/velocityHyp;
          velX*=similarTriangleProportion;
          velY*=similarTriangleProportion;
       }
@@ -187,18 +195,18 @@ Rioter.prototype.fireAtBuilding = function(game, building){
    if(!building.isDead){
       if(this.canFire === true){
         this.canFire = false;
-         tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
+         var tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
          tObject.throwAtBuilding(building, 20);
       }
    }
 };
 
 Rioter.prototype.fireAtOwnBuilding = function(game){
-   building = this.building;
+   var building = this.building;
    if(!building.isDead){
       if(this.canFire === true){
         this.canFire = false;
-         tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
+         var tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
          tObject.throwAtBuilding(building, 20);
       }
    }
@@ -213,10 +221,10 @@ Rioter.prototype.addEvent = function(callbackForMobManager, elapsedSecondsAfterC
 };
 
 Rioter.prototype.positionOffscreenRandomly = function(game){
-   leftX = game.camera.x - this.spriteDiagonal;
-   rightX = game.camera.x + game.camera.width + this.spriteDiagonal;
-   leftY = game.camera.y - this.spriteDiagonal;
-   rightY = game.camera.y + game.camera.height + this.spriteDiagonal;
+   var leftX = game.camera.x - this.spriteDiagonal;
+   var rightX = game.camera.x + game.camera.width + this.spriteDiagonal;
+   var leftY = game.camera.y - this.spriteDiagonal;
+   var rightY = game.camera.y + game.camera.height + this.spriteDiagonal;
    switch(randInt(3, 0)){
       case 0:
          this.x = leftX;

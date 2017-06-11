@@ -7,13 +7,11 @@ function Protester(game, spriteObject, positionX, positionY){
 
    game.add.existing(this);
 
-   /*var result = "";
-   chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-   for (var i = 10; i > 0; i--){
-      randomChar = chars[Math.floor(Math.random() * chars.length)];
-      result+=randomChar;
+   // Quickfix for world ordering
+   game.world.sendToBack(this);
+   for(var q=0; q<2; q++){
+      game.world.moveUp(this);
    }
-   this.id = result;*/
 
    this.hasTurnedRioter = false;
 
@@ -104,7 +102,7 @@ Protester.prototype.setFlockingDistances = function(cDist, sDist, hDist){
 };
 Protester.prototype.update = function(){
 
-   time = (new Date()).getTime();
+   var time = (new Date()).getTime();
    for(var w=this._events.length-1; w>=0; w--){
       event = this._events[w];
       if(time > this.creationTime + event.millisecs){
@@ -113,15 +111,17 @@ Protester.prototype.update = function(){
       }
    }
 
-   velX = this.body.velocity.x;
-   velY = this.body.velocity.y;
+   var velX = this.body.velocity.x;
+   var velY = this.body.velocity.y;
 
    if(this.naturalMove === true){
+      var velocityVectorX;
+      var velocityVectorY;
       if(this.headToGoal === true){
-         goalVectorX = this.primaryGoalX-this.x;
-         goalVectorY = this.primaryGoalY-this.y;
-         goal = normalize(goalVectorX, goalVectorY);
-         normal = normalize((this.flockingVector.x+(this.goalVectorWeight*goal.x)),(this.flockingVector.y+(this.goalVectorWeight*goal.y)));
+         var goalVectorX = this.primaryGoalX-this.x;
+         var goalVectorY = this.primaryGoalY-this.y;
+         var goal = normalize(goalVectorX, goalVectorY);
+         var normal = normalize((this.flockingVector.x+(this.goalVectorWeight*goal.x)),(this.flockingVector.y+(this.goalVectorWeight*goal.y)));
          velocityVectorX = normal.x;
          velocityVectorY = normal.y;
       }else{
@@ -130,9 +130,9 @@ Protester.prototype.update = function(){
       }
       velX += velocityVectorX;
       velY += velocityVectorY;
-      velocityHyp = Math.sqrt((velX*velX)+(velY*velY));
+      var velocityHyp = Math.sqrt((velX*velX)+(velY*velY));
       if(velocityHyp > this.maxVelocity){
-         similarTriangleProportion = this.maxVelocity/velocityHyp;
+         var similarTriangleProportion = this.maxVelocity/velocityHyp;
          velX*=similarTriangleProportion;
          velY*=similarTriangleProportion;
       }
@@ -202,10 +202,10 @@ Protester.prototype.addEvent = function(callbackForMobManager, elapsedSecondsAft
 };
 
 Protester.prototype.positionOffscreenRandomly = function(game){
-   leftX = game.camera.x - this.spriteDiagonal;
-   rightX = game.camera.x + game.camera.width + this.spriteDiagonal;
-   leftY = game.camera.y - this.spriteDiagonal;
-   rightY = game.camera.y + game.camera.height + this.spriteDiagonal;
+   var leftX = game.camera.x - this.spriteDiagonal;
+   var rightX = game.camera.x + game.camera.width + this.spriteDiagonal;
+   var leftY = game.camera.y - this.spriteDiagonal;
+   var rightY = game.camera.y + game.camera.height + this.spriteDiagonal;
    switch(randInt(3, 0)){
       case 0:
          this.x = leftX;
@@ -262,7 +262,7 @@ Protester.prototype.becomeRioter = function(game, spriteObject, building, Rioter
       rioter.triggerOnEntry(building.x-(building.width/2)-60, building.y - (building.height/2)- 60, building.width+120, building.height + 120, throwAtBuilding);
 
       for(var z = 0; z<collisionArray.length; z++){
-         callback = typeof collisionArray[z].cb !== 'undefined' ? collisionArray[z].cb : null;
+         var callback = typeof collisionArray[z].cb !== 'undefined' ? collisionArray[z].cb : null;
          rioter.triggerOnCollision(collisionArray[z].with, callback, false);
       }
 

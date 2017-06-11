@@ -48,7 +48,7 @@ MobManager.prototype.addMob = function(mob){
 // removes a mob passed into arguments, if it exists
 MobManager.prototype.removeMob = function(mobToRemove){
    for(var x=mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
-      mob = mobList[x];
+      var mob = mobList[x];
       if(mob == mobToRemove){
          this.mobList.splice(x, 1);
       }
@@ -57,10 +57,10 @@ MobManager.prototype.removeMob = function(mobToRemove){
 
 // removes and destroys a mob passed into arguments, if it exists
 MobManager.prototype.removeAndDestroyMob = function(mobToRemove){
-   for(var x=mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
-      mob = this.mobList[x];
+   for(var x=this.mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
+      var mob = this.mobList[x];
       if(mob == mobToRemove){
-         removed = this.mobList.splice(x, 1);
+         var removed = this.mobList.splice(x, 1);
          mob.killNextFrame = true;
       }
    }
@@ -68,7 +68,7 @@ MobManager.prototype.removeAndDestroyMob = function(mobToRemove){
 
 // destroys all mobs within this MobManager
 MobManager.prototype.killAll = function(mobToRemove){
-   mobList = this.mobList;
+   var mobList = this.mobList;
    for(var x in mobList){
       mob = mobList[x];
       mob.destroy();
@@ -94,13 +94,13 @@ MobManager.prototype.setAllBuilding = function(building){
 
 // kills all mobs out of view of the camera, assumes anchor is at center
 MobManager.prototype.killAllOutOfView = function(game){ // kills only mobs with killOffscreen set to true
-   cameraX = game.camera.x;
-   cameraY = game.camera.y;
-   cameraW = game.camera.width;
-   cameraH = game.camera.height;
-   mobList = this.mobList;
+   var cameraX = game.camera.x;
+   var cameraY = game.camera.y;
+   var cameraW = game.camera.width;
+   var cameraH = game.camera.height;
+   var mobList = this.mobList;
    for(var x=mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
-      mob = mobList[x];
+      var mob = mobList[x];
       //assumption: sprite's anchor is 0.5, 0.5
       if(mob.killOffscreen === true){
          if(((mob.x + mob.spriteDiagonal/2)<cameraX) || ((mob.x - mob.spriteDiagonal/2)>(cameraX+cameraW)) || ((mob.y + mob.spriteDiagonal/2)<cameraY) || ((mob.y - mob.spriteDiagonal/2)>(cameraY+cameraH))){
@@ -133,8 +133,8 @@ MobManager.prototype.addAllTriggerOnCollision = function(objectToCollideWith, ca
 // update method for MobManager, since this is not a phaser object, this method MUST be called within the update loop of its state
 MobManager.prototype.update = function(game){
    //include MobManager as parameter to callback
-   time = (new Date()).getTime();
-   createTime = this.creationTime;
+   var time = (new Date()).getTime();
+   var createTime = this.creationTime;
    for(var x=this.events.length-1; x>=0; x--){
       event = this.events[x];
       if(time > createTime + event.millisecs){
@@ -148,7 +148,7 @@ MobManager.prototype.update = function(game){
    }
 
    var mobList = this.mobList;
-   doCollideMobs = this.doCollideMobs;
+   var doCollideMobs = this.doCollideMobs;
 
    mobList.forEach(function(mob){
       //game.debug.body(mob);
@@ -167,18 +167,18 @@ MobManager.prototype.update = function(game){
    //--/ functions used for update loop above
 
    function getNeighbors(sourceMob, mobList){
-      cDist = sourceMob.cohesionDistance;
-      sDist = sourceMob.separationDistance;
-      hDist = sourceMob.headingDistance;
+      var cDist = sourceMob.cohesionDistance;
+      var sDist = sourceMob.separationDistance;
+      var hDist = sourceMob.headingDistance;
 
-      cohesionNeighbors = [];
-      separationNeighbors = [];
-      headingNeighbors = [];
+      var cohesionNeighbors = [];
+      var separationNeighbors = [];
+      var headingNeighbors = [];
 
       for(var x in mobList){
-         mob = mobList[x];
+         var mob = mobList[x];
          if(mob!=sourceMob){ //prevents addition of self to neighbor group
-            dist = distanceBetween(mob.x, mob.y, sourceMob.x, sourceMob.y);
+            var dist = distanceBetween(mob.x, mob.y, sourceMob.x, sourceMob.y);
             if(dist <= cDist){
                cohesionNeighbors.push(mob);
             }
@@ -197,14 +197,14 @@ MobManager.prototype.update = function(game){
       if(neighbors.cN.length>0){
    }
 
-      calcHeading = averageHeading(mob, neighbors.hN);
-      calcCohesion = averageCohesion(mob, neighbors.cN);
-      calcSepraration = averageSeparation(mob, neighbors.sN);
+      var calcHeading = averageHeading(mob, neighbors.hN);
+      var calcCohesion = averageCohesion(mob, neighbors.cN);
+      var calcSepraration = averageSeparation(mob, neighbors.sN);
 
-      newVectorX = calcCohesion.cX*mob.cohesionWeight + calcSepraration.sX*mob.separationWeight + calcHeading.hX*mob.headingWeight;
-      newVectorY = calcCohesion.cY*mob.cohesionWeight + calcSepraration.sY*mob.separationWeight + calcHeading.hY*mob.headingWeight;
+      var newVectorX = calcCohesion.cX*mob.cohesionWeight + calcSepraration.sX*mob.separationWeight + calcHeading.hX*mob.headingWeight;
+      var newVectorY = calcCohesion.cY*mob.cohesionWeight + calcSepraration.sY*mob.separationWeight + calcHeading.hY*mob.headingWeight;
 
-      combinedVector = normalize(newVectorX, newVectorY);
+      var combinedVector = normalize(newVectorX, newVectorY);
       mob.setFlockingVector(combinedVector.x, combinedVector.y);
 
 
@@ -213,21 +213,21 @@ MobManager.prototype.update = function(game){
          if(headingNeighbors.length<=0){ //doublecheck
             return {hX: 0, hY: 0};
          }
-         headingPointX = 0;
-         headingPointY = 0;
+         var headingPointX = 0;
+         var headingPointY = 0;
          headingNeighbors.forEach(function(neighbor){
-            neighborVelocities = neighbor.getVelocities();
+            var neighborVelocities = neighbor.getVelocities();
             headingPointX += (neighborVelocities.x);
             headingPointY += (neighborVelocities.y);
          });
          headingPointX /= headingNeighbors.length;
          headingPointY /= headingNeighbors.length;
-         headingPoint = normalize(headingPointX, headingPointY);
+         var headingPoint = normalize(headingPointX, headingPointY);
          return {hX: headingPoint.x, hY: headingPoint.y};
       }
       function averageCohesion(mob, cohesionNeighbors){
-         cPositionX = 0;
-         cPositionY = 0;
+         var cPositionX = 0;
+         var cPositionY = 0;
          if(cohesionNeighbors.length<=0){
             return {cX: 0, cY: 0};
          }
@@ -237,12 +237,12 @@ MobManager.prototype.update = function(game){
          });
          cPositionX /= cohesionNeighbors.length;
          cPositionY /= cohesionNeighbors.length;
-         cohesionPoint = normalize(cPositionX, cPositionY);
+         var cohesionPoint = normalize(cPositionX, cPositionY);
          return {cX: cohesionPoint.x, cY: cohesionPoint.y};
       }
       function averageSeparation(mob, separationNeighbors){
-         sPositionX = 0;
-         sPositionY = 0;
+         var sPositionX = 0;
+         var sPositionY = 0;
          if(separationNeighbors.length<=0){
             return {sX: 0, sY: 0};
          }
@@ -254,7 +254,7 @@ MobManager.prototype.update = function(game){
          sPositionY /= separationNeighbors.length;
          sPositionX *= -1;
          sPositionY *= -1;
-         separationPoint = normalize(sPositionX, sPositionY);
+         var separationPoint = normalize(sPositionX, sPositionY);
          return {sX: separationPoint.x, sY: separationPoint.y};
       }
 
@@ -283,8 +283,8 @@ MobManager.prototype.addEvent = function(callbackForMobManager, elapsedSecondsAf
 
 // returns a random array of mobs
 MobManager.prototype.getRandomSubset = function(minQuantity, maxQuntity){
-   maxQuantity = typeof maxQuantity !== 'undefined' ? maxQuantity : minQuantity;
-   mobList = this.mobList;
+   var maxQuantity = typeof maxQuantity !== 'undefined' ? maxQuantity : minQuantity;
+   var mobList = this.mobList;
    if(minQuantity >= mobList.length){
       return mobList;
    }
@@ -292,21 +292,21 @@ MobManager.prototype.getRandomSubset = function(minQuantity, maxQuntity){
       maxQuantity = mobList.length;
    }
    tempList = mobList.slice(mobList); // creates copy
-   returnList = [];
-   quantityToReturn = randInt(maxQuantity, minQuantity);
-   for(i = 0; i<quantityToReturn; i++){
-      randomlyChosenIndex = Math.floor(Math.random()*tempList.length);
+   var returnList = [];
+   var quantityToReturn = randInt(maxQuantity, minQuantity);
+   for(var i = 0; i<quantityToReturn; i++){
+      var randomlyChosenIndex = Math.floor(Math.random()*tempList.length);
       returnList.push(tempList.splice(randomlyChosenIndex, 1));
    }
    return returnList;
 };
 
 MobManager.prototype.positionAllOffscreenRandomly = function(game){
-   mobList = this.mobList;
+   var mobList = this.mobList;
    for(var x=mobList.length-1; x>=0; x--){ //from back to front, array is reindexed on removal due to destroy
 
 
-      mob = mobList[x];
+      var mob = mobList[x];
       mob.positionOffscreenRandomly(game);
       /*
       leftX = game.camera.x - mob.spriteDiagonal;
