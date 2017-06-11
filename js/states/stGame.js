@@ -25,7 +25,7 @@ stGame.prototype = {
    //--/ variable assignments
    console.log('game bg');
       //--/ tilemap variable
-		this.game.world.setBounds(0,0,4320,2918.4); // initialize world bounds
+		//this.game.world.setBounds(0,0,4320,2918.4); // initialize world bounds
         this.game.stage.backgroundColor = "#228B22";
 		//this.game.add.tileSprite(0,0,1200,912,'bg');
 		this.map = this.game.add.tilemap('CityTilemap');
@@ -33,8 +33,6 @@ stGame.prototype = {
         this.backgroundLayer = this.map.createLayer('Background');
         this.groundLayer = this.map.createLayer('ForeGround');
 		
-		this.groundLayer.width =1800;
-		this.groundLayer.height =1216;
 		this.groundLayer.resizeWorld();
 
       // Create a new Player
