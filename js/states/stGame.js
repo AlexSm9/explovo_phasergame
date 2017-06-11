@@ -211,14 +211,14 @@ stGame.prototype = {
         this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
 		this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
         this.pointer.anchor.set(0.5,0.5);
-        this.musicButton = new MusicButton(this.game, this.bg_music, 1, 760, 560); //music mute/unmute button
+        //this.musicButton = new MusicButton(this.game, this.bg_music, 1, 760, 560); //music mute/unmute button
 
 		
 		this.uiLayer.add(this.waterUI.uiInner);
 		this.uiLayer.add(this.fireUI.uiInner);
 		this.uiLayer.add(this.waterUI.uiOuter);
 		this.uiLayer.add(this.fireUI.uiOuter);
-        this.uiLayer.add(this.musicButton);
+        //this.uiLayer.add(this.musicButton);
 		this.uiLayer.add(this.pointer);
 
 },//end_create
