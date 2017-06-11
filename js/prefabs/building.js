@@ -7,7 +7,8 @@ var Building = function(game, x, y, health, fires, src){
 	// initalization
 	this.game = game;
 	this.src = src + '-01';
-	this.srcDestroyed = src + '-02';
+	this.srcMid = src + '-02';
+	this.srcDestroyed = src + '-03';
 	// Creation Code
 	Phaser.Sprite.call(this, game, x, y, 'buildings', this.src); // call sprite
 	game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
@@ -19,14 +20,17 @@ var Building = function(game, x, y, health, fires, src){
     // add sounds
     this.collapse = game.add.audio('collapse');
     
-	//this.count = game.add.text(740,35, 'X ' + this.fireCount,{fontSize: '25px',fill:'yellow'});
-	//this.count.fixedToCamera=true;
+	// Set Dead flag
 	this.isDead = false;
 
 	// Parameters
 	this.health = health; // default hp set
+	this.total = health; // max health
 	this.damageMult = 0.1; // damage multiplier
 	this.fireGroup = this.game.add.group(); // generate fire group
+	this.mid = new Phaser.Signal();
+	this.mid.addOnce(this.midDestroy,this);
+
 	// start # of fires
 	for( let i = 0; i < fires; i++){
 		let j = game.rnd.integerInRange(-2,3);
@@ -53,12 +57,18 @@ Building.prototype.update = function(){
 		}
 	}
 
+	// at half health, load mid destroy sprite
+	if (this.health/this.total <= 0.50){
+		this.mid.dispatch();
+	}
+
 	// Building health damage
 	if(this.health > 0){
 		this.health -= this.fireGroup.countLiving() * this.damageMult;
 	}
 	else{
 		this.isDead = true;
+		this.alive = false;
         this.fireGroup.forEach(this.stopFireSound, this, true);
 		this.fireGroup.removeAll(true);
 		this.loadTexture('buildings', this.srcDestroyed);
@@ -121,4 +131,9 @@ Building.prototype.damageFire = function(particle,fire){
 
 Building.prototype.stopFireSound = function(fire) {
     fire.fire_sound.stop();
+}
+
+Building.prototype.midDestroy = function(){
+	console.log('dispatched');
+	this.loadTexture('buildings',this.srcMid);
 }

@@ -1,3 +1,5 @@
+// Main File
+// Instantiates and adds all the states to the game
 window.onload = function() {
     var config = {
         width: 800,
