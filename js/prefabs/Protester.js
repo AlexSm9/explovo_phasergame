@@ -1,10 +1,9 @@
-function Rioter(game, spriteObject, positionX, positionY){
+function Protester(game, spriteObject, positionX, positionY){
    Phaser.Sprite.call(this, game, positionX, positionY, spriteObject.key, spriteObject.frame);
    this.spriteDiagonal = distanceBetween(this.x, this.y, this.x+this.width, this.y+this.height); //do this before setting anchor
    this.anchor.set(0.5);
    game.physics.enable(this);
    this.body.setSize(this.width-4, this.height-4, 2, 2);
-   this.building = null;
 
    game.add.existing(this);
 
@@ -14,18 +13,19 @@ function Rioter(game, spriteObject, positionX, positionY){
       game.world.moveUp(this);
    }
 
+   this.hasTurnedRioter = false;
+
+   this.killNextFrame = false;
    this.killOffscreen = false;
 
    this.creationTime = (new Date()).getTime();
    this._events = [];
 
    // values which should be here but can be changed as required
-   this.maxVelocity = 60;
+   this.maxVelocity = 40;
    this.goalVectorWeightDefault = 0.4;
    this.spriteAngleOffset = Math.PI/2; //(sprite normally faces... up: -Math.PI/2, down: Math.pi/2, left: Math.PI, right: 0)
    this.rotationDefault = 0;
-
-   this.canFire = true;
 
    //--/ can change but beware of possible buggy behavior
    // This value and the function that uses it prevents a situation between 2 sprites where
@@ -53,17 +53,17 @@ function Rioter(game, spriteObject, positionX, positionY){
    this.triggerEvents = [];
    this.collideEvents = [];
 }
-// Rioter is a Sprite, its constructor is above
-Rioter.prototype = Object.create(Phaser.Sprite.prototype);
-Rioter.prototype.constructor = Rioter;
+// Protester is a Sprite, its constructor is above
+Protester.prototype = Object.create(Phaser.Sprite.prototype);
+Protester.prototype.constructor = Protester;
 
 //--/ The Following functions are used by MobManager to manage mobs, do not remove
-Rioter.prototype.setFlockingVector = function(xFlocking, yFlocking){
+Protester.prototype.setFlockingVector = function(xFlocking, yFlocking){
    this.flockingVector.x = xFlocking;
    this.flockingVector.y = yFlocking;
 };
 // can call seerately from Mob Manager to individually set goals for sprites
-Rioter.prototype.setGoalPoint = function(x, y, goalWeight){
+Protester.prototype.setGoalPoint = function(x, y, goalWeight){
    if(x=="undefined" || y=="undefined"){
       this.headToGoal = false;
    }else{
@@ -74,33 +74,33 @@ Rioter.prototype.setGoalPoint = function(x, y, goalWeight){
    this.goalVectorWeight = typeof goalWeight !== 'undefined' ? goalWeight : this.goalVectorWeightDefault;
 };
 // returns a object containing the velocites of the mob
-Rioter.prototype.getVelocities = function(){
+Protester.prototype.getVelocities = function(){
    return {x: this.body.velocity.x, y: this.body.velocity.y};
 };
-Rioter.prototype.triggerOnEntry = function(leftCornerX, leftCornerY, width, height, callbackFunction){
+Protester.prototype.triggerOnEntry = function(leftCornerX, leftCornerY, width, height, callbackFunction){
    this.triggerEvents.push({leftX: leftCornerX, rightX: (leftCornerX+width), upY: leftCornerY, downY: (leftCornerY+height), cb: callbackFunction});
 };
-Rioter.prototype.triggerOnCollision = function(objectToCollideWith, callbackFunction, booleanIsEfficient){
+Protester.prototype.triggerOnCollision = function(objectToCollideWith, callbackFunction, booleanIsEfficient){
    this.collideEvents.push({collideWith: objectToCollideWith, cb: callbackFunction, efficient: booleanIsEfficient});
 };
-Rioter.prototype.reverseNatural = function(boolean){
+Protester.prototype.reverseNatural = function(boolean){
    if(typeof(boolean)!="boolean"){
       this.reverseNatural = false;
    }else{
       this.reverseNatural = boolean;
    }
 };
-Rioter.prototype.setFlockingWeights = function(cWeight, sWeight, hWeight){
+Protester.prototype.setFlockingWeights = function(cWeight, sWeight, hWeight){
    this.cohesionWeight = cWeight;
    this.separationWeight = sWeight;
    this.headingWeight = hWeight;
 };
-Rioter.prototype.setFlockingDistances = function(cDist, sDist, hDist){
+Protester.prototype.setFlockingDistances = function(cDist, sDist, hDist){
    this.cohesionDistance = cDist;
    this.separationDistance = sDist;
    this.headingDistance = hDist;
 };
-Rioter.prototype.update = function(){
+Protester.prototype.update = function(){
 
    var time = (new Date()).getTime();
    for(var w=this._events.length-1; w>=0; w--){
@@ -180,47 +180,28 @@ Rioter.prototype.update = function(){
          }
       }
    }
+
+   if(this.killNextFrame){
+      this.destroy();
+   }
+
+
 };
 
 //--/ functions not absolutely necessary for normal operation, do not call in MobManager if removed
 
-Rioter.prototype.freeze = function(boolean){
+Protester.prototype.freeze = function(boolean){
    this.naturalMove = false;
    if(boolean === false){
       this.naturalMove = true;
    }
 };
 
-Rioter.prototype.fireAtBuilding = function(game, building){
-   if(!building.isDead){
-      if(this.canFire === true){
-        this.canFire = false;
-         var tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
-         tObject.throwAtBuilding(building, 20);
-      }
-   }
-};
-
-Rioter.prototype.fireAtOwnBuilding = function(game){
-   var building = this.building;
-   if(!building.isDead){
-      if(this.canFire === true){
-        this.canFire = false;
-         var tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
-         tObject.throwAtBuilding(building, 20);
-      }
-   }
-};
-
-Rioter.prototype.setOwnBuilding = function(building){
-   this.building = building;
-};
-
-Rioter.prototype.addEvent = function(callbackForMobManager, elapsedSecondsAfterCallingThisFunction){
+Protester.prototype.addEvent = function(callbackForMobManager, elapsedSecondsAfterCallingThisFunction){
    this._events.push({millisecs: elapsedSecondsAfterCallingThisFunction*1000, cb: callbackForMobManager});
 };
 
-Rioter.prototype.positionOffscreenRandomly = function(game){
+Protester.prototype.positionOffscreenRandomly = function(game){
    var leftX = game.camera.x - this.spriteDiagonal;
    var rightX = game.camera.x + game.camera.width + this.spriteDiagonal;
    var leftY = game.camera.y - this.spriteDiagonal;
@@ -244,8 +225,53 @@ Rioter.prototype.positionOffscreenRandomly = function(game){
    }
 };
 
-Rioter.prototype.positionOffworldRandomly = function(game){
+Protester.prototype.positionOffworldRandomly = function(game){
    var point = randomPointOffscreen;
    this.x = point.x;
    this.y = point.y;
+};
+
+Protester.prototype.becomeRioter = function(game, spriteObject, building, RioterManager, ProtesterManager, collisionArray, eventArray){
+   if(this.hasTurnedRioter === false){
+      this.hasTurnedRioter = true;
+      var protester = this;
+      var rioter = new Rioter(game, {key: 'assets', frame: 'rioter'}, protester.x, protester.y);
+      //var rioter = new Rioter(game, {key: 'assets', frame: 'rioter'}, 20, 20); // TEST CODE
+
+
+      var throwAtBuilding = function(mob){
+         //mob.freeze();
+         mob.fireAtOwnBuilding(game);
+         mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
+         //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
+      };
+
+      rioter.body.velocity.x = protester.body.velocity.x;
+      rioter.body.velocity.y = protester.body.velocity.y;
+      rioter.setOwnBuilding(building);
+      rioter.setGoalPoint(building.centerX, building.centerY, 0.4);
+      /*rioter.addEvent(setGoalOffscreen, 40); // 40 seconds after creation, set goal of rioter to offscreen
+      rioter.addEvent(setGoalOffscreen, 60); // 60 seconds after creation, set goal of rioter to offscreen, goal to prevent stuck state
+      rioter.addEvent(setGoalOffscreen, 100); // 100 seconds after creation, set goal of rioter to offscreen, goal to prevent stuck state
+      */
+
+      for(var q = 0; q<eventArray.length; q++){
+         rioter.addEvent(eventArray[q].cb, eventArray[q].time); // 40 seconds after creation, set goal of rioter to offscreen
+      }
+
+      rioter.triggerOnEntry(building.x-(building.width/2)-60, building.y - (building.height/2)- 60, building.width+120, building.height + 120, throwAtBuilding);
+
+      for(var z = 0; z<collisionArray.length; z++){
+         var callback = typeof collisionArray[z].cb !== 'undefined' ? collisionArray[z].cb : null;
+         rioter.triggerOnCollision(collisionArray[z].with, callback, false);
+      }
+
+      rioter.maxVelocity = 100;
+
+      protester.killNextFrame = true;
+
+      ProtesterManager.removeAndDestroyMob(protester);
+      RioterManager.addMob(rioter);
+   }
+
 };
