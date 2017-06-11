@@ -47,7 +47,7 @@ stDirections.prototype = {
     },//end_startTutorial
 	skipTutorial: function() {
 
-        this.state.start("stGame");
+        this.state.start("stContext1");
       
     }//end_skipTutorial
 };
