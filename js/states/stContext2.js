@@ -7,11 +7,12 @@ var stContext2 = function(game) {
 stContext2.prototype = {
     preload: function(){
         l("Directions_preload");
-        // add in background
+        this.game.stage.backgroundColor = "#000000";
         
     },//end_preload
     create: function(){
        l("Directions_create");
+       this.sound.stopAll();
        sfx= this.game.add.audio("whirling");
 
        sfx.play('',0,.2,false);
@@ -47,6 +48,6 @@ stContext2.prototype = {
         
     },//end_out
     startGame: function() {
-        this.state.start("stContext3");
+        this.state.start("stWin");
     }//end_startGame
 };

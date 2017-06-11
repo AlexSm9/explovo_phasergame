@@ -1,10 +1,6 @@
 //Main this.game State
 var stGame = function(game) {
-    //Rioter_
-   //var MM;
-   //var MM2;
-
-
+    this.game = game;
    var RM;
    var PM;
    var buildingGroup;
@@ -34,6 +30,9 @@ stGame.prototype = {
         this.map.addTilesetImage('CityTileset64', 'CityTileset64');
         this.backgroundLayer = this.map.createLayer('Background');
         this.groundLayer = this.map.createLayer('ForeGround');
+
+        //Win flag
+        this.winnable = false;
 
       // Create a new Player
    	  this.player = new Player(this.game,this.game.world.centerX, this.game.world.centerY, 'assets' , 'firefighter');
@@ -107,12 +106,26 @@ stGame.prototype = {
    MM.addAllTriggerOnCollision(this.buildingGroup, null, false);
 */
 
-this.game.time.events.repeat(5000, 50, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 10 times then stop
-this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
+   // -- Conditions
+      // Loss Signal
+    this.gameOver = new Phaser.Signal();
+    this.gameOver.addOnce(this.fadeGO,this);
+    // Win Signal
+    this.gameWin = new Phaser.Signal();
+    this.gameWin.addOnce(this.fadeWin,this);
+
+      // Wave Timer + Winnable flag
+      this.waves = this.game.time.events.repeat(5000, 2, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 10 times then stop
+      // Once this timer ends, enable win flag
+      this.waves.timer.onComplete.addOnce(function(){
+        this.winnable = true;
+      },this);
+
+      // Peaceful protester spawn timer
+      this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
 
 
 var buildingGroup = this.buildingGroup;
-
 function chooseUnburntBuilding(){
    var unburntBuildings = [];
    for(var u = 0; u<buildingGroup.children.length; u++){
@@ -134,7 +147,6 @@ var setGoalOffscreen = function(mob){
 };
 
 function newBuildingAttack(){
-
    var building = chooseUnburntBuilding();
       for(var i=0; i<randInt(5, 2); i++){ //creates 2-4 rioters to pursue building
          var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
@@ -216,19 +228,12 @@ var throwAtBuilding = function(mob){
    //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
 };
 
-
    // Create UI
    this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
    this.pointer.anchor.set(0.5,0.5);
    this.waterUI = new WaterUI(this.game,this.player,70,60);
    this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
-
-     this.end = damageFire = function(particle,building){
-      particle.kill();
-      building.damageFire();
-   };
-
-   },//end_create
+},//end_create
 
    update: function(){
       game = this.game;
@@ -240,13 +245,28 @@ var throwAtBuilding = function(mob){
       //l("Mobs in RM: " + this.RM.mobList.length + ", Mobs in PM: " + this.PM.mobList.length);
 
    if (this.G.isDown){
-      this.state.start("stGameOver");
+      this.gameWin.dispatch();
+   }
+   // Loss Condition
+   //  IF city life is below 40%, signal game over
+   if(this.fireUI.current/this.fireUI.total < 0.4){
+      this.gameOver.dispatch();
    }
 
-   if(this.buildingGroup.numberOfLiving() <= 0){
-      this.state.start("stGameOver");
+   // Win Condition
+   // IF no more rioters and fire, call WIN
+   if(this.winnable == true && this.RM.mobList.length == 0){
+      let currentFires = 0;
+      this.buildingGroup.forEach(function(building){
+        currentFires += building.fireGroup.countLiving();
+      },this)
+      if (currentFires == 0){
+        this.gameWin.dispatch();
+      }
+      else{
+        console.log(currentFires);
+      }
    }
-
    // start UI update functions
 	this.waterUI.update();
 	this.fireUI.update();
@@ -267,7 +287,26 @@ var throwAtBuilding = function(mob){
 
    },//end_update
 
+// Fade the camera before going to the game over screen
+    fadeGO: function(){
+      // function call when fade ends
+      this.camera.onFadeComplete.add(function(){
+        this.game.state.previousState = 'stGame';
+        this.game.state.start('stGameOver');
+      })
+      this.camera.fade(); // fade camera
+      this.bg_music.fadeOut(500);
+    },
 
+// Fade the camera before going to next stage context
+    fadeWin: function(){
+      this.camera.onFadeComplete.add(function(){
+        this.game.state.previousState = 'stGame';
+        this.game.state.start('stContext2');
+      })
+      this.camera.fade(); // fade camera
+      this.bg_music.fadeOut(500);
+    },
 
 
  /* render: function() {
