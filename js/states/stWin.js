@@ -23,9 +23,9 @@ stWin.prototype = {
             this.bg_music.volume = 0;
         }
         
-        this.titleButton = this.game.add.button(130, this.game.height - 75, 'TitleScreenButtons', this.titleScreen, this.game,'titleScreenButtonOver', 'titleScreenButton');
+        this.titleButton = this.game.add.button(this.game.width - 125, this.game.height - 100, 'TitleScreenButtons', this.titleScreen, this.game,'titleScreenButtonOver', 'titleScreenButton');
         this.titleButton.anchor.set(0.5);
-        this.titleButton.scale.setTo(0.8);
+        this.titleButton.scale.setTo(0.85);
         this.titleButton.onInputUp.add(this.stopSound, this);
         
 
