@@ -17,7 +17,7 @@ stGameOver.prototype = {
         
         // add sound
         this.fire_sound = this.game.add.audio('fire');
-        this.fire_sound.play('', 0, .3, true);
+        this.fire_sound.play('', 0, .5, true);
         
         // add in start button
         this.add.text(315, this.game.height-500, 'You failed to save the city!', {fontSize: '15px', fill: 'white'});
