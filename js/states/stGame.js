@@ -271,7 +271,7 @@ var throwAtBuilding = function(mob){
 
 
 
-  render: function() {
+ /* render: function() {
 
 	  // this.buildingGroup.forEach(function(building){
 		//   building.fireGroup.forEach(function(fire){
@@ -281,5 +281,5 @@ var throwAtBuilding = function(mob){
 
    // display fps
      this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
-  }
+  }*/
 };//end_s1Game
