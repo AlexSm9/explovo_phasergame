@@ -16,10 +16,10 @@ var Building = function(game, x, y, health, fires, src){
 	this.body.moves = false;
 	this.anchor.set(0.5,0.5); // set anchor to center
 	this.game.add.existing(this);
-    
+
     // add sounds
     this.collapse = game.add.audio('collapse');
-    
+
 	// Set Dead flag
 	this.isDead = false;
 
@@ -73,7 +73,7 @@ Building.prototype.update = function(){
 		this.fireGroup.removeAll(true);
 		this.loadTexture('buildings', this.srcDestroyed);
 	}
-    
+
     // play collapse sound
     if(this.health > 0 && this.health < 1 && !this.collapse.isPlaying) {
         this.collapse.play('', 0, 1, false);
@@ -89,7 +89,7 @@ Building.prototype.update = function(){
 // Starts a fire on this building
 
 // Accepts a side in radians and generates a random fire
-Building.prototype.startFire = function(side){    
+Building.prototype.startFire = function(side){
 	// Get the side of the building that was lit
 	var angle = rToA(side);
 	if (angle >= -45 && angle <= 45){ // left
@@ -134,6 +134,6 @@ Building.prototype.stopFireSound = function(fire) {
 }
 
 Building.prototype.midDestroy = function(){
-	console.log('dispatched');
+	//console.log('dispatched');
 	this.loadTexture('buildings',this.srcMid);
 }

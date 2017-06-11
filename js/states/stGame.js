@@ -22,7 +22,7 @@ stGame.prototype = {
 
    create: function() {
     //--/ variable assignments
-   
+
         //--/ tilemap variable
         this.game.world.setBounds(0,0,3200,2432); // initialize world bounds
         this.game.stage.backgroundColor = "#228B22";
@@ -52,7 +52,7 @@ stGame.prototype = {
          this.bg_sounds = this.game.add.audio('riot_sounds'); this.bg_sounds.play('', 0, 1, true);
          this.bg_music = this.game.add.audio('game_music');
          this.bg_music.play('', 0, 1, true);
-       
+
          if (isMute === true) {
             this.bg_music.volume = 0;
          }
@@ -77,7 +77,7 @@ stGame.prototype = {
             this.winnable = true;
         },this);
 
-        // Peaceful protester spawn timer  
+        // Peaceful protester spawn timer
         this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
 
 
@@ -210,7 +210,7 @@ stGame.prototype = {
    }
    // Loss Condition
    //  IF city life is below 40%, signal game over
-   console.log(this.buildingGroup.countLiving());
+   //console.log(this.buildingGroup.countLiving());
    if(this.buildingGroup.countLiving() == 0){
       this.gameOver.dispatch();
    }
@@ -234,7 +234,7 @@ stGame.prototype = {
             console.log(currentFires);
         }
    }
-   
+
    // start UI update functions
 	this.waterUI.update();
 	this.fireUI.update();
