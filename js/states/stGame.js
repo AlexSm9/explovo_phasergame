@@ -21,8 +21,7 @@ stGame.prototype = {
    },//end_preload
 
    create: function() {
-    //--/ variable assignments
-
+		//--/ variable assignments
         //--/ tilemap variable
         this.game.world.setBounds(0,0,3200,2432); // initialize world bounds
         this.game.stage.backgroundColor = "#228B22";
@@ -32,21 +31,39 @@ stGame.prototype = {
         this.backgroundLayer = this.map.createLayer('Background');
         this.groundLayer = this.map.createLayer('ForeGround');
 
+		//groups for ordering
+		this.hydrantLayer = this.game.add.group();
+		this.rioterLayer = this.game.add.group();
+      this.protesterLayer = this.game.add.group();
+		this.emitterLayer = this.game.add.group();
+		this.playerLayer = this.game.add.group();
+		this.buildingLayer = this.game.add.group();
+		this.uiLayer = this.game.add.group();
+
         //Win flag
         this.winnable = false;
 
         // Create a new Player
         this.player = new Player(this.game,this.game.world.centerX, this.game.world.centerY, 'assets' , 'firefighter');
+		this.playerLayer.add(this.player);
         this.game.camera.focusOnXY(this.player.x,this.player.y);
         this.game.camera.follow(this.player,4,0.1,0.1);  // set camera to player
 
         // Attach hose to player object
         this.emitter = new WaterHose(this.game, this.player, 30, 15);
-        this.world.moveDown(this.emitter); // emitter below player
+        this.emitterLayer.add(this.emitter);
 
     // Create environment
         this.hydrantGroup = new stGameHydrantGroup(this.game,this.player); // Hydrants
+		this.hydrantLayer.add(this.hydrantGroup);
         this.buildingGroup = new stGameBuildingGroup(this.game); // Buildings
+		this.buildingLayer.add(this.buildingGroup);
+
+		var pLayer = this.playerLayer;
+		this.buildingGroup.forEach(function(building){
+			pLayer.add(building.fireGroup);
+			pLayer.add(building.foamGroup);
+		});
 
         // Start music
          this.bg_sounds = this.game.add.audio('riot_sounds'); this.bg_sounds.play('', 0, 1, true);
@@ -104,15 +121,16 @@ stGame.prototype = {
         }
 
         var setGoalOffscreen = function(mob){
-        var point = randomPointOffscreen(game, 50);
-        mob.setGoalPoint(point.x, point.y, 0.8); // randomly head to offscreen point with weight 0.8
-        mob.killOffscreen = true;
+			var point = randomPointOffscreen(game, 50);
+			mob.setGoalPoint(point.x, point.y, 0.8); // randomly head to offscreen point with weight 0.8
+			mob.killOffscreen = true;
         };
 
         function newBuildingAttack(){
         var building = chooseUnburntBuilding();
             for(var i=0; i<randInt(6, 3); i++){ //creates 3-5 rioters to pursue building
                 var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
+				this.rioterLayer.add(rioter);
                 //l(rioter);
                 //console.dir(this.RM);
                 this.RM.addMob(rioter);
@@ -163,6 +181,7 @@ stGame.prototype = {
 
         for(var i=0; i<randInt(4, 1); i++){
             var protester = new Protester(this.game, {key: 'protester', frame: 0}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
+			this.protesterLayer.add(protester);
             this.PM.addMob(protester);
             protester.positionOffscreenRandomly(game);
 
@@ -175,6 +194,11 @@ stGame.prototype = {
 
             protester.triggerOnCollision(this.emitter, onSprayBecomeRioter, false);
             protester.triggerOnCollision(this.player);
+
+            // Potential for slowdown with many mobs, use the second commented line instead if slowdown too significant
+            protester.triggerOnCollision(this.rioterLayer, null, false);
+            //  protester.triggerOnCollision(this.rioterLayer);
+
             protester.triggerOnCollision(this.hydrantGroup, null, false);
             protester.triggerOnCollision(this.buildingGroup, null, false);
         }
@@ -189,11 +213,20 @@ stGame.prototype = {
         };
 
         // Create UI
-        this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
+        this.waterUI = new WaterUI(this.game,this.player,70,60);
+        this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
+		this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
         this.pointer.anchor.set(0.5,0.5);
-        this.waterUI = new WaterUI(this.game,this.player,70,60); //water UI
-        this.fireUI = new FireUI(this.game,this.buildingGroup,765,355); //fire UI
-        this.musicButton = new MusicButton(this.game, this.bg_music, 1, 760, 560); //music mute/unmute button
+        //this.musicButton = new MusicButton(this.game, this.bg_music, 1, 760, 560); //music mute/unmute button
+
+
+		this.uiLayer.add(this.waterUI.uiInner);
+		this.uiLayer.add(this.fireUI.uiInner);
+		this.uiLayer.add(this.waterUI.uiOuter);
+		this.uiLayer.add(this.fireUI.uiOuter);
+        //this.uiLayer.add(this.musicButton);
+		this.uiLayer.add(this.pointer);
+
 },//end_create
 
    update: function(){
@@ -277,8 +310,8 @@ stGame.prototype = {
     },
 
 
- /* render: function() {
-
+  /*render: function() {
+	this.game.debug.body(this.buildingGroup.building);
 	  // this.buildingGroup.forEach(function(building){
 		//   building.fireGroup.forEach(function(fire){
 		//	   this.game.debug.body(fire);

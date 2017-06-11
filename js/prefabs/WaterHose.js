@@ -4,7 +4,8 @@
 var ArrowOn=false;
 
 var WaterHose = function(game,attachments,x,y){
-	console.log('create hose');
+	this.game = game;
+	// console.log('create hose');
 // Create emitter
 	Phaser.Particles.Arcade.Emitter.call(this, game, x, y); // create emitter
 	this.game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
@@ -55,7 +56,7 @@ WaterHose.prototype.create = function() {
 
 // Override Update Function
 WaterHose.prototype.update = function() {
-	if (this.game.input.mousePointer.isDown){
+	if (this.game.input.mousePointer.isDown && !this.attachment.frozen){
         this.y = this.attachment.y + transformOverAngle(this.attachment.rotation, this.emitterSpriteOffsetX, this.emitterSpriteOffsetY).y;
 		this.x = this.attachment.x + transformOverAngle(this.attachment.rotation, this.emitterSpriteOffsetX, this.emitterSpriteOffsetY).x;
 
@@ -122,18 +123,20 @@ WaterHose.prototype.update = function() {
 
 // Sound functions
 WaterHose.prototype.playSound = function() {
-    // Play spray sound on mouse press
-    if (this.attachment.waterLevel > 0) {
-        this.water_spray.play('', 0, 0.75, true);
-    } else {
-        this.water_out1.play('', 0, 0.75, false);
-    }
+	if(!this.attachment.frozen){
+		// Play spray sound on mouse press
+		if (this.attachment.waterLevel > 0) {
+			this.water_spray.play('', 0, 0.75, true);
+		} else {
+			this.water_out1.play('', 0, 0.75, false);
+		}
+	}
 };
 
 WaterHose.prototype.stopSound = function() {
     // Stop spray sound, play spray release sound on mouse release
     this.water_spray.stop();
-    if (this.game.input.activePointer.withinGame) {
+    if (this.game.input.activePointer.withinGame && !this.attachment.frozen) {
         if (this.attachment.waterLevel > 0) {
             this.water_end.play('', 0, .75, false);
         } else {
@@ -146,7 +149,9 @@ WaterHose.prototype.stopSound = function() {
 // Creates 'foam' over the collision target
 WaterHose.prototype.buildingCollision = function(particle,building){
     // Generate a new emitter
-    var foamEmitter = building.game.add.emitter(particle.x,particle.y,3);
+    foamEmitter = building.game.add.emitter(particle.x,particle.y,3);
+	building.foamGroup.add(foamEmitter);
+
     foamEmitter.makeParticles('foam'); // create foam particle
     foamEmitter.forEach(function(particle){ // disable gravity for each
         particle.body.allowGravity = false;
