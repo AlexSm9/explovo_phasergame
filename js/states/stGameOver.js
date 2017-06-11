@@ -12,6 +12,9 @@ stGameOver.prototype = {
     create: function(){
         game.sound.stopAll();
        l("Directions_create");
+        
+        this.game.stage.backgroundColor = "#000000";
+        
         // add in start button
         this.add.text(315, this.game.height-500, 'You failed to save the city!', {fontSize: '15px', fill: 'white'});
         this.add.text(280, this.game.height-450, 'Hopefully next time you can succeed.', {fontSize: '15px', fill: 'white'});

@@ -1,6 +1,6 @@
 // Title state
 // Title screen
-var isMute = false; //keeps track of whether or not music should be muted
+var isMute = false; //GLOBAL: keeps track of whether or not music should be muted
 var stTitle = function(game) {
 };
 stTitle.prototype = {
@@ -20,6 +20,11 @@ stTitle.prototype = {
        this.title_sounds.play('', 0, .7, true);
        this.title_music = this.game.add.audio('title_screen');
        this.title_music.play('', 0, .7, true);
+        
+       // ensures music won't play if mute is true and returning from game over screen
+       if (isMute === true) {
+           this.title_music.volume = 0;
+       }
        
        // add in animated title background
        this.TitleAnimation = this.game.add.sprite(0,0,'TitleAnimation');
@@ -35,21 +40,19 @@ stTitle.prototype = {
        this.button.onInputUp.add(this.stopMusic, this);
         
        // add in music mute/unmute button
-       this.musicButton = this.game.add.button(this.game.width - 40, this.game.height - 45, 'MusicButtons', this.muteMusic, this, 'music-button-on2', 'music-button-on');
-       this.musicButton.anchor.set(0.5);
-       this.musicButton.scale.setTo(0.4);
+       this.musicButton = new MusicButton(this.game, this.title_music);
         
         
     },//end_create
+    update: function() {
+        this.musicButton.update();
+        
+    },//end_update
     stopMusic: function() {
        this.title_music.stop();
        this.title_sounds.stop();
-    },
-    muteMusic: function() {
-       //if music is mute, unmute. Else, mute it.
-       isMute ? (isMute = false, this.title_music.mute = false) : (isMute = true, this.title_music.mute = true);
-
-    },
+        
+    },//end_stopMusic
     startGame: function() {
         
         

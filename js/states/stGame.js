@@ -55,6 +55,10 @@ stGame.prototype = {
    this.bg_sounds.play('', 0, 1, true);
    this.bg_music = this.game.add.audio('game_music');
    this.bg_music.play('', 0, 1, true);
+       
+   if (isMute === true) {
+       this.bg_music.volume = 0;
+   }
 
    //create rioters and add to MobManager
 /*
@@ -222,8 +226,9 @@ var throwAtBuilding = function(mob){
    // Create UI
    this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
    this.pointer.anchor.set(0.5,0.5);
-   this.waterUI = new WaterUI(this.game,this.player,70,60);
-   this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
+   this.waterUI = new WaterUI(this.game,this.player,70,60); //water UI
+   this.fireUI = new FireUI(this.game,this.buildingGroup,765,355); //fire UI
+   this.musicButton = new MusicButton(this.game, this.bg_music); //music mute/unmute button
 
      this.end = damageFire = function(particle,building){
       particle.kill();
@@ -269,10 +274,7 @@ var throwAtBuilding = function(mob){
 	this.pointer.y = this.game.camera.y + this.game.input.y -0;
 
    },//end_update
-
-
-
-
+    
  /* render: function() {
 
 	  // this.buildingGroup.forEach(function(building){

@@ -74,6 +74,7 @@ stPreload.prototype = {
         this.load.audio('title_sounds', 'title sounds.mp3');
         this.load.audio('game_music', 'game music.mp3');
         this.load.audio('riot_sounds', 'riot sounds.mp3');
+        this.load.audio('swish', 'swish.mp3');
         this.load.audio('water_spray', 'water_spray.mp3');
         this.load.audio('water_end', 'water_end.mp3');
         this.load.audio('water_out1', 'water_out1.mp3');
