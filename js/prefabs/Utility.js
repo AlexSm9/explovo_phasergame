@@ -12,7 +12,7 @@ if(true){
 // returns unit vector from x and y
 function normalize(x, y){
    if(x!==0 && y!==0){
-      pointMagnitude = Math.sqrt((x*x)+(y*y));
+      var pointMagnitude = Math.sqrt((x*x)+(y*y));
       return {x: (x/pointMagnitude), y: (y/pointMagnitude)};
    }else{
       return {x: 0, y: 0};
@@ -31,10 +31,10 @@ function randomOfArray(array, numberOfElementsToGet){
    if(numberOfElementsToGet > array.length){
       return array.slice(array);
    }
-   tempArray = array.slice(array); // creates copy
-   returnArray = [];
-   for(i = 0; i<numberOfElementsToGet; i++){
-      randomlyChosenIndex = Math.floor(Math.random()*tempArray.length);
+   var tempArray = array.slice(array); // creates copy
+   var returnArray = [];
+   for(var i = 0; i<numberOfElementsToGet; i++){
+      var randomlyChosenIndex = Math.floor(Math.random()*tempArray.length);
       returnArray.push(tempArray.splice(randomlyChosenIndex, 1));
    }
    return returnArray;
@@ -79,10 +79,10 @@ function aToR(degrees){
 
 // calculates rotational transformation of X and Y spaces away from rotational origin (0, 0)
 function transformOverAngle(angleInRadians, x, y){
-   cosine = Math.cos(angleInRadians);
-   sine = Math.sin(angleInRadians);
-   xprime = (cosine*x)+(-1*(sine*y));
-   yprime = (sine*x)+(cosine*y);
+   var cosine = Math.cos(angleInRadians);
+   var sine = Math.sin(angleInRadians);
+   var xprime = (cosine*x)+(-1*(sine*y));
+   var yprime = (sine*x)+(cosine*y);
    var returnObj = {x: xprime, y: yprime};
    return returnObj;
 }

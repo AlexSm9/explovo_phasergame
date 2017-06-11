@@ -6,6 +6,7 @@ var stGame = function(game) {
 
 
    var RM;
+   var PM;
    var buildingGroup;
    var hydrantGroup;
    var player;
@@ -19,6 +20,7 @@ stGame.prototype = {
       //MM = new MobManager(100, 50, 100, 1, 1.5, 1);
       //_Rioter
       this.RM = new MobManager(100, 50, 100, 1, 1.5, 1);
+      this.PM = new MobManager(150, 75, 100, 1, 1.5, 1.5);
 
    },//end_preload
    create: function() {
@@ -107,34 +109,40 @@ stGame.prototype = {
    MM.addAllTriggerOnCollision(this.buildingGroup, null, false);
 */
 
-this.game.time.events.repeat(5000, 50, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 10 times then stop
+this.game.time.events.repeat(5000, 50, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 10 times then stop
+this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
+
+
+var buildingGroup = this.buildingGroup;
+
+function chooseUnburntBuilding(){
+   var unburntBuildings = [];
+   for(var u = 0; u<buildingGroup.children.length; u++){
+      if(buildingGroup.children[u].isDead === false){
+         unburntBuildings.push(buildingGroup.children[u]);
+      }
+   }
+   if(unburntBuildings.length <= 0){
+      return randomOfArray(buildingGroup.children, 1)[0][0];
+   }else{
+      return randomOfArray(unburntBuildings, 1)[0][0];
+   }
+}
+
+var setGoalOffscreen = function(mob){
+   var point = randomPointOffscreen(game, 50);
+   mob.setGoalPoint(point.x, point.y, 0.8); // randomly head to offscreen point with weight 0.8
+   mob.killOffscreen = true;
+};
 
 function newBuildingAttack(){
 
-   var setGoalOffscreen = function(mob){
-      var point = randomPointOffscreen(game, 50);
-      mob.setGoalPoint(point.x, point.y, 0.8); // randomly head to offscreen point with weight 0.8
-      mob.killOffscreen = true;
-   };
-
-      var unburntBuildings = [];
-      for(var u = 0; u<this.buildingGroup.children.length; u++){
-         if(this.buildingGroup.children[u].isDead === false){
-            unburntBuildings.push(this.buildingGroup.children[u]);
-         }
-      }
-      var building;
-      if(unburntBuildings.length <= 0){
-         building = randomOfArray(this.buildingGroup.children, 1)[0][0];
-      }else{
-         building = randomOfArray(unburntBuildings, 1)[0][0];
-      }
-      for(i=0; i<randInt(5, 2); i++){ //creates 2-4 rioters to pursue building
+   var building = chooseUnburntBuilding();
+      for(var i=0; i<randInt(5, 2); i++){ //creates 2-4 rioters to pursue building
          var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
          //l(rioter);
          //console.dir(this.RM);
          this.RM.addMob(rioter);
-         this.game.add.existing(rioter);
 
          //do{ // infinite loop
             rioter.positionOffscreenRandomly(game);
@@ -142,6 +150,8 @@ function newBuildingAttack(){
 
          rioter.setOwnBuilding(building);
          rioter.setGoalPoint(building.centerX, building.centerY, 0.4);
+
+         // IF EVENTS CHANGED, also change in onSprayBecomeRioter
          rioter.addEvent(setGoalOffscreen, 40); // 40 seconds after creation, set goal of rioter to offscreen
          rioter.addEvent(setGoalOffscreen, 60); // 60 seconds after creation, set goal of rioter to offscreen, goal to prevent stuck state
          rioter.addEvent(setGoalOffscreen, 100); // 100 seconds after creation, set goal of rioter to offscreen, goal to prevent stuck state
@@ -153,17 +163,53 @@ function newBuildingAttack(){
          rioter.triggerOnCollision(this.player);
          rioter.triggerOnCollision(this.hydrantGroup, null, false);
          rioter.triggerOnCollision(this.buildingGroup, null, false);
-
       }
 
 
 
 }
 
+function createProtesters(){
 
+   var RioterManager = this.RM;
+   var ProtesterManager = this.PM;
+   var emitter = this.emitter;
+   var player = this.player;
+   var hydrantGroup = this.hydrantGroup;
+   var buildingGroup = this.buildingGroup;
 
+   var triggerToNewPoint = function(mob){
+      var newPoint = randomPointOffscreen(game, 50);
+      mob.setGoalPoint(newPoint.x, newPoint.y, 0.5); // randomly head to offscreen point with weight 0.8
+      mob.triggerOnEntry(newPoint.x-60, newPoint.y-60, newPoint.x+120, newPoint.y+120, triggerToNewPoint); //possible reccursion issues?
+      //^ Current Problem Here
+   };
 
+   var onSprayBecomeRioter = function(mob){
+      var collisionArray = [{with: emitter, cb: onSprayIncreaseGoalweight}, {with: player}, {with: hydrantGroup}, {with: buildingGroup}];
+      var eventArray = [{cb: setGoalOffscreen, time: 40}, {cb: setGoalOffscreen, time: 60}, {cb: setGoalOffscreen, time: 100}];
+      mob.becomeRioter(game, {key: 'assets', frame: 'rioter'}, chooseUnburntBuilding(), RioterManager, ProtesterManager, collisionArray, eventArray);
+   };
 
+   for(var i=0; i<randInt(4, 1); i++){
+      var protester = new Protester(this.game, {key: 'protester', frame: 0}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
+      this.PM.addMob(protester);
+      protester.positionOffscreenRandomly(game);
+
+      /*var point = randomPointOffscreen(game, 50);
+      protester.setGoalPoint(point.x, point.y, 0.2); // randomly head to offscreen point with weight 0.8
+      protester.triggerOnEntry(point.x-60, point.y-60, point+120, point+120, triggerToNewPoint); //possible reccursion issues?
+*/
+
+      triggerToNewPoint(protester);
+
+      protester.triggerOnCollision(this.emitter, onSprayBecomeRioter, false);
+      protester.triggerOnCollision(this.player);
+      protester.triggerOnCollision(this.hydrantGroup, null, false);
+      protester.triggerOnCollision(this.buildingGroup, null, false);
+   }
+
+}
 
 var throwAtBuilding = function(mob){
    //mob.freeze();
@@ -171,9 +217,6 @@ var throwAtBuilding = function(mob){
    mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
    //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
 };
-
-
-
 
 
    // Create UI
@@ -185,7 +228,7 @@ var throwAtBuilding = function(mob){
      this.end = damageFire = function(particle,building){
       particle.kill();
       building.damageFire();
-   }
+   };
 
    },//end_create
 
@@ -193,19 +236,11 @@ var throwAtBuilding = function(mob){
 
       game = this.game;
 
-
-
-
-
-
-
       this.RM.update(this.game);
       this.RM.killAllOutOfView(this.game);
-      //l("Mobs in RM: " + this.RM.mobList.length);
+      this.PM.update(this.game);
 
-
-   //MM.update(this.game);
-
+      //l("Mobs in RM: " + this.RM.mobList.length + ", Mobs in PM: " + this.PM.mobList.length);
 
    if (this.G.isDown){
       this.state.start("stGameOver");
@@ -238,13 +273,15 @@ var throwAtBuilding = function(mob){
 
 
 
- /*  render: function() {
-	   this.buildingGroup.forEach(function(building){
-		   building.fireGroup.forEach(function(fire){
-			   this.game.debug.body(fire);
-		   },this);
-	   },this);
+ /* render: function() {
+
+	  // this.buildingGroup.forEach(function(building){
+		//   building.fireGroup.forEach(function(fire){
+		//	   this.game.debug.body(fire);
+		 //  },this);
+	   // },this);
+
    // display fps
-    //  this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
-   }*/
+     this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
+  }*/
 };//end_s1Game
