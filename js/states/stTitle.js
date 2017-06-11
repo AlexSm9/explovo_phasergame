@@ -58,9 +58,11 @@ stTitle.prototype = {
         
     },//end_stopMusic
     startGame: function() {
+
         
         
-       this.state.start("stContext1");
+    this.state.start("stDirections");
+
 
 
     }//end_startGame
