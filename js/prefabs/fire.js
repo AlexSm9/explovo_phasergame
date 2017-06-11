@@ -10,7 +10,6 @@ var Fire = function(game, x, y, angle){
 	game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
 	this.angle = angle; // set angle to provided angle
 	this.body.immovable = true;
-
 	// Angle for specific cases
 	switch(angle){
 		case 0:
@@ -32,8 +31,8 @@ var Fire = function(game, x, y, angle){
 	}
 	// Adjust the size of the fire
 	// Bounding box will be adjusted along with size
-	this.width = 40; // adjusting size of fires
-	this.height = 48;
+	this.width = 60; // adjusting size of fires
+	this.height = 68;
 	this.game.add.existing(this);
 	
 	// Parameters

@@ -3,7 +3,7 @@
 // Buildings should be named building01-01, building01-02, etc subject to change
 // Example - "MemeFactory-01.png" for alive "MemeFactory-02.png" for dead
 // May extend for animations if necessary
-var Building = function(game, x, y, health, fires, src){
+var Building = function(game, x, y, health, fires, src, width, height, bodyWidth, bodyHeight){
 	// initalization
 	this.game = game;
 	this.src = src + '-01';
@@ -14,6 +14,9 @@ var Building = function(game, x, y, health, fires, src){
 	game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
 	this.body.immovable = true; // dsable movement
 	this.body.moves = false;
+	this.height = height;
+	this.width = width;
+	this.body.setSize(bodyWidth, bodyHeight, ((width - bodyWidth)/2), ((height - bodyHeight)/2));
 	this.anchor.set(0.5,0.5); // set anchor to center
 	this.game.add.existing(this);
 
@@ -28,6 +31,7 @@ var Building = function(game, x, y, health, fires, src){
 	this.total = health; // max health
 	this.damageMult = 0.1; // damage multiplier
 	this.fireGroup = this.game.add.group(); // generate fire group
+	this.foamGroup = this.game.add.group();
 	this.mid = new Phaser.Signal();
 	this.mid.addOnce(this.midDestroy,this);
 
@@ -93,23 +97,23 @@ Building.prototype.startFire = function(side){
 	// Get the side of the building that was lit
 	var angle = rToA(side);
 	if (angle >= -45 && angle <= 45){ // left
-		var xpos = (this.x - this.width/2);
-		var ypos = (this.y - this.height/2) + this.game.rnd.integerInRange(0,this.height-69);
+		var xpos = (this.body.x);
+		var ypos = (this.body.y) + this.game.rnd.integerInRange(0,this.body.height-68);
 		var ang = 270;
 	}
 	else if( angle >= 46 && angle <= 135){ // top
-		var xpos = (this.x - this.width/2) + this.game.rnd.integerInRange(0,this.width-48);
-		var ypos = (this.y - this.height/2);
+		var xpos = (this.body.x) + this.game.rnd.integerInRange(0,this.body.width-60);
+		var ypos = (this.body.y);
 		var ang = 0;
 	}
 	else if( angle >= -135 && angle <= -44){ // bottom
-		var xpos = (this.x - this.width/2) + this.game.rnd.integerInRange(0,this.width-69);
-		var ypos = (this.y - this.height/2) + this.height - 4;
+		var xpos = (this.body.x) + this.game.rnd.integerInRange(0,this.body.width-68);
+		var ypos = (this.body.y + this.body.height);
 		var ang = 180;
 	}
 	else{ // right
-		var xpos = (this.x - this.width/2) + this.width-4; // accounting for shadows
-		var ypos = (this.y - this.height/2) + this.game.rnd.integerInRange(0,this.height-48);
+		var xpos = (this.body.x + this.body.width); // accounting for shadows
+		var ypos = (this.body.y) + this.game.rnd.integerInRange(0,this.body.height-60);
 		var ang = 90;
 	}
 

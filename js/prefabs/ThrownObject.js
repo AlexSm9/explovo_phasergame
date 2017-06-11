@@ -49,7 +49,6 @@ ThrownObject.prototype.update = function() {
             this.destroy();
          }
       }
-
 	}
 };
 
