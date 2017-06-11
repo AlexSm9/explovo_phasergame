@@ -194,7 +194,11 @@ stGame.prototype = {
 
             protester.triggerOnCollision(this.emitter, onSprayBecomeRioter, false);
             protester.triggerOnCollision(this.player);
-            protester.triggerOnCollision(this.rioterLayer);
+
+            // Potential for slowdown with many mobs, use the second commented line instead if slowdown too significant
+            protester.triggerOnCollision(this.rioterLayer, null, false);
+            //  protester.triggerOnCollision(this.rioterLayer);
+
             protester.triggerOnCollision(this.hydrantGroup, null, false);
             protester.triggerOnCollision(this.buildingGroup, null, false);
         }
