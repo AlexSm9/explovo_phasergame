@@ -49,8 +49,13 @@ stGame.prototype = {
         this.buildingGroup = new stGameBuildingGroup(this.game); // Buildings
 
         // Start music
-        this.bg_music = this.game.add.audio('game_music');
-        this.bg_music.play('', 0, 0.5, true);
+         this.bg_sounds = this.game.add.audio('riot_sounds'); this.bg_sounds.play('', 0, 1, true);
+         this.bg_music = this.game.add.audio('game_music');
+         this.bg_music.play('', 0, 1, true);
+       
+         if (isMute === true) {
+            this.bg_music.volume = 0;
+         }
 
 
    // Debug Keys
@@ -186,8 +191,9 @@ stGame.prototype = {
         // Create UI
         this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
         this.pointer.anchor.set(0.5,0.5);
-        this.waterUI = new WaterUI(this.game,this.player,70,60);
-        this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
+        this.waterUI = new WaterUI(this.game,this.player,70,60); //water UI
+        this.fireUI = new FireUI(this.game,this.buildingGroup,765,355); //fire UI
+        this.musicButton = new MusicButton(this.game, this.bg_music, 1, 760, 560); //music mute/unmute button
 },//end_create
 
    update: function(){

@@ -10,6 +10,7 @@ stPreload.prototype = {
         //  -- load screens
         this.load.path = "assets/img/screens/"; //
         this.load.image('TitleScreen', 'riotfighter-titlescreen.png'); // title screen
+        this.load.image('titleText', "riotfighter title text.png"); // title screen text
         this.load.image('DirectPage','DirectionsPage.png'); // instructions
 		this.load.image('TutorialBG', "TutorialBG.png"); // tutorial background
 
@@ -17,6 +18,7 @@ stPreload.prototype = {
         this.load.image('News2', "News2.png"); // newspaper 2
         this.load.image('News3', "News3.png"); // newspaper 3
         this.load.image('GameOverPage',"GameOverScreen.png"); // game over screen
+
         this.load.image('Win',"WinScreen.png"); // game over screen
         this.load.image('titleText', "riotfighter title text.png");
 
@@ -27,8 +29,9 @@ stPreload.prototype = {
         this.load.atlas('fires','Fires.png','json/FiresAtlas.json'); // animated fire asset
         this.load.atlas('TitleAnimation',"TitleAnimation.png","json/TitleAnimation.json"); // title screen animation
         this.load.atlas('NextButtons', 'ContinueButtons.png', 'json/ContinueButtons.json'); // continue button
-
-        this.load.atlas('TitleScreenButtons', 'TitleScreenButtons.png', 'json/TitleScreenButtons.json');
+        
+        this.load.atlas('TitleScreenButtons', 'TitleScreenButtons.png', 'json/TitleScreenButtons.json'); // return to title screen buttons
+        this.load.atlas('MusicButtons', 'musicButtons.png', 'json/musicButtons.json'); // mute/unmute music buttons
         this.load.atlas('assets','normalAssets.png','json/normalAssets.json'); // all remaining assets
         this.load.atlas('buildings',"buildings.png",'json/buildings.json');
 
@@ -71,7 +74,12 @@ stPreload.prototype = {
         //load audio assets
         this.load.path = "assets/audio/"
         this.load.audio('title_screen', 'title screen.mp3');
+        this.load.audio('title_sounds', 'title sounds.mp3');
         this.load.audio('game_music', 'game music.mp3');
+        this.load.audio('riot_sounds', 'riot sounds.mp3');
+        this.load.audio('click1', 'click1.mp3');
+        this.load.audio('click2', 'click2.mp3');
+        this.load.audio('swish', 'swish.mp3');
         this.load.audio('water_spray', 'water_spray.mp3');
         this.load.audio('water_end', 'water_end.mp3');
         this.load.audio('water_out1', 'water_out1.mp3');
@@ -89,7 +97,7 @@ stPreload.prototype = {
     },//end_preload
     create: function(){
         l("PreloadAssets_create");
-        this.game.sound.setDecodedCallback(['title_screen', 'game_music'], this.start, this);
+        this.game.sound.setDecodedCallback(['title_screen', 'title_sounds', 'game_music', 'riot_sounds'], this.start, this);
     },//end_create
     loadUpdate: function(){
         this.loading.setText('Loading: ' + this.load.progress)
