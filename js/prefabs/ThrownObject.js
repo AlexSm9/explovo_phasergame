@@ -10,7 +10,7 @@ var ThrownObject = function(game, spriteObject, positionX, positionY, isTutorial
 
    // Quickfix for world ordering
    game.world.sendToBack(this);
-   for(var q=0; q<2; q++){
+   for(var q=0; q<4; q++){
       game.world.moveUp(this);
    }
 
