@@ -179,7 +179,7 @@ stTutorialLevel.prototype = {
 		this.button.destroy();
 
 		//Create a hydrant
-		this.hydrant = new Hydrant(this.game,455,200,this.player);
+		this.hydrant = new Hydrant(this.game,520,200,this.player);
 		this.hydrantGroup.add(this.hydrant);
 
 		this.text1.text = "Configuring HYDRANT ... Complete";
@@ -220,7 +220,7 @@ stTutorialLevel.prototype = {
 		this.instructor.visible = true;
 
 		//Create a building
-		this.building = new Building(this.game,326,300,200,0,'Building06');
+		this.building = new Building(this.game,300,300,200,0,'Building06');
 		this.buildingGroup.add(this.building);
 
 		if(this.game.physics.arcade.overlap(this.player, this.building)){
