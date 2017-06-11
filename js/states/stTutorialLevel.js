@@ -285,7 +285,7 @@ stTutorialLevel.prototype = {
 	tutorial07: function() {
 		this.button.destroy();
 		this.instructor.visible = true;
-		rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, 600, 400);
+		rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, 700, 400);
 		MM.addMob(rioter);
 		this.game.add.existing(rioter);
 
