@@ -96,6 +96,8 @@ Building.prototype.update = function(){
 
 // Accepts a side in radians and generates a random fire
 Building.prototype.startFire = function(side,x,y){
+	console.log("molotov x: " + x);
+	console.log("molotov y: " + y);
 	// Get the side of the building that was lit
 	var angle = rToA(side);
 	if (angle >= -45 && angle <= 45){ // left
@@ -115,12 +117,13 @@ Building.prototype.startFire = function(side,x,y){
 	}
 	else{ // right
 		var xpos = (this.body.x + this.body.width); // accounting for shadows
-		var ypos = Phaser.Math.clamp((this.body.y) + (y - this.body.y - 34), this.body.y,this.body.x+this.width-68);
+		var ypos = Phaser.Math.clamp((this.body.y) + (y - this.body.y - 34), this.body.y,this.body.x+this.height-68);
 		var ang = 90;
 	}
 
 	// create a fire and add to group based on parameters
 	var fire = new Fire(this.game, xpos, ypos, ang);
+	console.log(fire.x + "|" + fire.y);
 	this.game.world.moveUp(fire);
   	this.fireGroup.add(fire);
 	if(this.fireGroup.countLiving() == 1){
