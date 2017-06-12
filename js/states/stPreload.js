@@ -101,6 +101,7 @@ stPreload.prototype = {
     create: function(){
         l("PreloadAssets_create");
         this.game.sound.setDecodedCallback(['title_screen', 'title_sounds', 'game_music', 'riot_sounds'], this.start, this);
+        this.loading.setText("Ready");
     },//end_create
     loadUpdate: function(){
         this.loading.setText('Loading: ' + this.load.progress)

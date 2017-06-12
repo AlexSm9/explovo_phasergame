@@ -45,7 +45,7 @@ ThrownObject.prototype.update = function() {
                if (!this.molotov.isPlaying) {
                    this.molotov.play('', 0, 0.75, false);
                }
-            this.building.startFire(this.game.physics.arcade.angleBetweenCenters(this,this.building));
+            this.building.startFire(this.game.physics.arcade.angleBetweenCenters(this,this.building),this.x,this.y);
             this.destroy();
          }
       }
