@@ -469,6 +469,7 @@ stTutorialLevel.prototype = {
 	},//end tutorialFail
 
 	startGame: function() {
+		this.bg_music.stop();
 		this.state.start("stContext1");
 	},//end startGame
 
