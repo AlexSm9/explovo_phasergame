@@ -8,6 +8,12 @@ var ThrownObject = function(game, spriteObject, positionX, positionY, isTutorial
 	// add this object to the game
 	this.game.add.existing(this);
 
+   // Quickfix for world ordering
+   game.world.sendToBack(this);
+   for(var q=0; q<4; q++){
+      game.world.moveUp(this);
+   }
+
 	this.collideWithBuildingEnable = false;
 	this.inProgress = false;
 	this.building = null;
