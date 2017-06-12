@@ -223,7 +223,8 @@ stTutorialLevel.prototype = {
 		this.player.freeze(true);
 
 		//Create a building
-		this.building = new Building(this.game,300,300,200,0,'Building07', 289, 397, 269, 346);
+		this.building = new Building(this.game,200,300,200,0,'Building07', 289, 397, 269, 346);
+		this.game.add.existing(this.building);
 		this.buildingLayer.add(this.building);
 
 		//add building's fire and foam to player Layer for ordering reasons
@@ -469,6 +470,7 @@ stTutorialLevel.prototype = {
 	},//end tutorialFail
 
 	startGame: function() {
+		this.sound.stopAll();
 		this.state.start("stContext1");
 	},//end startGame
 

@@ -3,7 +3,7 @@
 var stGameBuildingGroup = function(game){
    this.game = game;
     Phaser.Group.call(this,game);
-    this.addBuilding(1722,1575,2500,0,'Building07', 289, 397, 269, 346);
+    this.addBuilding(1522,1575,2500,0,'Building05', 800, 400, 503, 326);
 
     // this.addBuilding(2786,2313,300000,0,'Building03', 300, 300, 300, 300);
     // this.addBuilding(2267,194,200000,0,'Building04', 300, 300, 300, 300);

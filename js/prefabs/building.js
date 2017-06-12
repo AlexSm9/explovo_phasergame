@@ -14,9 +14,9 @@ var Building = function(game, x, y, health, fires, src, width, height, bodyWidth
 	game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
 	this.body.immovable = true; // dsable movement
 	this.body.moves = false;
+	this.body.setSize(bodyWidth, bodyHeight, ((this.width - bodyWidth)/2), ((this.height - bodyHeight)/2));
 	this.height = height;
 	this.width = width;
-	this.body.setSize(bodyWidth, bodyHeight, ((width - bodyWidth)/2), ((height - bodyHeight)/2));
 	this.anchor.set(0.5,0.5); // set anchor to center
 	this.game.add.existing(this);
 
@@ -87,6 +87,8 @@ Building.prototype.update = function(){
 	/*this.fireGroup.forEach(function(fire){
 		this.saved.debug.body(fire);
 	},this);*/
+		this.game.debug.body(this);
+
 };
 
 // startFire
