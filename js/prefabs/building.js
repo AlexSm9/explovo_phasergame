@@ -14,9 +14,9 @@ var Building = function(game, x, y, health, fires, src, width, height, bodyWidth
 	game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
 	this.body.immovable = true; // dsable movement
 	this.body.moves = false;
+	this.body.setSize(bodyWidth, bodyHeight, ((this.width - bodyWidth)/2), ((this.height - bodyHeight)/2));
 	this.height = height;
 	this.width = width;
-	this.body.setSize(bodyWidth, bodyHeight, ((width - bodyWidth)/2), ((height - bodyHeight)/2));
 	this.anchor.set(0.5,0.5); // set anchor to center
 	this.game.add.existing(this);
 
@@ -87,33 +87,35 @@ Building.prototype.update = function(){
 	/*this.fireGroup.forEach(function(fire){
 		this.saved.debug.body(fire);
 	},this);*/
+		this.game.debug.body(this);
+
 };
 
 // startFire
 // Starts a fire on this building
 
 // Accepts a side in radians and generates a random fire
-Building.prototype.startFire = function(side){
+Building.prototype.startFire = function(side,x,y){
 	// Get the side of the building that was lit
 	var angle = rToA(side);
 	if (angle >= -45 && angle <= 45){ // left
 		var xpos = (this.body.x);
-		var ypos = (this.body.y) + this.game.rnd.integerInRange(0,this.body.height-68);
+		var ypos = Phaser.Math.clamp((this.body.y) + (y - this.body.y - 30),this.body.y,this.body.y + this.height-60);
 		var ang = 270;
 	}
-	else if( angle >= 46 && angle <= 135){ // top
-		var xpos = (this.body.x) + this.game.rnd.integerInRange(0,this.body.width-60);
+	else if( angle >= 45 && angle <= 135){ // top
+		var xpos = Phaser.Math.clamp((this.body.x) + (x - this.body.x - 34), this.body.x, this.body.x+this.width-68);
 		var ypos = (this.body.y);
 		var ang = 0;
 	}
-	else if( angle >= -135 && angle <= -44){ // bottom
-		var xpos = (this.body.x) + this.game.rnd.integerInRange(0,this.body.width-68);
+	else if( angle >= -135 && angle <= -45){ // bottom
+		var xpos = Phaser.Math.clamp((this.body.x) + (x - this.body.x - 30),this.body.x,this.body.x+this.width-68);
 		var ypos = (this.body.y + this.body.height);
 		var ang = 180;
 	}
 	else{ // right
 		var xpos = (this.body.x + this.body.width); // accounting for shadows
-		var ypos = (this.body.y) + this.game.rnd.integerInRange(0,this.body.height-60);
+		var ypos = Phaser.Math.clamp((this.body.y) + (y - this.body.y - 34), this.body.y,this.body.x+this.height-68);
 		var ang = 90;
 	}
 
