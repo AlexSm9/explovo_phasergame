@@ -35,6 +35,6 @@ stContext1.prototype = {
         
     },//end_create
     startGame: function() {
-		this.state.start("stGame");
+		this.state.start("stGame3");
     }//end_startGame
 };
