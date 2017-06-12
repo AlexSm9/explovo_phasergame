@@ -20,18 +20,19 @@ stGame.prototype = {
    create: function() {
 		//--/ variable assignments
         //--/ tilemap variable
-        this.game.world.setBounds(0,0,3200,2432); // initialize world bounds
+        //this.game.world.setBounds(0,0,3200,2432); // initialize world bounds
         this.game.stage.backgroundColor = "#228B22";
       //this.game.add.tileSprite(0,0,1200,912,'bg');
-        this.map = this.game.add.tilemap('CityTilemap');
+        this.map = this.game.add.tilemap('Level1Tilemap');
         this.map.addTilesetImage('CityTileset64', 'CityTileset64');
         this.backgroundLayer = this.map.createLayer('Background');
         this.groundLayer = this.map.createLayer('ForeGround');
+		this.groundLayer.resizeWorld();
 
 		//groups for ordering
 		this.hydrantLayer = this.game.add.group();
 		this.rioterLayer = this.game.add.group();
-      this.protesterLayer = this.game.add.group();
+		this.protesterLayer = this.game.add.group();
 		this.emitterLayer = this.game.add.group();
 		this.playerLayer = this.game.add.group();
 		this.buildingLayer = this.game.add.group();
@@ -41,7 +42,7 @@ stGame.prototype = {
         this.winnable = false;
 
         // Create a new Player
-        this.player = new Player(this.game,this.game.world.centerX, this.game.world.centerY, 'assets' , 'firefighter');
+        this.player = new Player(this.game,885, 535, 'assets' , 'firefighter');
 		this.playerLayer.add(this.player);
         this.game.camera.focusOnXY(this.player.x,this.player.y);
         this.game.camera.follow(this.player,4,0.1,0.1);  // set camera to player
@@ -51,9 +52,9 @@ stGame.prototype = {
         this.emitterLayer.add(this.emitter);
 
     // Create environment
-        this.hydrantGroup = new stGameHydrantGroup(this.game,this.player); // Hydrants
+        this.hydrantGroup = new lvl1HydrantGroup(this.game,this.player); // Hydrants
 		this.hydrantLayer.add(this.hydrantGroup);
-        this.buildingGroup = new stGameBuildingGroup(this.game); // Buildings
+        this.buildingGroup = new lvl1BuildingGroup(this.game); // Buildings
 		this.buildingLayer.add(this.buildingGroup);
 
 		var pLayer = this.playerLayer;
@@ -288,8 +289,8 @@ stGame.prototype = {
     },
 
 
-  /*render: function() {
-   // display fps
-     this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
-  }*/
+  // render: function() {
+		// if(this.buildingGroup != null)
+			// this.game.debug.body(this.buildingGroup.building);
+	// }
 };//end_s1Game

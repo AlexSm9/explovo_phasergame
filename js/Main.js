@@ -18,6 +18,8 @@ window.onload = function() {
     game.state.add("stWin",stWin);
     game.state.add("stTitle", stTitle);
     game.state.add("stGame", stGame);
+    game.state.add("stGame2", stGame2);
+    game.state.add("stGame3", stGame3);
     //start the first state
     game.state.start("stBoot");
 };
