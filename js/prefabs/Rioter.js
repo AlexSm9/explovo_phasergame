@@ -8,12 +8,6 @@ function Rioter(game, spriteObject, positionX, positionY){
 
    game.add.existing(this);
 
-   // Quickfix for world ordering
-   game.world.sendToBack(this);
-   for(var q=0; q<2; q++){
-      game.world.moveUp(this);
-   }
-
    this.killOffscreen = false;
 
    this.creationTime = (new Date()).getTime();
@@ -191,11 +185,17 @@ Rioter.prototype.freeze = function(boolean){
    }
 };
 
-Rioter.prototype.fireAtBuilding = function(game, building){
+Rioter.prototype.fireAtBuilding = function(game, building, isTutorial){
+   isTutorial = typeof isTutorial !== 'undefined' ? isTutorial : false;
    if(!building.isDead){
       if(this.canFire === true){
         this.canFire = false;
-         var tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
+        var tObject;
+        if(isTutorial){
+         tObject  = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY, true);
+      }else{
+         tObject  = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
+      }
          tObject.throwAtBuilding(building, 20);
       }
    }
