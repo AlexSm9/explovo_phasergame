@@ -243,7 +243,7 @@ stGame3.prototype = {
             }
         }
         else{
-            console.log(currentFires);
+            //console.log(currentFires);
         }
    }
 
