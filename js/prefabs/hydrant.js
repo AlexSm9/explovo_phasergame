@@ -2,7 +2,7 @@
 var Hydrant = function(game,x,y,player){
 	this.game = game;
 	this.player = player;
-	Phaser.Sprite.call(this,game,x,y,'assets','FireHydrant1');
+	Phaser.Sprite.call(this,game,x,y,'assets','FireHydrant2');
 	game.physics.enable(this,Phaser.Physics.ARCADE);
 	this.body.immovable = true;
 	this.body.moves = false;
