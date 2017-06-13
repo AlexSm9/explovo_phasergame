@@ -231,9 +231,9 @@ stGame.prototype = {
       this.RM.killAllOutOfView(this.game);
       this.PM.update(this.game);
 
-   if (this.G.isDown){
-      this.gameWin.dispatch();
-   }
+  // if (this.G.isDown){
+  //    this.gameWin.dispatch();
+  // }
    // Loss Condition
    //  IF city life is below 40%, signal game over
    if(this.buildingGroup.countLiving() == 0){

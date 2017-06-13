@@ -230,9 +230,9 @@ stGame2.prototype = {
       this.RM.killAllOutOfView(this.game);
       this.PM.update(this.game);
 
-   if (this.G.isDown){
-      this.gameWin.dispatch();
-   }
+  // if (this.G.isDown){
+  //    this.gameWin.dispatch();
+   //}
    // Loss Condition
    //  IF city is burned down
    if(this.buildingGroup.countLiving() == 0){
