@@ -1,14 +1,16 @@
-//Instructions Page
+// Context for level 2 -> level 3
 var stContext3 = function(game) {
 };
 stContext3.prototype = {
     preload: function(){
         l("Directions_preload");
         // add in background
+        this.game.stage.backgroundColor = "#000000";
         
     },//end_preload
     create: function(){
        l("Directions_create");
+       this.sound.stopAll();
        this.sfx= this.game.add.audio("whirling");
        this.swish = this.game.add.audio('swish');
 
@@ -34,6 +36,6 @@ stContext3.prototype = {
 
     },//end_create
     startGame: function() {
-        this.state.start("stDirections");
+        this.state.start("stGame3");
     }//end_startGame
 };

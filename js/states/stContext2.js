@@ -1,4 +1,4 @@
-//Instructions Page
+// Context for level 1 -> level 2
 var stContext2 = function(game) {
 };
 stContext2.prototype = {
@@ -37,6 +37,6 @@ stContext2.prototype = {
         
     },//end_create
     startGame: function() {
-        this.state.start("stWin");
+        this.state.start("stGame2");
     }//end_startGame
 };
