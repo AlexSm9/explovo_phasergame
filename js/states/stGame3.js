@@ -87,11 +87,11 @@ stGame3.prototype = {
         this.gameWin.addOnce(this.fadeWin,this);
 
         // Wave Timer + Winnable flag
-        this.waves = this.game.time.events.repeat(4000, 45, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 40 times then stop
+        this.waves = this.game.time.events.repeat(2000, 70, newBuildingAttack, this); // every 2 seconds run function newBuildingAttack; repeat 70 times then stop
         // Once this timer ends, enable win flag
         this.waves.timer.onComplete.addOnce(function(){
             this.winnable = true;
-            console.log("winnable: " + this.winnable);
+            //console.log("winnable: " + this.winnable);
             // alert the player that they can win
             var alert = this.sound.add('alarm');
             alert.play();
@@ -104,7 +104,7 @@ stGame3.prototype = {
         },this);
 
         // Peaceful protester spawn timer
-        this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
+        this.game.time.events.repeat(5000, 10, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
 
 
             // Functions
@@ -136,7 +136,7 @@ stGame3.prototype = {
 
         function newBuildingAttack(){
         var building = chooseUnburntBuilding();
-            for(var i=0; i<randInt(6, 3); i++){ //creates 3-5 rioters to pursue building
+            for(var i=0; i<randInt(5, 3); i++){ //creates 3-4 rioters to pursue building
                 var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
 				this.rioterLayer.add(rioter);
                 this.RM.addMob(rioter);
@@ -291,7 +291,7 @@ stGame3.prototype = {
         this.game.state.start('stContext4');
       })
       this.game.time.events.add(2000,function(){
-          console.log('delayed');
+          //console.log('delayed');
         this.camera.fade("#000000",3000); // fade camera
         this.bg_music.fadeOut(3000);
       },this);

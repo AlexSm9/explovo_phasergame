@@ -88,11 +88,11 @@ stGame2.prototype = {
         this.gameWin.addOnce(this.fadeWin,this);
 
         // Wave Timer + Winnable flag
-        this.waves = this.game.time.events.repeat(5000, 30, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 30 times then stop
+        this.waves = this.game.time.events.repeat(4400, 40, newBuildingAttack, this); // every 4.4 seconds run function newBuildingAttack; repeat 40 times then stop
         // Once this timer ends, enable win flag
         this.waves.timer.onComplete.addOnce(function(){
             this.winnable = true;
-            console.log("winnable: " + this.winnable);
+            //console.log("winnable: " + this.winnable);
             // alert the player that they can win
             var alert = this.sound.add('alarm');
             alert.play();
@@ -250,7 +250,7 @@ stGame2.prototype = {
             this.gameWin.dispatch();
         }
         else{
-            console.log(currentFires);
+            //console.log(currentFires);
         }
    }
 
@@ -292,7 +292,7 @@ stGame2.prototype = {
         this.game.state.start('stContext3');
       })
       this.game.time.events.add(2000,function(){
-          console.log('delayed');
+          //console.log('delayed');
         this.camera.fade("#000000",3000); // fade camera
         this.bg_music.fadeOut(3000);
       },this);

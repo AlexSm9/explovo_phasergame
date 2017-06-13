@@ -88,12 +88,12 @@ stGame.prototype = {
         this.gameWin.addOnce(this.fadeWin,this);
 
         // Wave Timer + Winnable flag
-        this.waves = this.game.time.events.repeat(5000,20, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 40 times then stop
+        this.waves = this.game.time.events.repeat(5000,20, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 20 times then stop
         // Once this timer ends, enable win flag
         this.waves.timer.onComplete.addOnce(function(){
             // allow the game to be winnable
             this.winnable = true;
-            console.log("winnable: " + this.winnable);
+            //console.log("winnable: " + this.winnable);
             // alert the player that they can win
             var alert = this.sound.add('alarm');
             alert.play();
@@ -251,7 +251,7 @@ stGame.prototype = {
             this.gameWin.dispatch();
         }
         else{
-            console.log(currentFires);
+            //console.log(currentFires);
         }
    }
 
@@ -288,14 +288,14 @@ stGame.prototype = {
 
 // Fade the camera before going to next stage context
     fadeWin: function(){
-        console.log('dispatch');
+        //console.log('dispatch');
       this.camera.onFadeComplete.add(function(){
         this.game.state.previousState = 'stGame';
         this.game.state.start('stContext2');
       })
       // Add a 2 second delay for game feel reasons
       this.game.time.events.add(2000,function(){
-          console.log('delayed');
+          //console.log('delayed');
         this.camera.fade("#000000",3000); // fade camera
         this.bg_music.fadeOut(3000);
       },this);

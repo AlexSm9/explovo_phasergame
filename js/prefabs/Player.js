@@ -4,7 +4,6 @@
 // needs to be modified later to accept atlas and animation
 var Player = function(game, x, y, key, src) {
 	// initialize variable
-	console.log('player create');
 	Phaser.Sprite.call(this, game, x, y, key, src); // call sprite
 	this.game.physics.enable(this, Phaser.Physics.ARCADE); // enable physics
 	this.anchor.set(0.5,0.5); // set anchor to center
