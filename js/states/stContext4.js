@@ -1,15 +1,17 @@
-// Context for starting the game -> level 1
-var stContext1 = function(game) {
+// Context for when the game is won
+// From level 3 to win screen
+var stContext4 = function(game) {
 };
-stContext1.prototype = {
+stContext4.prototype = {
     preload: function(){
-        l("Context1_preload");
-        this.game.stage.backgroundColor = "#000000";
+        l("Directions_preload");
         // add in background
+        this.game.stage.backgroundColor = "#000000";
         
     },//end_preload
     create: function(){
-       l("Context1_create");
+       l("Directions_create");
+       this.sound.stopAll();
        this.sfx= this.game.add.audio("whirling");
        this.swish = this.game.add.audio('swish');
 
@@ -20,21 +22,21 @@ stContext1.prototype = {
        if (isMute === true) {
            this.sfx.volume = 0;
        }
-
-        this.news = this.game.add.image(this.game.width/2, this.game.height/2, 'News1');
+        
+        this.news = this.game.add.image(this.game.width/2, this.game.height/2, 'News4');
         this.news.anchor.set(0.5,0.5);
         this.news.scale.setTo(0.1,0.1);
 
         this.game.add.tween(this.news).to( { angle: 720 }, 900, Phaser.Easing.Linear.None, true);
         this.game.add.tween(this.news.scale).to( { x: 1, y: 1 }, 1200, Phaser.Easing.Linear.None, true);
 
-        // add in button
+        //add in button
         this.button = this.game.add.button(this.game.width/2, this.game.height - 120, 'NextButtons', this.startGame, this.game,'ContinueButtonOver', 'ContinueButton');
         this.button.anchor.set(0.5);
         this.button.scale.setTo(0.4,0.4);
-        
+
     },//end_create
     startGame: function() {
-		this.state.start("stGame");
+        this.state.start("stWin");
     }//end_startGame
 };

@@ -74,7 +74,7 @@ stGame2.prototype = {
 
 
    // Debug Keys
-    	this.G = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
+    //	this.G = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
 
 
    // -- Conditions
@@ -86,10 +86,20 @@ stGame2.prototype = {
         this.gameWin.addOnce(this.fadeWin,this);
 
         // Wave Timer + Winnable flag
-        this.waves = this.game.time.events.repeat(3000, 40, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 40 times then stop
+        this.waves = this.game.time.events.repeat(5000, 30, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 30 times then stop
         // Once this timer ends, enable win flag
         this.waves.timer.onComplete.addOnce(function(){
             this.winnable = true;
+            console.log("winnable: " + this.winnable);
+            // alert the player that they can win
+            var alert = this.sound.add('alarm');
+            alert.play();
+            // keep text on screen and tween until they finish the level
+            var winMes = this.game.add.text(400,100,"Riot is dispersing!\nPut out the remaining fires!",{align:'center',fill:'#FFF',font:'18pt Arial'});
+            winMes.anchor.x = 0.5;
+            winMes.anchor.y = 0.5;
+            winMes.fixedToCamera = true;
+            this.game.add.tween(winMes).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true); 
         },this);
 
         // Peaceful protester spawn timer
@@ -218,29 +228,24 @@ stGame2.prototype = {
       this.RM.killAllOutOfView(this.game);
       this.PM.update(this.game);
 
-   if (this.G.isDown){
-      this.gameWin.dispatch();
-   }
+  // if (this.G.isDown){
+    //  this.gameWin.dispatch();
+   //}
    // Loss Condition
-   //  IF city life is below 40%, signal game over
+   //  IF city is burned down
    if(this.buildingGroup.countLiving() == 0){
       this.gameOver.dispatch();
    }
 
    // Win Condition
    // IF no more rioters and fire, call WIN
-   if(this.winnable == true && this.RM.mobList.length == 0){
+   if(this.winnable == true){
         let currentFires = 0;
         this.buildingGroup.forEach(function(building){
             currentFires += building.fireGroup.countLiving();
         },this)
         if (currentFires == 0){ // If fires are all put out
-            if(this.buildingGroup.countLiving > 0){ // if any buildings are alive, end the game
-                this.gameWin.dispatch();
-            }
-            else{ // edge case where the last fire destroys the last building
-                this.gameOver.dispatch();
-            }
+            this.gameWin.dispatch();
         }
         else{
             console.log(currentFires);
@@ -282,10 +287,13 @@ stGame2.prototype = {
     fadeWin: function(){
       this.camera.onFadeComplete.add(function(){
         this.game.state.previousState = 'stGame2';
-        this.game.state.start('stContext2');
+        this.game.state.start('stContext3');
       })
-      this.camera.fade("#000000",3000); // fade camera
-      this.bg_music.fadeOut(3000);
+      this.game.time.events.add(2000,function(){
+          console.log('delayed');
+        this.camera.fade("#000000",3000); // fade camera
+        this.bg_music.fadeOut(3000);
+      },this);
     },
 
 

@@ -114,7 +114,7 @@ Building.prototype.startFire = function(side,x,y){
 	}
 	else{ // right
 		var xpos = (this.body.x + this.body.width); // accounting for shadows
-		var ypos = Phaser.Math.clamp((this.body.y) + (y - this.body.y - 34), this.body.y,this.body.x+this.height-68);
+		var ypos = Phaser.Math.clamp((this.body.y) + (y - this.body.y - 34), this.body.y,this.body.y+this.height-68);
 		var ang = 90;
 	}
 

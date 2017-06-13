@@ -17,6 +17,7 @@ stPreload.prototype = {
         this.load.image('News1', "News1.png"); // newspaper 1
         this.load.image('News2', "News2.png"); // newspaper 2
         this.load.image('News3', "News3.png"); // newspaper 3
+        this.load.image('News4', "News4.png"); // newspaper 3
         this.load.image('GameOverPage',"GameOverScreen.png"); // game over screen
 
         this.load.image('Win',"WinScreen.png"); // game over screen
@@ -98,6 +99,7 @@ stPreload.prototype = {
         this.load.audio('game_over', 'game over.mp3');
         this.load.audio('win', 'win.mp3');
         this.load.audio('win_sounds', 'win sounds.mp3');
+        this.load.audio('alarm','fire_alarm.mp3');
 
     },//end_preload
     create: function(){

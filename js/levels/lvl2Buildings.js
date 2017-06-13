@@ -4,20 +4,20 @@ var lvl2BuildingGroup = function(game){
    this.game = game;
     Phaser.Group.call(this,game);
 	
-    this.addBuilding(992, 992, 2500,0,'Building04r', 348, 770, 356, 848); //hospital rotated +28/66
-    this.addBuilding(1568, 992, 2500,0,'Building05r', 372, 700, 327, 472); //spinner factory rotated +52/92
-	this.addBuilding(329, 224, 2500,0,'Building06', 572, 382, 504, 317); //meme factory +60/62
-	this.addBuilding(2176, 1140, 2000,0,'Building02', 426, 251, 559, 330); //firehouse +42/80
-	this.addBuilding(2235, 800, 2000,0,'Building01r', 558, 366, 378, 317); //squarish plain +46/46
-	this.addBuilding(992, 224, 2000,0,'Building03', 368, 392, 268, 346); //bevel roof +48/72
-	this.addBuilding(992, 1760, 2000,0,'Building03', 368, 392, 268, 346); //bevel roof +48/72
-	this.addBuilding(1568, 224, 2000,0,'Building03', 368, 392, 268, 346); //bevel roof +48/72
-	this.addBuilding(1568, 1760, 2000,0,'Building03', 368, 392, 268, 346); //bevel roof +48/72
-	this.addBuilding(2250, 229, 2000,0,'Building07', 592, 380, 504, 298); //long plain +60/80
-	this.addBuilding(2250, 1745, 2000,0,'Building07', 592, 380, 504, 298); //long plain +60/80
-	this.addBuilding(305, 1184, 2000,0,'Building07', 592, 380, 504, 298); //long plain +60/80
-	this.addBuilding(320, 800, 2000,0,'Building01r', 558, 366, 378, 317); //squarish plain +46/46
-	this.addBuilding(320, 1760, 2000,0,'Building01r', 558, 366, 378, 317); //squarish plain +46/46
+    this.addBuilding(992, 992, 800,0,'Building04r', 348, 770, 356, 848); //hospital rotated +28/66
+    this.addBuilding(1568, 992, 800,0,'Building05r', 372, 700, 327, 472); //spinner factory rotated +52/92
+	this.addBuilding(329, 224, 800,0,'Building06', 572, 382, 504, 317); //meme factory +60/62
+	this.addBuilding(2176, 1140, 600,0,'Building02', 426, 251, 559, 330); //firehouse +42/80
+	this.addBuilding(2235, 800, 600,0,'Building01r', 558, 366, 378, 317); //squarish plain +46/46
+	this.addBuilding(992, 224, 600,0,'Building03', 368, 392, 268, 346); //bevel roof +48/72
+	this.addBuilding(992, 1760, 600,0,'Building03', 368, 392, 268, 346); //bevel roof +48/72
+	this.addBuilding(1568, 224, 600,0,'Building03', 368, 392, 268, 346); //bevel roof +48/72
+	this.addBuilding(1568, 1760, 600,0,'Building03', 368, 392, 268, 346); //bevel roof +48/72
+	this.addBuilding(2250, 229, 600,0,'Building07', 592, 380, 504, 298); //long plain +60/80
+	this.addBuilding(2250, 1745, 600,0,'Building07', 592, 380, 504, 298); //long plain +60/80
+	this.addBuilding(305, 1184, 600,0,'Building07', 592, 380, 504, 298); //long plain +60/80
+	this.addBuilding(320, 800, 600,0,'Building01r', 558, 366, 378, 317); //squarish plain +46/46
+	this.addBuilding(320, 1760, 600,0,'Building01r', 558, 366, 378, 317); //squarish plain +46/46
 };
 
 lvl2BuildingGroup.prototype = Object.create(Phaser.Group.prototype);

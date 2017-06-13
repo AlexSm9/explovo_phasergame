@@ -14,6 +14,7 @@ window.onload = function() {
     game.state.add("stContext1", stContext1);
     game.state.add("stContext2", stContext2);
     game.state.add("stContext3", stContext3);
+    game.state.add("stContext4", stContext4);
     game.state.add("stGameOver", stGameOver);
     game.state.add("stWin",stWin);
     game.state.add("stTitle", stTitle);
