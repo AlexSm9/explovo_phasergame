@@ -8,19 +8,13 @@ function Rioter(game, spriteObject, positionX, positionY){
 
    game.add.existing(this);
 
-   // Quickfix for world ordering
-   game.world.sendToBack(this);
-   for(var q=0; q<2; q++){
-      game.world.moveUp(this);
-   }
-
    this.killOffscreen = false;
 
    this.creationTime = (new Date()).getTime();
    this._events = [];
 
    // values which should be here but can be changed as required
-   this.maxVelocity = 60;
+   this.maxVelocity = 120;
    this.goalVectorWeightDefault = 0.4;
    this.spriteAngleOffset = Math.PI/2; //(sprite normally faces... up: -Math.PI/2, down: Math.pi/2, left: Math.PI, right: 0)
    this.rotationDefault = 0;
@@ -191,11 +185,17 @@ Rioter.prototype.freeze = function(boolean){
    }
 };
 
-Rioter.prototype.fireAtBuilding = function(game, building){
+Rioter.prototype.fireAtBuilding = function(game, building, isTutorial){
+   isTutorial = typeof isTutorial !== 'undefined' ? isTutorial : false;
    if(!building.isDead){
       if(this.canFire === true){
         this.canFire = false;
-         var tObject = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
+        var tObject;
+        if(isTutorial){
+         tObject  = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY, true);
+      }else{
+         tObject  = new ThrownObject(game, {key: "assets", frame: 'molotov'}, this.centerX, this.centerY);
+      }
          tObject.throwAtBuilding(building, 20);
       }
    }

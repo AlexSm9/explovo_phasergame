@@ -4,19 +4,23 @@ var stPreload = function(game) {
 };
 stPreload.prototype = {
     preload: function(){
-        //---/ load all assets
+        // Setup loading signals
+        this.loading = this.add.text(this.game.width/2, this.game.height/2, this.load.progress, {fontSize: '15px', fill: 'white', align:'center'});
 
         //  -- load screens
         this.load.path = "assets/img/screens/"; //
         this.load.image('TitleScreen', 'riotfighter-titlescreen.png'); // title screen
+        this.load.image('titleText', "riotfighter title text.png"); // title screen text
         this.load.image('DirectPage','DirectionsPage.png'); // instructions
 		this.load.image('TutorialBG', "TutorialBG.png"); // tutorial background
 
         this.load.image('News1', "News1.png"); // newspaper 1
         this.load.image('News2', "News2.png"); // newspaper 2
         this.load.image('News3', "News3.png"); // newspaper 3
+        this.load.image('News4', "News4.png"); // newspaper 3
         this.load.image('GameOverPage',"GameOverScreen.png"); // game over screen
-        this.load.image('WinScreen',"WinScreen.png"); // game over screen
+
+        this.load.image('Win',"WinScreen.png"); // game over screen
         this.load.image('titleText', "riotfighter title text.png");
 
         // --  load asset sheets
@@ -27,14 +31,15 @@ stPreload.prototype = {
         this.load.atlas('TitleAnimation',"TitleAnimation.png","json/TitleAnimation.json"); // title screen animation
         this.load.atlas('NextButtons', 'ContinueButtons.png', 'json/ContinueButtons.json'); // continue button
 
-        this.load.atlas('TitleScreenButtons', 'TitleScreenButtons.png', 'json/TitleScreenButtons.json');
+        this.load.atlas('TitleScreenButtons', 'TitleScreenButtons.png', 'json/TitleScreenButtons.json'); // return to title screen buttons
+        this.load.atlas('MusicButtons', 'musicButtons.png', 'json/musicButtons.json'); // mute/unmute music buttons
         this.load.atlas('assets','normalAssets.png','json/normalAssets.json'); // all remaining assets
         this.load.atlas('buildings',"buildings.png",'json/buildings.json');
 
         // -- misc assets, last minute assets
         this.load.path = "assets/img/raw images/";
 
-        this.load.image('protester', 'PeaceProtester.png');
+        this.load.image('protester', 'Protester.png');
 
         // particles are incompatible with texture atlas
         this.load.image('water','WaFParticle.png');
@@ -64,13 +69,23 @@ stPreload.prototype = {
 
         //Tilemap
 		this.load.path = "assets/img/tiles/"
-        this.game.load.tilemap('CityTilemap', 'CityTilemap.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.image('CityTileset64', 'CityTileset64.png');
+        this.game.load.image('Level1TileMapIMAGE','Level1TileMapIMAGE.png');
+        this.game.load.image('Level2TileMapIMAGE','Level2TileMapIMAGE.png');
+        this.game.load.image('Level3TileMapIMAGE','Level3TileMapIMAGE.png');
+        ///this.game.load.tilemap('Level1Tilemap', 'Level1Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+        //this.game.load.tilemap('Level2Tilemap', 'Level2Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+        //this.game.load.tilemap('Level3Tilemap', 'Level3Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+        //this.game.load.image('CityTileset64', 'CityTileset64.png');
 
         //load audio assets
         this.load.path = "assets/audio/"
         this.load.audio('title_screen', 'title screen.mp3');
+        this.load.audio('title_sounds', 'title sounds.mp3');
         this.load.audio('game_music', 'game music.mp3');
+        this.load.audio('riot_sounds', 'riot sounds.mp3');
+        this.load.audio('click1', 'click1.mp3');
+        this.load.audio('click2', 'click2.mp3');
+        this.load.audio('swish', 'swish.mp3');
         this.load.audio('water_spray', 'water_spray.mp3');
         this.load.audio('water_end', 'water_end.mp3');
         this.load.audio('water_out1', 'water_out1.mp3');
@@ -83,13 +98,21 @@ stPreload.prototype = {
         this.load.audio('fireSizzle','sizzle.mp3');
         this.load.audio('fire', 'fire.mp3');
         this.load.audio('collapse', 'building collapse.mp3');
-        this.game.load.audio("whirling", 'newstransition.mp3');
+        this.load.audio('whirling', 'newstransition.mp3');
+        this.load.audio('game_over', 'game over.mp3');
+        this.load.audio('win', 'win.mp3');
+        this.load.audio('win_sounds', 'win sounds.mp3');
+        this.load.audio('alarm','fire_alarm.mp3');
 
     },//end_preload
     create: function(){
         l("PreloadAssets_create");
-        this.game.sound.setDecodedCallback(['title_screen', 'game_music'], this.start, this);
+        this.game.sound.setDecodedCallback(['title_screen', 'title_sounds', 'game_music', 'riot_sounds'], this.start, this);
+        this.loading.setText("Ready");
     },//end_create
+    loadUpdate: function(){
+        this.loading.setText('Loading: ' + this.load.progress)
+    },
     start: function(){
          this.state.start("stTitle");
     }, //end_start

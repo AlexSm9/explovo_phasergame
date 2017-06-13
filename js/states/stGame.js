@@ -1,10 +1,6 @@
-//Main this.game State
+//Main game State
 var stGame = function(game) {
-    //Rioter_
-   //var MM;
-   //var MM2;
-
-
+    this.game = game;
    var RM;
    var PM;
    var buildingGroup;
@@ -16,236 +12,247 @@ var stGame = function(game) {
 stGame.prototype = {
    preload: function(){
       this.game.time.advancedTiming = true;
-      //Rioter_
-      //MM = new MobManager(100, 50, 100, 1, 1.5, 1);
-      //_Rioter
       this.RM = new MobManager(100, 50, 100, 1, 1.5, 1);
       this.PM = new MobManager(150, 75, 100, 1, 1.5, 1.5);
 
    },//end_preload
+
    create: function() {
-   //--/ variable assignments
-   console.log('game bg');
-      //--/ tilemap variable
-		this.game.world.setBounds(0,0,3200,2432); // initialize world bounds
+		//--/ variable assignments
+        //--/ tilemap variable
+        //this.game.world.setBounds(0,0,3200,2432); // initialize world bounds
         this.game.stage.backgroundColor = "#228B22";
-		//this.game.add.tileSprite(0,0,1200,912,'bg');
-		this.map = this.game.add.tilemap('CityTilemap');
-        this.map.addTilesetImage('CityTileset64', 'CityTileset64');
-        this.backgroundLayer = this.map.createLayer('Background');
-        this.groundLayer = this.map.createLayer('ForeGround');
+        this.game.add.image(0,0,'Level1TileMapIMAGE');
+        this.game.world.setBounds(0,0,1792,1472);
+      //this.game.add.tileSprite(0,0,1200,912,'bg');
+        //this.map = this.game.add.tilemap('Level1Tilemap');
+        //this.map.addTilesetImage('CityTileset64', 'CityTileset64');
+        //this.backgroundLayer = this.map.createLayer('Background');
+        //this.groundLayer = this.map.createLayer('ForeGround');
+		//this.groundLayer.resizeWorld();
 
-      // Create a new Player
-   	  this.player = new Player(this.game,this.game.world.centerX, this.game.world.centerY, 'assets' , 'firefighter');
-	  this.game.camera.focusOnXY(this.player.x,this.player.y);
-      this.game.camera.follow(this.player,4,0.1,0.1);  // set camera to player
+		//groups for ordering
+		this.hydrantLayer = this.game.add.group();
+		this.rioterLayer = this.game.add.group();
+		this.protesterLayer = this.game.add.group();
+		this.emitterLayer = this.game.add.group();
+		this.playerLayer = this.game.add.group();
+		this.buildingLayer = this.game.add.group();
+		this.uiLayer = this.game.add.group();
 
-	  // Attach hose to player object
-      this.emitter = new WaterHose(this.game, this.player, 30, 15);
-      this.world.moveDown(this.emitter); // emitter below player
+        //Win flag
+        this.winnable = false;
 
+        // Create a new Player
+        this.player = new Player(this.game,885, 535, 'assets' , 'firefighter');
+		this.playerLayer.add(this.player);
+        this.game.camera.focusOnXY(this.player.x,this.player.y);
+        this.game.camera.follow(this.player,4,0.1,0.1);  // set camera to player
 
+        // Attach hose to player object
+        this.emitter = new WaterHose(this.game, this.player, 30, 15);
+        this.emitterLayer.add(this.emitter);
 
-   // Create environment
-	this.hydrantGroup = new stGameHydrantGroup(this.game,this.player); // Hydrants
-	this.buildingGroup = new stGameBuildingGroup(this.game); // Buildings
+    // Create environment
+        this.hydrantGroup = new lvl1HydrantGroup(this.game,this.player); // Hydrants
+		this.hydrantLayer.add(this.hydrantGroup);
+        this.buildingGroup = new lvl1BuildingGroup(this.game); // Buildings
+		this.buildingLayer.add(this.buildingGroup);
 
-   // Start music
-   this.bg_music = this.game.add.audio('game_music');
-   this.bg_music.play('', 0, 1, true);
+		var pLayer = this.playerLayer;
+		this.buildingGroup.forEach(function(building){
+			pLayer.add(building.fireGroup);
+			pLayer.add(building.foamGroup);
+		});
 
-   //create rioters and add to MobManager
-/*
-   for(i=0; i<19; i++){
-      rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
-      MM.addMob(rioter);
-      this.game.add.existing(rioter);
-   }
+        // Start music
+         this.bg_sounds = this.game.add.audio('riot_sounds'); this.bg_sounds.play('', 0, 1, true);
+         this.bg_music = this.game.add.audio('game_music');
+         this.bg_music.play('', 0, 1, true);
 
-   building2 = this.buildingGroup.getRandom();
-   MM.positionAllOffscreenRandomly(this.game);
-   MM.setAllGoal(building2.centerX, building2.centerY, 0.4);
-   console.log("BUILDING LOC: ", building2.x, building2.y);
-
-
-   // Create UI
-   this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
-   this.pointer.anchor.set(0.5,0.5);
-   this.waterUI = new WaterUI(this.game,this.player,70,60);
-   this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
-
-     this.end = damageFire = function(particle,building){
-      particle.kill();
-      building.damageFire();
-   }
-   // Debug Keys*/
-	this.G = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
-/*
-	// Functions
-	  game = this.game; //temp solution until I can figure out a better way to refernce game
-   var throwAtBuilding2 = function(mob){
-      //mob.freeze();
-      mob.fireAtBuilding(game, building2);
-      mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
-      //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
-   };*/
-
-   var onSprayIncreaseGoalweight = function(mob){
-      //mob.freeze();
-      mob.setGoalPoint(mob.primaryGoalX, mob.primaryGoalY, (mob.goalVectorWeight + 0.02));
-      //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
-   };
+         if (isMute === true) {
+            this.bg_music.volume = 0;
+         }
 
 
-/*
-   MM.addAllTriggerOnEntry(building2.x-(building2.width/2)-60, building2.y - (building2.height/2)- 60, building2.width+120, building2.height + 120, throwAtBuilding2);
-   //This is for top left corner handle --> MM.addAllTriggerOnEntry(building2.x-60, building2.y - 60, building2.width+120, building2.height + 120, throwAtBuilding2);
-   // The less movable an object is, the further down the list it should be
-   MM.addAllTriggerOnCollision(this.emitter, onSprayIncreaseGoalweight, false);
-   MM.addAllTriggerOnCollision(this.player);
-   MM.addAllTriggerOnCollision(this.hydrantGroup, null, false);
-   MM.addAllTriggerOnCollision(this.buildingGroup, null, false);
-*/
-
-this.game.time.events.repeat(5000, 50, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 10 times then stop
-this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
+   // Debug Keys
+    	this.G = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
 
 
-var buildingGroup = this.buildingGroup;
+   // -- Conditions
+         // Loss Signal
+        this.gameOver = new Phaser.Signal();
+        this.gameOver.addOnce(this.fadeGO,this);
+        // Win Signal
+        this.gameWin = new Phaser.Signal();
+        this.gameWin.addOnce(this.fadeWin,this);
 
-function chooseUnburntBuilding(){
-   var unburntBuildings = [];
-   for(var u = 0; u<buildingGroup.children.length; u++){
-      if(buildingGroup.children[u].isDead === false){
-         unburntBuildings.push(buildingGroup.children[u]);
-      }
-   }
-   if(unburntBuildings.length <= 0){
-      return randomOfArray(buildingGroup.children, 1)[0][0];
-   }else{
-      return randomOfArray(unburntBuildings, 1)[0][0];
-   }
-}
-
-var setGoalOffscreen = function(mob){
-   var point = randomPointOffscreen(game, 50);
-   mob.setGoalPoint(point.x, point.y, 0.8); // randomly head to offscreen point with weight 0.8
-   mob.killOffscreen = true;
-};
-
-function newBuildingAttack(){
-
-   var building = chooseUnburntBuilding();
-      for(var i=0; i<randInt(5, 2); i++){ //creates 2-4 rioters to pursue building
-         var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
-         //l(rioter);
-         //console.dir(this.RM);
-         this.RM.addMob(rioter);
-
-         //do{ // infinite loop
-            rioter.positionOffscreenRandomly(game);
-         //}while(game.physics.arcade.overlap(rioter, this.buildingGroup)===true);
-
-         rioter.setOwnBuilding(building);
-         rioter.setGoalPoint(building.centerX, building.centerY, 0.4);
-
-         // IF EVENTS CHANGED, also change in onSprayBecomeRioter
-         rioter.addEvent(setGoalOffscreen, 40); // 40 seconds after creation, set goal of rioter to offscreen
-         rioter.addEvent(setGoalOffscreen, 60); // 60 seconds after creation, set goal of rioter to offscreen, goal to prevent stuck state
-         rioter.addEvent(setGoalOffscreen, 100); // 100 seconds after creation, set goal of rioter to offscreen, goal to prevent stuck state
-
-         // The less movable an object is, the further down the list it should be
-         rioter.triggerOnEntry(building.x-(building.width/2)-60, building.y - (building.height/2)- 60, building.width+120, building.height + 120, throwAtBuilding);
-         //This is for top left corner handle --> rioter.triggerOnEntry(building2.x-60, building2.y - 60, building2.width+120, building2.height + 120, throwAtBuilding2);
-         rioter.triggerOnCollision(this.emitter, onSprayIncreaseGoalweight, false);
-         rioter.triggerOnCollision(this.player);
-         rioter.triggerOnCollision(this.hydrantGroup, null, false);
-         rioter.triggerOnCollision(this.buildingGroup, null, false);
-      }
+        // Wave Timer + Winnable flag
+        this.waves = this.game.time.events.repeat(5000,20, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 40 times then stop
+        // Once this timer ends, enable win flag
+        this.waves.timer.onComplete.addOnce(function(){
+            // allow the game to be winnable
+            this.winnable = true;
+            console.log("winnable: " + this.winnable);
+            // alert the player that they can win
+            var alert = this.sound.add('alarm');
+            alert.play();
+            // keep text on screen and tween until they finish the level
+            var winMes = this.game.add.text(400,100,"Riot is dispersing!\nPut out the remaining fires!",{align:'center',fill:'#FFF',font:'18pt Arial'});
+            winMes.anchor.x = 0.5;
+            winMes.anchor.y = 0.5;
+            winMes.fixedToCamera = true;
+            this.game.add.tween(winMes).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true); 
+        },this);
+        
+        // Peaceful protester spawn timer
+        this.game.time.events.repeat(6000, 5, createProtesters, this); // every 6 seconds run function newBuildingAttack; repeat 10 times then stop
 
 
+            // Functions
+        var onSprayIncreaseGoalweight = function(mob){
+            //mob.freeze();
+            mob.setGoalPoint(mob.primaryGoalX, mob.primaryGoalY, (mob.goalVectorWeight + 0.02));
+        };
 
-}
+        var buildingGroup = this.buildingGroup;
+        function chooseUnburntBuilding(){
+        var unburntBuildings = [];
+        for(var u = 0; u<buildingGroup.children.length; u++){
+            if(buildingGroup.children[u].isDead === false){
+                unburntBuildings.push(buildingGroup.children[u]);
+            }
+        }
+        if(unburntBuildings.length <= 0){
+            return randomOfArray(buildingGroup.children, 1)[0][0];
+        }else{
+            return randomOfArray(unburntBuildings, 1)[0][0];
+        }
+        }
 
-function createProtesters(){
+        var setGoalOffscreen = function(mob){
+			var point = randomPointOffscreen(game, 50);
+			mob.setGoalPoint(point.x, point.y, 0.8); // randomly head to offscreen point with weight 0.8
+			mob.killOffscreen = true;
+        };
 
-   var RioterManager = this.RM;
-   var ProtesterManager = this.PM;
-   var emitter = this.emitter;
-   var player = this.player;
-   var hydrantGroup = this.hydrantGroup;
-   var buildingGroup = this.buildingGroup;
+        function newBuildingAttack(){
+        var building = chooseUnburntBuilding();
+            for(var i=0; i<randInt(4, 3); i++){ //creates 3-4 rioters to pursue building
+                var rioter = new Rioter(this.game, {key: 'assets', frame: 'rioter'}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
+				this.rioterLayer.add(rioter);
+                this.RM.addMob(rioter);
 
-   var triggerToNewPoint = function(mob){
-      var newPoint = randomPointOffscreen(game, 50);
-      mob.setGoalPoint(newPoint.x, newPoint.y, 0.5); // randomly head to offscreen point with weight 0.8
-      mob.triggerOnEntry(newPoint.x-60, newPoint.y-60, newPoint.x+120, newPoint.y+120, triggerToNewPoint); //possible reccursion issues?
-      //^ Current Problem Here
-   };
+                    rioter.positionOffscreenRandomly(game);
 
-   var onSprayBecomeRioter = function(mob){
-      var collisionArray = [{with: emitter, cb: onSprayIncreaseGoalweight}, {with: player}, {with: hydrantGroup}, {with: buildingGroup}];
-      var eventArray = [{cb: setGoalOffscreen, time: 40}, {cb: setGoalOffscreen, time: 60}, {cb: setGoalOffscreen, time: 100}];
-      mob.becomeRioter(game, {key: 'assets', frame: 'rioter'}, chooseUnburntBuilding(), RioterManager, ProtesterManager, collisionArray, eventArray);
-   };
+                rioter.setOwnBuilding(building);
+                rioter.setGoalPoint(building.centerX, building.centerY, 0.4);
 
-   for(var i=0; i<randInt(4, 1); i++){
-      var protester = new Protester(this.game, {key: 'protester', frame: 0}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
-      this.PM.addMob(protester);
-      protester.positionOffscreenRandomly(game);
+                // IF EVENTS CHANGED, also change in onSprayBecomeRioter
+                rioter.addEvent(setGoalOffscreen, 40); // 40 seconds after creation, set goal of rioter to offscreen
+                rioter.addEvent(setGoalOffscreen, 60); // 60 seconds after creation, set goal of rioter to offscreen, goal to prevent stuck state
+                rioter.addEvent(setGoalOffscreen, 100); // 100 seconds after creation, set goal of rioter to offscreen, goal to prevent stuck state
 
-      /*var point = randomPointOffscreen(game, 50);
-      protester.setGoalPoint(point.x, point.y, 0.2); // randomly head to offscreen point with weight 0.8
-      protester.triggerOnEntry(point.x-60, point.y-60, point+120, point+120, triggerToNewPoint); //possible reccursion issues?
-*/
+                // The less movable an object is, the further down the list it should be
+                rioter.triggerOnEntry(building.x-(building.width/2)-60, building.y - (building.height/2)- 60, building.width+120, building.height + 120, throwAtBuilding);
+                //This is for top left corner handle --> rioter.triggerOnEntry(building2.x-60, building2.y - 60, building2.width+120, building2.height + 120, throwAtBuilding2);
+                rioter.triggerOnCollision(this.emitter, onSprayIncreaseGoalweight, false);
+                rioter.triggerOnCollision(this.player);
+                rioter.triggerOnCollision(this.hydrantGroup, null, false);
+                rioter.triggerOnCollision(this.buildingGroup, null, false);
+            }
+        }
 
-      triggerToNewPoint(protester);
+        function createProtesters(){
 
-      protester.triggerOnCollision(this.emitter, onSprayBecomeRioter, false);
-      protester.triggerOnCollision(this.player);
-      protester.triggerOnCollision(this.hydrantGroup, null, false);
-      protester.triggerOnCollision(this.buildingGroup, null, false);
-   }
+        var RioterManager = this.RM;
+        var ProtesterManager = this.PM;
+        var emitter = this.emitter;
+        var player = this.player;
+        var hydrantGroup = this.hydrantGroup;
+        var buildingGroup = this.buildingGroup;
 
-}
+        var triggerToNewPoint = function(mob){
+            var newPoint = randomPointOffscreen(game, 50);
+            mob.setGoalPoint(newPoint.x, newPoint.y, 0.5); // randomly head to offscreen point with weight 0.8
+            mob.triggerOnEntry(newPoint.x-60, newPoint.y-60, newPoint.x+120, newPoint.y+120, triggerToNewPoint); //possible reccursion issues?
+        };
 
-var throwAtBuilding = function(mob){
-   //mob.freeze();
-   mob.fireAtOwnBuilding(game);
-   mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
-   //tObject = new ThrownObject(game, {key: "moltav", frame: 0}, mob.centerX, mob.centerY);
-};
+        var onSprayBecomeRioter = function(mob){
+            var collisionArray = [{with: emitter, cb: onSprayIncreaseGoalweight}, {with: player}, {with: hydrantGroup}, {with: buildingGroup}];
+            var eventArray = [{cb: setGoalOffscreen, time: 40}, {cb: setGoalOffscreen, time: 60}, {cb: setGoalOffscreen, time: 100}];
+            mob.becomeRioter(game, {key: 'assets', frame: 'rioter'}, chooseUnburntBuilding(), RioterManager, ProtesterManager, collisionArray, eventArray);
+        };
 
+        for(var i=0; i<randInt(4, 1); i++){
+            var protester = new Protester(this.game, {key: 'protester', frame: 0}, this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, this.game.height));
+			this.protesterLayer.add(protester);
+            this.PM.addMob(protester);
+            protester.positionOffscreenRandomly(game);
 
-   // Create UI
-   this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
-   this.pointer.anchor.set(0.5,0.5);
-   this.waterUI = new WaterUI(this.game,this.player,70,60);
-   this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
+            triggerToNewPoint(protester);
 
-     this.end = damageFire = function(particle,building){
-      particle.kill();
-      building.damageFire();
-   };
+            protester.triggerOnCollision(this.emitter, onSprayBecomeRioter, false);
+            protester.triggerOnCollision(this.player);
 
-   },//end_create
+            // Potential for slowdown with many mobs, use the second commented line instead if slowdown too significant
+            protester.triggerOnCollision(this.rioterLayer, null, false);
+
+            protester.triggerOnCollision(this.hydrantGroup, null, false);
+            protester.triggerOnCollision(this.buildingGroup, null, false);
+        }
+
+        }
+
+        var throwAtBuilding = function(mob){
+        //mob.freeze();
+        mob.fireAtOwnBuilding(game);
+        mob.setGoalPoint(game.world.centerX, game.world.centerY, 0.5);
+        };
+
+        // Create UI
+        this.waterUI = new WaterUI(this.game,this.player,70,60);
+        this.fireUI = new FireUI(this.game,this.buildingGroup,765,355);
+		this.pointer = this.game.add.sprite(0, 0, 'assets','crosshair');
+        this.pointer.anchor.set(0.5,0.5);
+
+		this.uiLayer.add(this.waterUI.uiInner);
+		this.uiLayer.add(this.fireUI.uiInner);
+		this.uiLayer.add(this.waterUI.uiOuter);
+		this.uiLayer.add(this.fireUI.uiOuter);
+		this.uiLayer.add(this.pointer);
+
+},//end_create
 
    update: function(){
-
       game = this.game;
 
       this.RM.update(this.game);
       this.RM.killAllOutOfView(this.game);
       this.PM.update(this.game);
 
-      //l("Mobs in RM: " + this.RM.mobList.length + ", Mobs in PM: " + this.PM.mobList.length);
-
-   if (this.G.isDown){
-      this.state.start("stGameOver");
+  // if (this.G.isDown){
+  //    this.gameWin.dispatch();
+  // }
+   // Loss Condition
+   //  IF city life is below 40%, signal game over
+   if(this.buildingGroup.countLiving() == 0){
+      this.gameOver.dispatch();
    }
 
-   if(this.buildingGroup.numberOfLiving() <= 0){
-      this.state.start("stGameOver");
+   // Win Condition
+   // IF no more rioters and fire, call WIN
+   if(this.winnable == true){
+        let currentFires = 0;
+        this.buildingGroup.forEach(function(building){
+            currentFires += building.fireGroup.countLiving();
+        },this)
+        if (currentFires == 0){ // If fires are all put out
+            this.gameWin.dispatch();
+        }
+        else{
+            console.log(currentFires);
+        }
    }
 
    // start UI update functions
@@ -268,18 +275,36 @@ var throwAtBuilding = function(mob){
 
    },//end_update
 
+// Fade the camera before going to the game over screen
+    fadeGO: function(){
+      // function call when fade ends
+      this.camera.onFadeComplete.add(function(){
+        this.game.state.previousState = 'stGame';
+        this.game.state.start('stGameOver');
+      })
+      this.camera.fade("#000000",3000); // fade camera
+      this.bg_music.fadeOut(3000);
+    },
+
+// Fade the camera before going to next stage context
+    fadeWin: function(){
+        console.log('dispatch');
+      this.camera.onFadeComplete.add(function(){
+        this.game.state.previousState = 'stGame';
+        this.game.state.start('stContext2');
+      })
+      // Add a 2 second delay for game feel reasons
+      this.game.time.events.add(2000,function(){
+          console.log('delayed');
+        this.camera.fade("#000000",3000); // fade camera
+        this.bg_music.fadeOut(3000);
+      },this);
+
+    },
 
 
-
- /* render: function() {
-
-	  // this.buildingGroup.forEach(function(building){
-		//   building.fireGroup.forEach(function(fire){
-		//	   this.game.debug.body(fire);
-		 //  },this);
-	   // },this);
-
-   // display fps
-     this.game.debug.text('FPS: ' + this.game.time.fps, 20, 580, 'yellow');
-  }*/
+  // render: function() {
+		// if(this.buildingGroup != null)
+			// this.game.debug.body(this.buildingGroup.building);
+	// }
 };//end_s1Game

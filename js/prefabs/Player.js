@@ -24,6 +24,10 @@ var Player = function(game, x, y, key, src) {
 	this.a = game.input.keyboard.addKey(Phaser.Keyboard.A);
 	this.s = game.input.keyboard.addKey(Phaser.Keyboard.S);
 	this.d = game.input.keyboard.addKey(Phaser.Keyboard.D);
+	this.game.input.keyboard.addKeyCapture(this.w);
+	this.game.input.keyboard.addKeyCapture(this.a);
+	this.game.input.keyboard.addKeyCapture(this.s);
+	this.game.input.keyboard.addKeyCapture(this.d);
 
 	// add this object to the game
 	this.game.add.existing(this);
@@ -34,7 +38,9 @@ Player.prototype.constructor = Player; // creation call
 
 Player.prototype.update = function() {
 	// angle towards mouse
-	this.rotation = this.game.physics.arcade.angleToPointer(this);
+	if(!this.frozen){
+		this.rotation = this.game.physics.arcade.angleToPointer(this);
+	}
 	// Y Axis Movement
 	// up
 	if (this.w.isDown){
@@ -63,4 +69,13 @@ Player.prototype.waterUp = function(){
 	if (this.waterLevel < 100){
 		this.waterLevel += 0.5;
     }
+};
+
+Player.prototype.freeze = function(boolean){
+   this.body.maxVelocity.set(0);
+   this.frozen = true;
+   if(boolean === false){
+      this.body.maxVelocity.set(200);
+	  this.frozen = false;
+   }
 };

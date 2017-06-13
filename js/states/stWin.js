@@ -12,25 +12,29 @@ stWin.prototype = {
     create: function(){
         this.sound.stopAll();
        l("Directions_create");
-        // add in start button
 
-
-        var button = this.game.add.button(this.game.width/2, this.game.height - 120, 'NextButtons', this.startGame, this.game,'ContinueButtonOver', 'ContinueButton');
-        button.anchor.set(0.5);
-        button.scale.setTo(0.4,0.4);
-        button.onInputOver.add(this.over, this);
-        button.onInputOut.add(this.out, this);
+        // add audio
+        this.bg_music = this.game.add.audio('win');
+        this.bg_music.play('', 0, .7, false);
+        this.bg_sounds = this.game.add.audio('win_sounds');
+        this.bg_sounds.play('', 0, .7, true);
+        
+        if (isMute === true) {
+            this.bg_music.volume = 0;
+        }
+        
+        this.titleButton = this.game.add.button(this.game.width - 125, this.game.height - 100, 'TitleScreenButtons', this.titleScreen, this.game,'titleScreenButtonOver', 'titleScreenButton');
+        this.titleButton.anchor.set(0.5);
+        this.titleButton.scale.setTo(0.85);
+        this.titleButton.onInputUp.add(this.stopSound, this);
+        
 
     },//end_create
-    over: function() {
-        l("over");
-
-    },//end_over
-    out: function() {
-        l("out");
-
-    },//end_out
-    startGame: function() {
+    stopSound: function() {
+        this.bg_music.stop();
+        this.bg_sounds.stop();
+    },//end_stopSound
+    titleScreen: function() {
         this.state.start("stTitle");
-    }//end_startGame
+    }//end_titleScreen
 };
