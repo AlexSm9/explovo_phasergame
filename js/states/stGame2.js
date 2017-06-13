@@ -22,12 +22,14 @@ stGame2.prototype = {
         //--/ tilemap variable
         //this.game.world.setBounds(0,0,3200,2432); // initialize world bounds
         this.game.stage.backgroundColor = "#228B22";
+        this.game.add.image(0,0,'Level2TileMapIMAGE');
+        this.game.world.setBounds(0,0,2560,1984);
       //this.game.add.tileSprite(0,0,1200,912,'bg');
-        this.map = this.game.add.tilemap('Level2Tilemap');
+      /*  this.map = this.game.add.tilemap('Level2Tilemap');
         this.map.addTilesetImage('CityTileset64', 'CityTileset64');
         this.backgroundLayer = this.map.createLayer('Background');
         this.groundLayer = this.map.createLayer('ForeGround');
-		this.groundLayer.resizeWorld();
+		this.groundLayer.resizeWorld();*/
 
 		//groups for ordering
 		this.hydrantLayer = this.game.add.group();
@@ -74,7 +76,7 @@ stGame2.prototype = {
 
 
    // Debug Keys
-    //	this.G = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
+    	this.G = this.game.input.keyboard.addKey(Phaser.Keyboard.G);
 
 
    // -- Conditions
@@ -229,7 +231,7 @@ stGame2.prototype = {
       this.PM.update(this.game);
 
   // if (this.G.isDown){
-    //  this.gameWin.dispatch();
+  //    this.gameWin.dispatch();
    //}
    // Loss Condition
    //  IF city is burned down
