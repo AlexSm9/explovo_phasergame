@@ -1,6 +1,6 @@
 // logging functionality
 function l(itemToLog){
-if(true){
+if(false){
       if(typeof(itemToLog)==Object){
          console.log(JSON.stringify(itemToLog));
       }else{
