@@ -234,11 +234,6 @@ stGame.prototype = {
   // if (this.G.isDown){
   //    this.gameWin.dispatch();
   // }
-   // Loss Condition
-   //  IF city life is below 40%, signal game over
-   if(this.buildingGroup.countLiving() == 0){
-      this.gameOver.dispatch();
-   }
 
    // Win Condition
    // IF no more rioters and fire, call WIN
@@ -248,11 +243,19 @@ stGame.prototype = {
             currentFires += building.fireGroup.countLiving();
         },this)
         if (currentFires == 0){ // If fires are all put out
-            this.gameWin.dispatch();
+            if(this.buildingGroup.countLiving() != 0){
+               this.gameWin.dispatch();
+            }
         }
         else{
             //console.log(currentFires);
         }
+   }
+   
+      // Loss Condition
+   //  IF city life is below 40%, signal game over
+   if(this.buildingGroup.countLiving() == 0){
+      this.gameOver.dispatch();
    }
 
    // start UI update functions
