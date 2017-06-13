@@ -87,7 +87,6 @@ Building.prototype.update = function(){
 	/*this.fireGroup.forEach(function(fire){
 		this.saved.debug.body(fire);
 	},this);*/
-		this.game.debug.body(this);
 
 };
 
