@@ -88,12 +88,12 @@ stGame.prototype = {
         this.gameWin.addOnce(this.fadeWin,this);
 
         // Wave Timer + Winnable flag
-        this.waves = this.game.time.events.repeat(5000,20, newBuildingAttack, this); // every 3 seconds run function newBuildingAttack; repeat 40 times then stop
+        this.waves = this.game.time.events.repeat(5000,20, newBuildingAttack, this); // every 5 seconds run function newBuildingAttack; repeat 20 times then stop
         // Once this timer ends, enable win flag
         this.waves.timer.onComplete.addOnce(function(){
             // allow the game to be winnable
             this.winnable = true;
-            console.log("winnable: " + this.winnable);
+            //console.log("winnable: " + this.winnable);
             // alert the player that they can win
             var alert = this.sound.add('alarm');
             alert.play();
