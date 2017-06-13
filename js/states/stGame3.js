@@ -291,7 +291,7 @@ stGame3.prototype = {
         this.game.state.start('stContext4');
       })
       this.game.time.events.add(2000,function(){
-          console.log('delayed');
+          //console.log('delayed');
         this.camera.fade("#000000",3000); // fade camera
         this.bg_music.fadeOut(3000);
       },this);

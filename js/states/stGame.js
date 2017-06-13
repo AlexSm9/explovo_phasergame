@@ -251,7 +251,7 @@ stGame.prototype = {
             this.gameWin.dispatch();
         }
         else{
-            console.log(currentFires);
+            //console.log(currentFires);
         }
    }
 
@@ -288,14 +288,14 @@ stGame.prototype = {
 
 // Fade the camera before going to next stage context
     fadeWin: function(){
-        console.log('dispatch');
+        //console.log('dispatch');
       this.camera.onFadeComplete.add(function(){
         this.game.state.previousState = 'stGame';
         this.game.state.start('stContext2');
       })
       // Add a 2 second delay for game feel reasons
       this.game.time.events.add(2000,function(){
-          console.log('delayed');
+          //console.log('delayed');
         this.camera.fade("#000000",3000); // fade camera
         this.bg_music.fadeOut(3000);
       },this);
