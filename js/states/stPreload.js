@@ -69,10 +69,13 @@ stPreload.prototype = {
 
         //Tilemap
 		this.load.path = "assets/img/tiles/"
-        this.game.load.tilemap('Level1Tilemap', 'Level1Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('Level2Tilemap', 'Level2Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.tilemap('Level3Tilemap', 'Level3Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.image('CityTileset64', 'CityTileset64.png');
+        this.game.load.image('Level1TileMapIMAGE','Level1TileMapIMAGE.png');
+        this.game.load.image('Level2TileMapIMAGE','Level2TileMapIMAGE.png');
+        this.game.load.image('Level3TileMapIMAGE','Level3TileMapIMAGE.png');
+        ///this.game.load.tilemap('Level1Tilemap', 'Level1Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+        //this.game.load.tilemap('Level2Tilemap', 'Level2Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+        //this.game.load.tilemap('Level3Tilemap', 'Level3Tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+        //this.game.load.image('CityTileset64', 'CityTileset64.png');
 
         //load audio assets
         this.load.path = "assets/audio/"
